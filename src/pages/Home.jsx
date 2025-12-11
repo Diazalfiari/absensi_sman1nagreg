@@ -1,6 +1,8 @@
 import React from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import logoSmansan from '../assets/images/logosmansan.png';
+import heroImage from '../assets/images/smansan.jpg';
 
 const Home = () => {
 
@@ -15,7 +17,7 @@ const Home = () => {
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 rounded-3xl bg-white/10 border border-white/20 flex items-center justify-center">
                 <img
-                  src={`${process.env.PUBLIC_URL}/images/logosmansan.png`}
+                  src={logoSmansan}
                   alt="Logo SMAN 1 Nagreg"
                   className="w-14 h-14 object-contain drop-shadow-lg"
                 />
@@ -37,7 +39,7 @@ const Home = () => {
           <div className="relative">
             <div className="rounded-[32px] border border-white/15 bg-white/5 backdrop-blur-xl shadow-glow overflow-hidden">
               <img
-                src={`${process.env.PUBLIC_URL}/images/smansan.jpg`}
+                src={heroImage}
                 alt="SMAN 1 Nagreg"
                 className="w-full h-[420px] object-cover"
               />

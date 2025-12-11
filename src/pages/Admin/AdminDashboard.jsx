@@ -6,6 +6,7 @@ import { rekapitulasiKelas } from '../../data/mockData';
 import { getCurrentUser, calculatePercentage } from '../../utils/helpers';
 import Button from '../../components/common/Button';
 import Footer from '../../components/common/Footer';
+import heroImage from '../../assets/images/smansan.jpg';
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
@@ -50,7 +51,7 @@ const AdminDashboard = () => {
           <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-ink-900/70 mb-8">
             <div className="absolute inset-0">
               <img
-                src={`${process.env.PUBLIC_URL}/images/smansan.jpg`}
+                src={heroImage}
                 alt="SMAN 1 Nagreg"
                 className="w-full h-full object-cover opacity-40"
               />

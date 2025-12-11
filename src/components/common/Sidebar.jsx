@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { logout } from '../../utils/helpers';
 import ConfirmDialog from './ConfirmDialog';
 import Loading from './Loading';
+import logoSmansan from '../../assets/images/logosmansan.png';
 
 const Sidebar = ({ role }) => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const Sidebar = ({ role }) => {
         <div className="px-6 py-8 border-b border-white/10">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center">
-              <img src={`${process.env.PUBLIC_URL}/images/logosmansan.png`} alt="Logo SMAN 1 Nagreg" className="w-12 h-12 object-contain" />
+              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-12 h-12 object-contain" />
             </div>
             <div>
               <h1 className="font-display text-xl">SMAN 1 Nagreg</h1>
@@ -104,7 +105,7 @@ const Sidebar = ({ role }) => {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl flex items-center justify-center">
-              <img src={`${process.env.PUBLIC_URL}/images/logosmansan.png`} alt="Logo SMAN 1 Nagreg" className="w-10 h-10 object-contain" />
+              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-10 h-10 object-contain" />
             </div>
             <div>
               <p className="text-sm font-semibold text-white">SMAN 1 Nagreg</p>
