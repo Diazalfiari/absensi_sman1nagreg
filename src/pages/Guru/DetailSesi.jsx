@@ -22,9 +22,10 @@ const DetailSesi = () => {
     }))
   );
 
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [uploadError, setUploadError] = useState('');
   const [sessionStarted, setSessionStarted] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
@@ -40,20 +41,34 @@ const DetailSesi = () => {
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
+    if (!file) return;
+
+    const maxSize = 10 * 1024 * 1024; // 10 MB
+    if (file.size > maxSize) {
+      setUploadError('Ukuran file melebihi 10MB. Pilih file yang lebih kecil.');
+      setSelectedFile(null);
+      e.target.value = '';
+      return;
     }
+
+    setUploadError('');
+    setSelectedFile(file);
   };
 
   const handleUploadClick = () => {
     if (selectedFile) {
+      if (uploadedFiles.length >= 2) {
+        setUploadError('Maksimal 2 materi per sesi. Hapus salah satu untuk mengunggah lagi.');
+        return;
+      }
       setShowUploadConfirm(true);
     }
   };
 
   const handleConfirmUpload = () => {
-    setUploadedFile(selectedFile);
+    setUploadedFiles((prev) => [...prev, selectedFile]);
     setShowUploadConfirm(false);
+    setUploadError('');
     setSuccessMessage(`File "${selectedFile.name}" berhasil diunggah!`);
     setTimeout(() => setSuccessMessage(''), 3000);
     setSelectedFile(null);
@@ -219,6 +234,11 @@ const DetailSesi = () => {
           {/* Upload Materi */}
           <Card padding="lg">
             <h2 className="text-xl font-semibold mb-4">📎 Upload Materi Pembelajaran</h2>
+            {uploadError && (
+              <div className="glass-panel p-4 mb-3 bg-rose-500/15 border border-rose-400/40 rounded-xl">
+                <p className="text-rose-200 text-sm">⚠️ {uploadError}</p>
+              </div>
+            )}
             <div className="space-y-4">
               <div className="border-2 border-dashed border-white/20 rounded-xl p-6 text-center hover:border-primary-500/50 transition-colors">
                 <input
@@ -239,7 +259,7 @@ const DetailSesi = () => {
                 </label>
               </div>
               
-              {selectedFile && !uploadedFile && (
+              {selectedFile && uploadedFiles.length < 2 && (
                 <div className="glass-panel p-4 bg-white/5 border-white/10 rounded-xl">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
@@ -264,26 +284,36 @@ const DetailSesi = () => {
                 </div>
               )}
 
-              {uploadedFile && (
-                <div className="glass-panel p-4 bg-emerald-500/10 border-emerald-500/30 rounded-xl">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">✅</span>
-                      <div>
-                        <p className="font-medium text-emerald-300">Materi Terupload</p>
-                        <p className="text-sm">{uploadedFile.name}</p>
-                        <p className="text-xs text-white/60">
-                          {(uploadedFile.size / 1024).toFixed(2)} KB
-                        </p>
+              {uploadedFiles.length > 0 && (
+                <div className="space-y-3">
+                  {uploadedFiles.map((file, idx) => (
+                    <div key={file.name + idx} className="glass-panel p-4 bg-emerald-500/10 border-emerald-500/30 rounded-xl">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">✅</span>
+                          <div>
+                            <p className="font-medium text-emerald-300">Materi Terupload</p>
+                            <p className="text-sm">{file.name}</p>
+                            <p className="text-xs text-white/60">
+                              {(file.size / 1024).toFixed(2)} KB
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setUploadedFiles((prev) => prev.filter((_, i) => i !== idx));
+                            setUploadError('');
+                          }}
+                          className="text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          ✕
+                        </button>
                       </div>
                     </div>
-                    <button
-                      onClick={() => setUploadedFile(null)}
-                      className="text-red-400 hover:text-red-300 transition-colors"
-                    >
-                      ✕
-                    </button>
-                  </div>
+                  ))}
+                  {uploadedFiles.length < 2 && (
+                    <p className="text-xs text-white/60">Anda dapat mengunggah 1 materi lagi (maks 10MB).</p>
+                  )}
                 </div>
               )}
             </div>
