@@ -109,7 +109,7 @@ const DetailSesi = () => {
       <div className="bg-ink-900 min-h-screen text-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-xl mb-4">Data sesi tidak ditemukan</p>
-          <Button onClick={() => navigate('/guru/input-absensi')}>
+          <Button onClick={() => navigate('/guru/Jadwal-mengajar')}>
             Kembali ke Jadwal
           </Button>
         </div>
@@ -125,7 +125,7 @@ const DetailSesi = () => {
           {/* Header */}
           <div>
             <button
-              onClick={() => navigate('/guru/input-absensi')}
+              onClick={() => navigate('/guru/Jadwal-mengajar')}
               className="text-white/70 hover:text-white flex items-center gap-2 mb-4 transition-colors"
             >
               ← Kembali ke Jadwal

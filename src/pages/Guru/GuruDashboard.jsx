@@ -66,7 +66,7 @@ const GuruDashboard = () => {
                   Lihat jadwal mengajar, mulai sesi, upload materi pembelajaran, dan input kehadiran siswa.
                 </p>
               </div>
-              <Button onClick={() => navigate('/guru/input-absensi')}>
+              <Button onClick={() => navigate('/guru/Jadwal-mengajar')}>
                 Buka Jadwal
               </Button>
             </Card>

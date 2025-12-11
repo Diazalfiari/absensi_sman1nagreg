@@ -35,7 +35,7 @@ const Sidebar = ({ role }) => {
     ],
     guru: [
       { path: '/guru', label: 'Dashboard', icon: '📊' },
-      { path: '/guru/input-absensi', label: 'Jadwal Mengajar', icon: '📅' },
+      { path: '/guru/Jadwal-mengajar', label: 'Jadwal Mengajar', icon: '📅' },
       { path: '/guru/riwayat', label: 'Riwayat', icon: '📋' },
     ],
     siswa: [

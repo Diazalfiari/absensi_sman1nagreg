@@ -86,7 +86,7 @@ function App() {
           }
         />
         <Route
-          path="/guru/input-absensi"
+          path="/guru/Jadwal-mengajar"
           element={
             <ProtectedRoute allowedRole="guru">
               <JadwalMengajar />
