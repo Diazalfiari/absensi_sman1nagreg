@@ -119,8 +119,12 @@ const Login = () => {
 
         <div className="glass-panel p-8 self-center">
           <div className="text-center mb-8">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center mx-auto mb-4 shadow-glow">
-              <span className="text-3xl font-bold">S</span>
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <img
+                src={logoSmansan}
+                alt="Logo SMAN 1 Nagreg"
+                className="w-12 h-12 object-contain drop-shadow-lg"
+              />
             </div>
             <h2 className="text-3xl font-semibold">Masuk</h2>
             <p className="text-sm text-white/70">Sistem Absensi SMAN 1 Nagreg</p>
