@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;600&family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-bg: #04030f;
+  --brand-surface: rgba(15, 23, 42, 0.55);
+  --brand-border: rgba(255, 255, 255, 0.1);
+  --brand-card: rgba(124, 58, 237, 0.12);
+  --brand-glass: rgba(15, 23, 42, 0.72);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Space Grotesk', 'DM Sans', sans-serif;
+  background-color: var(--brand-bg);
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(140, 70, 255, 0.4), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.25), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.05), transparent 40%);
+  pointer-events: none;
+  z-index: -2;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(120deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 55%);
+  pointer-events: none;
+  z-index: -1;
+  mix-blend-mode: screen;
+}
+
+code {
+  font-family: 'Space Grotesk', 'DM Sans', monospace;
+}
+
+.app-shell {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--brand-border);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 80px rgba(3, 7, 18, 0.55);
+}
+
+.glass-panel {
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-border);
+  backdrop-filter: blur(24px);
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 50px rgba(2, 6, 23, 0.6);
+}
+
+.hero-grid {
+  position: relative;
+  background: var(--brand-glass);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.hero-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 2px, transparent 2px);
+  background-size: 40px 40px;
+  opacity: 0.4;
+}
+
+.hero-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.35), transparent 45%);
+  mix-blend-mode: overlay;
+}
+
+.shimmer-border {
+  position: relative;
+  border-radius: 1.25rem;
+}
+
+.shimmer-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, rgba(140, 70, 255, 0.9), rgba(14, 165, 233, 0.8), rgba(140, 70, 255, 0.9));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-rotate 6s linear infinite;
+}
+
+@keyframes border-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8c46ff, #0ea5e9);
+  border-radius: 999px;
+}
+
+::selection {
+  background: rgba(140, 70, 255, 0.4);
+  color: #f8fafc;
+}
+
+.dark-select {
+  background-color: rgba(15, 23, 42, 0.85);
+  color: #f8fafc;
+  appearance: none;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark-select option {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.dark-select:disabled {
+  color: rgba(226, 232, 240, 0.5);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(-50%);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out;
+}
