@@ -169,6 +169,20 @@ code {
   color: rgba(226, 232, 240, 0.5);
 }
 
+/* Force autofill to follow dark input styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: #e2e8f0;
+  caret-color: #e2e8f0;
+  transition: background-color 9999s ease-out 0s;
+  box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
