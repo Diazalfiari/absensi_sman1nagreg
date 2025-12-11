@@ -552,10 +552,6 @@ const LaporanBulanan = () => {
                       </td>
                     );
                   })}
-                  {/* <td className="px-3 py-2 text-center border border-white/20">
-                    {absensiData.reduce((sum, siswa) => sum + siswa.hadir, 0)}
-                  </td>
-                  <td colSpan="4" className="px-3 py-2 border border-white/20"></td> */}
                 </tr>
 
                 {/* Sakit Row */}
@@ -578,11 +574,6 @@ const LaporanBulanan = () => {
                       </td>
                     );
                   })}
-                  {/* <td className="px-3 py-2 border border-white/20"></td>
-                  <td className="px-3 py-2 text-center border border-white/20">
-                    {absensiData.reduce((sum, siswa) => sum + siswa.sakit, 0)}
-                  </td>
-                  <td colSpan="3" className="px-3 py-2 border border-white/20"></td> */}
                 </tr>
 
                 {/* Ijin Row */}
@@ -605,11 +596,6 @@ const LaporanBulanan = () => {
                       </td>
                     );
                   })}
-                  {/* <td colSpan="2" className="px-3 py-2 border border-white/20"></td>
-                  <td className="px-3 py-2 text-center border border-white/20">
-                    {absensiData.reduce((sum, siswa) => sum + siswa.izin, 0)}
-                  </td>
-                  <td colSpan="2" className="px-3 py-2 border border-white/20"></td> */}
                 </tr>
 
                 {/* Alfa Row */}
@@ -632,11 +618,6 @@ const LaporanBulanan = () => {
                       </td>
                     );
                   })}
-                  {/* <td colSpan="3" className="px-3 py-2 border border-white/20"></td>
-                  <td className="px-3 py-2 text-center border border-white/20">
-                    {absensiData.reduce((sum, siswa) => sum + siswa.alfa, 0)}
-                  </td>
-                  <td className="px-3 py-2 border border-white/20"></td> */}
                 </tr>
 
                 {/* % Kehadiran Row */}
@@ -666,14 +647,6 @@ const LaporanBulanan = () => {
                       </td>
                     );
                   })}
-                  {/* <td colSpan="4" className="px-3 py-2 border border-white/20"></td>
-                  <td className="px-3 py-2 text-center border border-white/20">
-                    {absensiData.length > 0 ? 
-                      Math.round(
-                        absensiData.reduce((sum, siswa) => sum + siswa.persentase, 0) / absensiData.length
-                      ) : 0
-                    }%
-                  </td> */}
                 </tr>
               </tbody>
                 </table>
