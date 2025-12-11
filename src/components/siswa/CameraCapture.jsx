@@ -58,6 +58,11 @@ const CameraCapture = ({ onPhotoCapture }) => {
       canvas.height = video.videoHeight;
       
       const ctx = canvas.getContext('2d');
+      
+      // Mirror the image
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      
       ctx.drawImage(video, 0, 0);
       
       const photoData = canvas.toDataURL('image/jpeg');
@@ -101,7 +106,7 @@ const CameraCapture = ({ onPhotoCapture }) => {
             className={`w-full h-full object-cover transition-opacity duration-200 ${
               cameraActive && !photo ? 'opacity-100' : 'opacity-0 absolute inset-0'
             }`}
-            style={{ transform: 'scaleX(1)' }}
+            style={{ transform: 'scaleX(-1)' }}
           />
 
           {photo && (

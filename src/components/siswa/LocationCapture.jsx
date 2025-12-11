@@ -9,8 +9,9 @@ const LocationCapture = ({ onLocationCapture }) => {
   const [inArea, setInArea] = useState(false);
 
   const getLocation = () => {
-    setLoading(true);
+    // Clear error saja, jangan clear location untuk menghindari glitch
     setError('');
+    setLoading(true);
 
     if (!navigator.geolocation) {
       setError('Geolocation tidak didukung oleh browser Anda');
@@ -39,6 +40,7 @@ const LocationCapture = ({ onLocationCapture }) => {
         console.log('Dalam Area?:', checkInArea);
         console.log('===================');
 
+        // Update state dalam satu batch untuk menghindari multiple re-render
         setLocation(locationData);
         setInArea(checkInArea);
         setLoading(false);
@@ -67,7 +69,7 @@ const LocationCapture = ({ onLocationCapture }) => {
       {
         enableHighAccuracy: true,
         timeout: 15000,
-        maximumAge: 60000,
+        maximumAge: 0, // Ubah ke 0 untuk memaksa refresh lokasi terbaru
       }
     );
   };
@@ -93,14 +95,7 @@ const LocationCapture = ({ onLocationCapture }) => {
         </div>
       )}
 
-      {loading && (
-        <div className="flex items-center gap-3 text-accent-200 mb-4">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-accent-200"></div>
-          <p className="text-sm">Mengambil lokasi...</p>
-        </div>
-      )}
-
-      {location && !loading && (
+      {location && (
         <div className="space-y-3">
           <div className={`flex items-center gap-2 p-3 rounded-lg ${
             inArea ? 'bg-emerald-500/20 text-emerald-100' : 'bg-amber-500/20 text-amber-100'
@@ -142,9 +137,17 @@ const LocationCapture = ({ onLocationCapture }) => {
 
           <button
             onClick={getLocation}
-            className="w-full px-4 py-2 text-sm text-white hover:bg-white/10 rounded-xl transition-colors border border-white/20"
+            disabled={loading}
+            className="w-full px-4 py-2 text-sm text-white hover:bg-white/10 rounded-xl transition-colors border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            🔄 Perbarui Lokasi
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Memperbarui...</span>
+              </>
+            ) : (
+              <>🔄 Perbarui Lokasi</>
+            )}
           </button>
         </div>
       )}
