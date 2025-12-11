@@ -20,7 +20,7 @@ const Loading = ({
         <div className={`${sizeClasses[size]} rounded-full border-4 border-white/20 border-t-primary-500 animate-spin`}></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <img 
-            src="/images/logosmansan.png" 
+            src={`${process.env.PUBLIC_URL}/images/logosmansan.png`}
             alt="Logo" 
             className="w-6 h-6 object-contain opacity-50"
           />

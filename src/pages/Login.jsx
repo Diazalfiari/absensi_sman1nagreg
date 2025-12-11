@@ -72,7 +72,7 @@ const Login = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-ink-950 via-ink-900 to-primary-900 opacity-95"></div>
       <div className="absolute inset-0">
         <img
-          src="/images/smansan.jpg"
+          src={`${process.env.PUBLIC_URL}/images/smansan.jpg`}
           alt="SMAN 1 Nagreg"
           className="w-full h-full object-cover opacity-20"
         />
@@ -83,7 +83,7 @@ const Login = () => {
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center">
               <img
-                src="/images/logosmansan.png"
+                src={`${process.env.PUBLIC_URL}/images/logosmansan.png`}
                 alt="Logo SMAN 1 Nagreg"
                 className="w-12 h-12 object-contain drop-shadow-lg"
               />

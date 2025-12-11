@@ -46,7 +46,7 @@ const AdminDashboard = () => {
           <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-ink-900/70 mb-12">
             <div className="absolute inset-0">
               <img
-                src="/images/smansan.jpg"
+                src={`${process.env.PUBLIC_URL}/images/smansan.jpg`}
                 alt="SMAN 1 Nagreg"
                 className="w-full h-full object-cover opacity-40"
               />
