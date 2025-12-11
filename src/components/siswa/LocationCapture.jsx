@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { lokasiSekolah } from '../../data/mockData';
 import { isInSchoolArea } from '../../utils/helpers';
 
@@ -8,7 +8,7 @@ const LocationCapture = ({ onLocationCapture }) => {
   const [error, setError] = useState('');
   const [inArea, setInArea] = useState(false);
 
-  const getLocation = useCallback(() => {
+  const getLocation = () => {
     setLoading(true);
     setError('');
 
@@ -66,15 +66,16 @@ const LocationCapture = ({ onLocationCapture }) => {
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
+        timeout: 15000,
+        maximumAge: 60000,
       }
     );
-  }, [onLocationCapture]);
+  };
 
   useEffect(() => {
     getLocation();
-  }, [getLocation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="glass-panel p-6">
