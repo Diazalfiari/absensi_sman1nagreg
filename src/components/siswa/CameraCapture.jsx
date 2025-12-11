@@ -93,31 +93,34 @@ const CameraCapture = ({ onPhotoCapture }) => {
 
       {/* Camera Preview or Captured Photo */}
       <div className="relative bg-black/40 rounded-2xl overflow-hidden border border-white/10">
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className={`w-full aspect-video object-cover transition-opacity duration-200 ${
-            cameraActive && !photo ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
-
-        {photo && (
-          <img
-            src={photo}
-            alt="Captured"
-            className="absolute inset-0 w-full h-full object-cover"
+        <div className="w-full aspect-[4/3] md:aspect-video">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className={`w-full h-full object-cover transition-opacity duration-200 ${
+              cameraActive && !photo ? 'opacity-100' : 'opacity-0 absolute inset-0'
+            }`}
+            style={{ transform: 'scaleX(1)' }}
           />
-        )}
 
-        {!cameraActive && !photo && (
-          <div className="absolute inset-0 flex items-center justify-center text-white/70">
-            <div className="text-center">
-              <div className="text-6xl mb-4">📷</div>
-              <p>Kamera belum diaktifkan</p>
+          {photo && (
+            <img
+              src={photo}
+              alt="Captured"
+              className="w-full h-full object-cover"
+            />
+          )}
+
+          {!cameraActive && !photo && (
+            <div className="absolute inset-0 flex items-center justify-center text-white/70">
+              <div className="text-center">
+                <div className="text-6xl mb-4">📷</div>
+                <p>Kamera belum diaktifkan</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <canvas ref={canvasRef} className="hidden" />
       </div>
