@@ -38,9 +38,9 @@ const LaporanBulanan = () => {
   ];
 
   const kelasOptions = [
-    'X-1', 'X-2', 'X-3',
-    'XI IPA 1', 'XI IPA 2', 'XI IPS 1',
-    'XII IPA 1', 'XII IPA 2', 'XII IPS 1'
+    'X-1', 'X-2', 'X-3','X-4', 'X-5', 'X-6', 'X-7', 'X-8', 'X-9', 'X-10', 'X-11', 'X-12',
+    'XI-1', 'XI-2', 'XI-3','XI-4', 'XI-5', 'XI-6', 'XI-7', 'XI-8', 'XI-9', 'XI-10', 'XI-11', 'XI-12',
+    'XII-1', 'XII-2', 'XII-3', 'XII-4', 'XII-5', 'XII-6', 'XII-7', 'XII-8', 'XII-9', 'XII-10', 'XII-11', 'XII-12'
   ];
 
   const getDaysInMonth = (month, year) => {
