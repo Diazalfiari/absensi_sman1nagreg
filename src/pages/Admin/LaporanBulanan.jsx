@@ -4,7 +4,7 @@ import ExcelJS from 'exceljs';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
 import { getCurrentUser } from '../../utils/helpers';
-import { dataSiswa } from '../../data/mockData';
+import { dataSiswa, dataMapel } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
 
 const LaporanBulanan = () => {
@@ -14,6 +14,7 @@ const LaporanBulanan = () => {
     bulan: new Date().getMonth() + 1,
     tahun: new Date().getFullYear(),
     kelas: 'X-1',
+    mataPelajaran: 'Matematika',
   });
 
   useEffect(() => {
@@ -164,6 +165,10 @@ const LaporanBulanan = () => {
       formulae: ['"X-1,X-2,X-3,XI IPA 1,XI IPA 2,XI IPS 1,XII IPA 1,XII IPA 2,XII IPS 1"']
     };
 
+    worksheet.getCell('C3').value = 'Mata Pelajaran:';
+    worksheet.getCell('C3').font = { bold: true };
+    worksheet.getCell('D3').value = filters.mataPelajaran;
+
     worksheet.addRow([]);
 
     // Header informasi
@@ -176,6 +181,11 @@ const LaporanBulanan = () => {
     schoolRow.font = { bold: true, size: 14 };
     schoolRow.alignment = { horizontal: 'center' };
     worksheet.mergeCells(`A${schoolRow.number}:D${schoolRow.number}`);
+
+    const mapelRow = worksheet.addRow([filters.mataPelajaran]);
+    mapelRow.font = { bold: true, size: 12 };
+    mapelRow.alignment = { horizontal: 'center' };
+    worksheet.mergeCells(`A${mapelRow.number}:D${mapelRow.number}`);
 
     const yearRow = worksheet.addRow([`TAHUN AJARAN ${filters.tahun}/${filters.tahun + 1}`]);
     yearRow.font = { bold: true };
@@ -346,7 +356,7 @@ const LaporanBulanan = () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Laporan_Absensi_${filters.kelas}_${bulanName}_${filters.tahun}.xlsx`;
+    link.download = `Laporan_Absensi_${filters.mataPelajaran}_${filters.kelas}_${bulanName}_${filters.tahun}.xlsx`;
     link.click();
     window.URL.revokeObjectURL(url);
   };
@@ -361,12 +371,14 @@ const LaporanBulanan = () => {
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white mb-2">
             Laporan Absensi Bulanan
           </h1>
-          <p className="text-sm md:text-base text-white/60">Laporan detail kehadiran siswa per bulan</p>
+          <p className="text-sm md:text-base text-white/60">
+            Laporan detail kehadiran siswa per bulan - {filters.mataPelajaran}
+          </p>
         </div>
 
         {/* Filter Section */}
         <div className="glass-panel p-4 md:p-6 mb-4 md:mb-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
             <div>
               <label className="block text-xs uppercase tracking-[0.2em] text-white/60 mb-2">
                 Bulan
@@ -418,6 +430,24 @@ const LaporanBulanan = () => {
               </select>
             </div>
 
+            <div>
+              <label className="block text-xs uppercase tracking-[0.2em] text-white/60 mb-2">
+                Mata Pelajaran
+              </label>
+              <select
+                name="mataPelajaran"
+                value={filters.mataPelajaran}
+                onChange={handleFilterChange}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white dark-select focus:outline-none focus:border-primary-400/50"
+              >
+                {dataMapel.map(mapel => (
+                  <option key={mapel.id} value={mapel.nama}>
+                    {mapel.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="flex items-end">
               <Button
                 variant="primary"
@@ -427,6 +457,18 @@ const LaporanBulanan = () => {
                 Export Excel
               </Button>
             </div>
+          </div>
+        </div>
+
+        {/* Info Box - Active Filter */}
+        <div className="glass-panel p-4 mb-4 bg-primary-500/10 border-primary-500/30">
+          <div className="flex items-center gap-2 text-sm text-white/90">
+            <span className="font-semibold">📊 Menampilkan:</span>
+            <span className="bg-white/10 px-3 py-1 rounded-lg">{filters.mataPelajaran}</span>
+            <span>•</span>
+            <span className="bg-white/10 px-3 py-1 rounded-lg">{filters.kelas}</span>
+            <span>•</span>
+            <span className="bg-white/10 px-3 py-1 rounded-lg">{bulanName} {filters.tahun}</span>
           </div>
         </div>
 
