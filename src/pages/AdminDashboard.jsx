@@ -5,7 +5,7 @@ import StatCard from '../components/admin/StatCard';
 import { rekapitulasiKelas } from '../data/mockData';
 import { getCurrentUser, calculatePercentage } from '../utils/helpers';
 import Button from '../components/common/Button';
-import heroImage from '../assets/images/smansan.jpg';
+import heroImage from '../assets/images/smansan2.jpg';
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const currentUser = getCurrentUser();

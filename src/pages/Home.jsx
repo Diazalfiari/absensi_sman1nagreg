@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import logoSmansan from '../assets/images/logosmansan.png';
-import heroImage from '../assets/images/smansan.jpg';
+import heroImage from '../assets/images/smansan2.jpg';
 
 const Home = () => {
 

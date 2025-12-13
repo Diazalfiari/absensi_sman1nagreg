@@ -5,7 +5,7 @@ import { saveToLocalStorage } from '../utils/helpers';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
 import logoSmansan from '../assets/images/logosmansan.png';
-import heroImage from '../assets/images/smansan.jpg';
+import heroImage from '../assets/images/smansan2.jpg';
 
 const Login = () => {
   const navigate = useNavigate();
