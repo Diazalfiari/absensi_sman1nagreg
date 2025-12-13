@@ -14,11 +14,11 @@ const Button = ({
   const baseStyles = 'font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 tracking-tight disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 text-white shadow-glow hover:shadow-soft hover:translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0',
-    secondary: 'bg-white/10 text-white border border-white/20 hover:bg-white/15 disabled:opacity-50',
-    success: 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-glow hover:brightness-110 disabled:opacity-50',
-    danger: 'bg-gradient-to-r from-rose-500 to-red-600 text-white shadow-glow hover:brightness-110 disabled:opacity-50',
-    outline: 'border border-white/30 text-white hover:bg-white/10 disabled:opacity-40',
+    primary: 'bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-60 disabled:hover:bg-blue-600',
+    secondary: 'bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200 disabled:opacity-50',
+    success: 'bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 disabled:opacity-50',
+    danger: 'bg-rose-600 text-white shadow-sm hover:bg-rose-700 disabled:opacity-50',
+    outline: 'border border-slate-300 text-slate-800 hover:bg-slate-100 disabled:opacity-40',
   };
 
   const sizes = {
