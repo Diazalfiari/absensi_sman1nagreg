@@ -11,7 +11,7 @@ const StatCard = ({ title, value, icon, color = 'primary', subtitle }) => {
 
   return (
     <div className={`relative overflow-hidden rounded-2xl border border-white/10 p-6 bg-white/5 backdrop-blur-xl shadow-soft hover:shadow-glow transition-all`}> 
-      <div className={`absolute inset-0 bg-gradient-to-br ${colorStyles[color]} opacity-80`}></div>
+      <div className={`absolute inset-0 ${colorStyles[color]} opacity-80`}></div>
       <div className="relative flex items-start justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.2em] text-white/70 mb-2">{title}</p>

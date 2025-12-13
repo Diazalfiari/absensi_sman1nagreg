@@ -114,7 +114,7 @@ const AbsensiMandiri = () => {
 
           {/* Info Absensi - Only show if coming from DetailPelajaran */}
           {jadwalInfo && (
-            <Card padding="lg" className="bg-gradient-to-br from-primary-600/40 to-primary-700/40 border border-primary-500/30">
+            <Card padding="lg" className="bg-blue-600/20 border border-blue-500/30">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-primary-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
                   <span className="text-2xl">📚</span>

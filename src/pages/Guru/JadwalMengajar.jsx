@@ -250,7 +250,7 @@ const JadwalMengajar = () => {
                               <h4 className="font-semibold text-white">
                                 {schedule.mataPelajaran}
                               </h4>
-                              <span className="text-xs px-2 py-1 rounded-lg bg-primary-500/20 text-primary-300 border border-primary-500/30">
+                              <span className="text-xs px-2 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30">
                                 {schedule.kelas}
                               </span>
                             </div>

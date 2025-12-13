@@ -50,7 +50,7 @@ const Sidebar = ({ role }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-72 min-h-screen fixed left-0 top-0 flex-col bg-gradient-to-b from-ink-900 via-ink-900/90 to-ink-900/70 border-r border-white/10 text-white">
+      <aside className="hidden lg:flex w-72 min-h-screen fixed left-0 top-0 flex-col bg-slate-800 border-r border-slate-700 text-white">
         {/* Logo */}
         <div className="px-6 py-8 border-b border-white/10">
           <div className="flex items-center gap-4">

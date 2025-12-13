@@ -52,7 +52,7 @@ const SiswaDashboard = () => {
 
           {/* Date & Status Card */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-            <Card className="bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+            <Card className="bg-blue-600 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm sm:text-base font-semibold mb-1">{getDayName(new Date())}</h3>
@@ -64,8 +64,8 @@ const SiswaDashboard = () => {
 
             <Card className={`${
               todayAbsensi 
-                ? 'bg-gradient-to-br from-green-600 to-green-700' 
-                : 'bg-gradient-to-br from-amber-500 to-yellow-500'
+                ? 'bg-emerald-600' 
+                : 'bg-amber-500'
             } text-white`}>
             <div className="flex items-center justify-between">
               <div>
@@ -86,7 +86,7 @@ const SiswaDashboard = () => {
 
           {/* CTA Jadwal Pelajaran */}
           {!todayAbsensi && (
-            <Card className="mb-5 bg-gradient-to-r from-primary-500/40 to-accent-500/40 border border-white/10">
+            <Card className="mb-5 bg-blue-500/20 border border-blue-500/30">
               <div className="flex flex-col md:flex-row items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
@@ -107,7 +107,7 @@ const SiswaDashboard = () => {
           {/* Statistik Kehadiran per Pelajaran (Hari Ini) */}
           <div className="mb-5">
             <h2 className="text-xl sm:text-2xl font-bold mb-3">Statistik Kehadiran per Pelajaran (Hari Ini)</h2>
-            <div className="bg-gradient-to-br from-primary-600/20 to-primary-700/20 border border-white/10 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div className="bg-blue-600/15 border border-blue-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
               <div className="flex items-center justify-between text-xs sm:text-sm text-white/70">
                 <span>Pelajaran</span>
                 <span>Hadir / Total</span>

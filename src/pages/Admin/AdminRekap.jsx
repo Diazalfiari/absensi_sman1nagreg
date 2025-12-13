@@ -260,7 +260,7 @@ const AdminRekap = () => {
   };
 
   return (
-    <div className="min-h-screen text-white bg-gradient-to-br from-ink-950 via-ink-900 to-ink-900">
+    <div className="min-h-screen text-white bg-slate-900">
       <Sidebar role="admin" />
 
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">

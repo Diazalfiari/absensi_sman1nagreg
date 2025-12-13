@@ -53,9 +53,9 @@ const AdminDashboard = () => {
               <img
                 src={heroImage}
                 alt="SMAN 1 Nagreg"
-                className="w-full h-full object-cover opacity-40"
+                className="w-full h-full object-cover opacity-60"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-900/90 to-primary-900/60"></div>
+              <div className="absolute inset-0 bg-slate-900/70"></div>
             </div>
             <div className="relative z-10 p-6 sm:p-8 flex flex-col lg:flex-row gap-6 items-start lg:items-center lg:justify-between">
               <div>
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-primary-600/30 to-accent-500/30 border border-white/10 p-4 sm:p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 sm:gap-4 shadow-glow mb-4">
+          <div className="rounded-xl sm:rounded-2xl bg-blue-600/20 border border-blue-500/30 p-4 sm:p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 sm:gap-4 shadow-sm mb-4">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-white/80">Rekap Terperinci</p>
               <h3 className="text-lg sm:text-xl font-semibold">Ingin menyelam lebih dalam?</h3>
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-            <div className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-accent-600/30 to-primary-500/30 border border-white/10 p-4 sm:p-5 flex flex-col items-start justify-between gap-3 sm:gap-4 shadow-glow">
+            <div className="rounded-xl sm:rounded-2xl bg-emerald-600/20 border border-emerald-500/30 p-4 sm:p-5 flex flex-col items-start justify-between gap-3 sm:gap-4 shadow-sm">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-white/80">Laporan Bulanan</p>
                 <h3 className="text-lg sm:text-xl font-semibold">Laporan Absensi Detail per Bulan</h3>
@@ -137,7 +137,7 @@ const AdminDashboard = () => {
               </Button>
             </div>
 
-            <div className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-violet-600/30 to-fuchsia-500/30 border border-white/10 p-4 sm:p-5 flex flex-col items-start justify-between gap-3 sm:gap-4 shadow-glow">
+            <div className="rounded-xl sm:rounded-2xl bg-violet-600/20 border border-violet-500/30 p-4 sm:p-5 flex flex-col items-start justify-between gap-3 sm:gap-4 shadow-sm">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-white/80">Manajemen Jadwal</p>
                 <h3 className="text-lg sm:text-xl font-semibold">Tambah Jadwal Pelajaran</h3>

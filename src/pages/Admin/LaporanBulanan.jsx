@@ -362,7 +362,7 @@ const LaporanBulanan = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ink-950 via-ink-900 to-primary-950">
+    <div className="min-h-screen bg-slate-900">
       <Sidebar role="admin" />
       
       <div className="lg:ml-64 p-4 md:py-6 md:pr-6 md:pl-10 lg:py-8 lg:pr-8 lg:pl-14">
@@ -477,7 +477,7 @@ const LaporanBulanan = () => {
               <div className="overflow-hidden">
                 <table className="w-full text-xs md:text-sm border-collapse min-w-max">
               <thead>
-                <tr className="bg-gradient-to-r from-primary-700/80 via-primary-500/80 to-accent-500/70 text-white">
+                <tr className="bg-blue-700 text-white">
                   <th rowSpan="2" className="px-3 py-3 text-center text-xs font-semibold uppercase border border-white/20">No</th>
                   <th rowSpan="2" className="px-3 py-3 text-center text-xs font-semibold uppercase border border-white/20">NIPD</th>
                   <th rowSpan="2" className="px-3 py-3 text-left text-xs font-semibold uppercase border border-white/20">Nama Siswa</th>
@@ -485,7 +485,7 @@ const LaporanBulanan = () => {
                   <th colSpan={daysInMonth} className="px-3 py-2 text-center text-xs font-semibold uppercase border border-white/20">Tanggal</th>
                   <th colSpan="5" className="px-3 py-2 text-center text-xs font-semibold uppercase border border-white/20">Rekap Absensi</th>
                 </tr>
-                <tr className="bg-gradient-to-r from-primary-700/80 via-primary-500/80 to-accent-500/70 text-white">
+                <tr className="bg-blue-600 text-white">
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
                     <th key={day} className="px-2 py-2 text-center text-xs border border-white/20">
                       <div>{day.toString().padStart(2, '0')}</div>

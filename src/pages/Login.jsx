@@ -71,7 +71,7 @@ const Login = () => {
     <>
       {loading && <Loading fullscreen text="Sedang memproses login..." />}
       <div className="min-h-screen flex items-center justify-center px-6 py-12 relative text-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-ink-950 via-ink-900 to-primary-900 opacity-95"></div>
+      <div className="absolute inset-0 bg-slate-900 opacity-95"></div>
       <div className="absolute inset-0">
         <img
           src={heroImage}
@@ -92,11 +92,11 @@ const Login = () => {
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.5em] text-white/60">SMAN 1 Nagreg</p>
-              <h1 className="font-display text-3xl sm:text-4xl">Digital Attendance Hub</h1>
+              <h1 className="font-display text-3xl sm:text-4xl">Presensi Siswa Digital</h1>
             </div>
           </div>
           <p className="text-white/75 max-w-md">
-            Masuk dan kelola seluruh perjalanan kehadiran dengan nuansa visual yang lebih hidup.
+            Masuk dan kelola seluruh kehadiran dengan Digital.
           </p>
           <div className="glass-panel p-6 space-y-3">
             <p className="text-xs uppercase tracking-[0.4em] text-white/60">Kredensial Demo</p>
@@ -159,19 +159,6 @@ const Login = () => {
                 className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-primary-400 placeholder-white/40"
                 placeholder="Masukkan password"
               />
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="rememberPassword"
-                checked={rememberPassword}
-                onChange={(e) => setRememberPassword(e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 bg-white/5 text-primary-500 focus:ring-2 focus:ring-primary-400 focus:ring-offset-0 cursor-pointer"
-              />
-              <label htmlFor="rememberPassword" className="ml-2 text-sm text-white/70 cursor-pointer">
-                Ingat password saya
-              </label>
             </div>
 
             <Button type="submit" variant="primary" fullWidth disabled={loading}>

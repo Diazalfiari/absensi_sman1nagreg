@@ -65,7 +65,7 @@ const DetailPelajaran = () => {
           <div className="flex items-center gap-4 mb-6">
             <button
               onClick={() => navigate(-1)}
-              className="text-white hover:text-primary-400 transition-colors"
+              className="text-white hover:text-blue-400 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -214,8 +214,8 @@ const DetailPelajaran = () => {
           {/* Video Interaktif */}
           <Card padding="lg" className="bg-white/10 backdrop-blur-sm border border-white/20">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -225,7 +225,7 @@ const DetailPelajaran = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {detailPelajaran.video.map((item) => (
                 <div key={item.id} className="bg-white/5 rounded-lg overflow-hidden hover:bg-white/10 transition-all cursor-pointer border border-white/10">
-                  <div className="aspect-video bg-gradient-to-br from-purple-500/40 to-blue-500/40 flex items-center justify-center">
+                  <div className="aspect-video bg-blue-500/20 flex items-center justify-center">
                     <span className="text-6xl">{item.thumbnail}</span>
                   </div>
                   <div className="p-4">
@@ -238,7 +238,7 @@ const DetailPelajaran = () => {
           </Card>
 
           {/* Button Absensi */}
-          <Card padding="lg" className="bg-gradient-to-r from-emerald-600 to-emerald-500">
+          <Card padding="lg" className="bg-emerald-600">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-lg sm:text-xl font-bold text-white">Absensi Kehadiran</h3>

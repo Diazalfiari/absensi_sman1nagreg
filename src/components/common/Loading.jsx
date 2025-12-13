@@ -18,7 +18,7 @@ const Loading = ({
     <div className="flex flex-col items-center justify-center gap-4">
       {/* Spinner dengan logo */}
       <div className="relative">
-        <div className={`${sizeClasses[size]} rounded-full border-4 border-white/20 border-t-primary-500 animate-spin`}></div>
+        <div className={`${sizeClasses[size]} rounded-full border-4 border-white/20 border-t-blue-500 animate-spin`}></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <img 
             src={logoSmansan}
@@ -32,9 +32,9 @@ const Loading = ({
         <div className="flex flex-col items-center gap-2">
           <p className="text-white/90 font-medium">{text}</p>
           <div className="flex gap-1">
-            <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
-            <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-            <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+            <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
+            <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+            <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
           </div>
         </div>
       )}
@@ -43,7 +43,7 @@ const Loading = ({
 
   if (fullscreen) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-ink-950 via-ink-900 to-ink-900">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900">
         {overlay && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
         )}
@@ -96,7 +96,7 @@ export const LoadingProgress = ({ progress = 0, text = '' }) => {
       </div>
       <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
         <div 
-          className="h-full bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-300 ease-out"
+          className="h-full bg-blue-600 transition-all duration-300 ease-out"
           style={{ width: `${progress}%` }}
         ></div>
       </div>

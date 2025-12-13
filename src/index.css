@@ -144,7 +144,7 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #8c46ff, #0ea5e9);
+  background: #2563eb;
   border-radius: 999px;
 }
 

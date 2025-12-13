@@ -181,7 +181,7 @@ const DetailSesi = () => {
 
           {/* Start Session Button */}
           {!sessionStarted && (
-            <Card padding="lg" className="bg-gradient-to-r from-primary-600/20 to-accent-500/20 border-primary-500/30">
+            <Card padding="lg" className="bg-blue-50 border-blue-200">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-1">▶️ Mulai Sesi Mengajar</h3>

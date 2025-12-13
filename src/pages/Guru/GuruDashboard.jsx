@@ -35,7 +35,7 @@ const GuruDashboard = () => {
 
           {/* Info Card */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <Card className="bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+            <Card className="bg-blue-600 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold mb-2">Tanggal Hari Ini</h3>
@@ -46,7 +46,7 @@ const GuruDashboard = () => {
             </div>
             </Card>
 
-            <Card className="bg-gradient-to-br from-green-600 to-green-700 text-white">
+            <Card className="bg-emerald-600 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold mb-2">NIP</h3>

@@ -3,14 +3,14 @@ import { calculatePercentage } from '../../utils/helpers';
 
 const StatCard = ({ title, value, icon, color = 'primary' }) => {
   const colorStyles = {
-    primary: 'from-primary-500/30 to-primary-500/5',
-    success: 'from-emerald-500/30 to-emerald-500/5',
-    warning: 'from-amber-400/30 to-amber-400/5',
-    danger: 'from-rose-500/30 to-rose-500/5',
+    primary: 'bg-blue-500/20',
+    success: 'bg-emerald-500/20',
+    warning: 'bg-amber-400/20',
+    danger: 'bg-rose-500/20',
   };
 
   return (
-    <div className={`rounded-2xl p-5 border border-white/10 bg-gradient-to-br ${colorStyles[color]} backdrop-blur-lg`}> 
+    <div className={`rounded-2xl p-5 border border-white/10 ${colorStyles[color]} backdrop-blur-lg`}> 
       <div className="flex items-center justify-between mb-2">
         <p className="text-white/70 text-sm font-medium">{title}</p>
         <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20">
@@ -30,7 +30,7 @@ const StatusCard = ({ siswaData }) => {
   return (
     <div className="space-y-6">
       {/* Main Stat Card */}
-      <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl shadow-glow p-6 text-white">
+      <div className="bg-blue-600 rounded-2xl shadow-sm p-6 text-white">
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm opacity-90 mb-1">Persentase Kehadiran</p>

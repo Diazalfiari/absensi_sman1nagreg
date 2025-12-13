@@ -43,7 +43,7 @@ const RekapTable = ({ data }) => {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-gradient-to-r from-primary-700/80 via-primary-500/80 to-accent-500/70 text-white">
+            <tr className="bg-blue-700 text-white">
               <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest">No</th>
               <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest">Tanggal</th>
               <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest">Kelas</th>

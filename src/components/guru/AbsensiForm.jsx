@@ -128,7 +128,7 @@ const AbsensiForm = ({ onSubmit }) => {
       {/* Student Table */}
       {selectedKelas && absensiData.length > 0 && (
         <div className="rounded-2xl border border-white/10 overflow-hidden bg-white/5 backdrop-blur-xl">
-          <div className="px-6 py-4 bg-gradient-to-r from-primary-600 to-accent-500">
+          <div className="px-6 py-4 bg-blue-600">
             <h3 className="text-lg font-semibold text-white">
               Daftar Siswa Kelas {selectedKelas}
             </h3>
