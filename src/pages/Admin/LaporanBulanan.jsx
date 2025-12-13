@@ -462,13 +462,11 @@ const LaporanBulanan = () => {
 
         {/* Info Box - Active Filter */}
         <div className="glass-panel p-4 mb-4 bg-primary-500/10 border-primary-500/30">
-          <div className="flex items-center gap-2 text-sm text-white/90">
-            <span className="font-semibold">📊 Menampilkan:</span>
-            <span className="bg-white/10 px-3 py-1 rounded-lg">{filters.mataPelajaran}</span>
-            <span>•</span>
-            <span className="bg-white/10 px-3 py-1 rounded-lg">{filters.kelas}</span>
-            <span>•</span>
-            <span className="bg-white/10 px-3 py-1 rounded-lg">{bulanName} {filters.tahun}</span>
+          <div className="flex flex-wrap items-center gap-2 text-sm text-white/90">
+            <span className="font-semibold">Menampilkan:</span>
+            <span className="bg-white/10 px-3 py-1 rounded-lg whitespace-nowrap">{filters.mataPelajaran}</span>
+            <span className="bg-white/10 px-3 py-1 rounded-lg whitespace-nowrap">{filters.kelas}</span>
+            <span className="bg-white/10 px-3 py-1 rounded-lg whitespace-nowrap">{bulanName} {filters.tahun}</span>
           </div>
         </div>
 
