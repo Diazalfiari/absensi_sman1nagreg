@@ -686,30 +686,42 @@ export const statistikSiswa = {
 
 // Statistik per mata pelajaran per hari (untuk dashboard siswa - hanya tampilkan hari ini)
 export const statistikMapelHarianSiswa = {
-  '2024-12-11': [
-    { mapel: 'Matematika', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'Bahasa Indonesia', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'Fisika', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-  ],
-  '2025-12-11': [
-    { mapel: 'Matematika', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'Bahasa Indonesia', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'Fisika', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-  ],
-  '2024-12-10': [
-    { mapel: 'Kimia', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'Bahasa Inggris', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-  ],
-  '2024-12-09': [
-    { mapel: 'Matematika', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'PJOK', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-  ],
-  '2024-12-08': [
-    { mapel: 'Biologi', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'Seni Budaya', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-  ],
-  '2024-12-07': [
+  '2025-12-07': [
     { mapel: 'Sejarah', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
-    { mapel: 'Geografi', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
+    { mapel: 'Geografi', hadir: 0, izin: 1, sakit: 0, alfa: 0 },
+  ],
+  '2025-12-14': [
+    { mapel: 'Sejarah', hadir: 1, izin: 0, sakit: 0, alfa: 0 },
+    { mapel: 'Geografi', hadir: 13, izin: 0, sakit: 1, alfa: 0 },
+  ],
+  '2025-12-15': [
+    { mapel: 'Matematika', hadir: 12, izin: 2, sakit: 0, alfa: 0 },
+    { mapel: 'Bahasa Indonesia', hadir: 14, izin: 0, sakit: 1, alfa: 0 },
+    { mapel: 'Fisika', hadir: 13, izin: 0, sakit: 0, alfa: 0 },
+    { mapel: 'Kimia', hadir: 16, izin: 0, sakit: 0, alfa: 0 },
+  ],
+  '2025-12-16': [
+    { mapel: 'Matematika', hadir: 12, izin: 2, sakit: 0, alfa: 0 },
+    { mapel: 'Bahasa Indonesia', hadir: 14, izin: 0, sakit: 1, alfa: 0 },
+    { mapel: 'Fisika', hadir: 13, izin: 0, sakit: 0, alfa: 0 },
+    { mapel: 'Kimia', hadir: 16, izin: 0, sakit: 0, alfa: 0 },
+  ],
+  '2025-12-17': [
+    { mapel: 'Matematika', hadir: 12, izin: 2, sakit: 0, alfa: 0 },
+    { mapel: 'Bahasa Indonesia', hadir: 14, izin: 0, sakit: 1, alfa: 0 },
+    { mapel: 'Fisika', hadir: 13, izin: 0, sakit: 0, alfa: 0 },
+    { mapel: 'Kimia', hadir: 16, izin: 0, sakit: 0, alfa: 0 },
+  ],
+  '2025-12-18': [
+    { mapel: 'Matematika', hadir: 12, izin: 2, sakit: 0, alfa: 0 },
+    { mapel: 'Bahasa Indonesia', hadir: 14, izin: 0, sakit: 1, alfa: 0 },
+    { mapel: 'Fisika', hadir: 13, izin: 0, sakit: 0, alfa: 0 },
+    { mapel: 'Kimia', hadir: 16, izin: 0, sakit: 0, alfa: 0 },
+  ],
+  '2025-12-19': [
+    { mapel: 'Matematika', hadir: 12, izin: 2, sakit: 0, alfa: 0 },
+    { mapel: 'Bahasa Indonesia', hadir: 14, izin: 0, sakit: 1, alfa: 0 },
+    { mapel: 'Fisika', hadir: 13, izin: 0, sakit: 0, alfa: 0 },
+    { mapel: 'Kimia', hadir: 16, izin: 0, sakit: 0, alfa: 0 },
   ],
 };
