@@ -670,9 +670,9 @@ export const absensiHarian = [
 
 // Koordinat lokasi sekolah (untuk validasi GPS)
 export const lokasiSekolah = {
-  lat: -6.864896,
-  lng: 107.5478528,
-  radius: 100, // dalam meter
+  lat: -7.010568, 
+  lng: 107.830889,
+  radius: 150, // dalam meter (diperbesar untuk akurasi GPS ~20m)
 };
 
 // Statistik untuk dashboard siswa
