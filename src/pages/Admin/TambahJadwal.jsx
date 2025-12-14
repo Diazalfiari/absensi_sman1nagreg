@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import Notification from '../../components/common/Notification';
 import Footer from '../../components/common/Footer';
 
 const TambahJadwal = () => {
@@ -16,8 +17,8 @@ const TambahJadwal = () => {
   const [selectedDates, setSelectedDates] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
+  const [notification, setNotification] = useState({ isOpen: false, type: 'success', title: '', message: '' });
 
   // Generate calendar days
   const getDaysInMonth = (date) => {
@@ -146,12 +147,16 @@ const TambahJadwal = () => {
     console.log('Data Jadwal:', jadwalData);
     console.log('Tanggal yang dipilih:', sortedDates.map(d => d.toLocaleDateString('id-ID')));
     
-    setSuccessMessage(`Jadwal berhasil ditambahkan untuk ${sortedDates.length} tanggal!`);
-    setTimeout(() => setSuccessMessage(''), 3000);
-    
     // Close dialog and reset form
     setShowConfirm(false);
     handleReset();
+    
+    setNotification({
+      isOpen: true,
+      type: 'success',
+      title: 'Jadwal Berhasil Ditambahkan!',
+      message: `${sortedDates.length} jadwal pelajaran telah berhasil disimpan.`
+    });
   };
 
   const handleReset = () => {
@@ -188,12 +193,6 @@ const TambahJadwal = () => {
             <h1 className="text-3xl md:text-4xl font-display">Tambah Jadwal Pelajaran</h1>
             <p className="text-white/70">Buat jadwal baru dengan multiple date selection</p>
           </div>
-
-          {successMessage && (
-            <div className="glass-panel bg-emerald-500/20 border-emerald-500/50 p-4 mb-6 rounded-2xl">
-              <p className="text-emerald-300 font-semibold">✓ {successMessage}</p>
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -454,6 +453,16 @@ const TambahJadwal = () => {
       </main>
 
       <Footer />
+
+      {/* Notification */}
+      <Notification
+        isOpen={notification.isOpen}
+        type={notification.type}
+        title={notification.title}
+        message={notification.message}
+        onClose={() => setNotification({ ...notification, isOpen: false })}
+        duration={3000}
+      />
 
       {/* Confirmation Dialog */}
       <ConfirmDialog
