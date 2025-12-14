@@ -4,6 +4,7 @@ import Sidebar from '../../components/common/Sidebar';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import Notification from '../../components/common/Notification';
 import { dataSiswa } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
 
@@ -24,12 +25,12 @@ const DetailSesi = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
   const [uploadError, setUploadError] = useState('');
   const [sessionStarted, setSessionStarted] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const [notification, setNotification] = useState({ isOpen: false, type: 'success', title: '', message: '' });
 
   const handleStatusChange = (siswaId, newStatus) => {
     setAttendance(
@@ -69,8 +70,12 @@ const DetailSesi = () => {
     setUploadedFiles((prev) => [...prev, selectedFile]);
     setShowUploadConfirm(false);
     setUploadError('');
-    setSuccessMessage(`File "${selectedFile.name}" berhasil diunggah!`);
-    setTimeout(() => setSuccessMessage(''), 3000);
+    setNotification({
+      isOpen: true,
+      type: 'success',
+      title: 'Upload Berhasil!',
+      message: `File "${selectedFile.name}" berhasil diunggah.`
+    });
     setSelectedFile(null);
   };
 
@@ -81,8 +86,12 @@ const DetailSesi = () => {
   const handleConfirmStart = () => {
     setSessionStarted(true);
     setShowConfirm(false);
-    setSuccessMessage('Sesi mengajar telah dimulai!');
-    setTimeout(() => setSuccessMessage(''), 3000);
+    setNotification({
+      isOpen: true,
+      type: 'success',
+      title: 'Sesi Dimulai!',
+      message: 'Sesi mengajar telah dimulai. Anda dapat mengisi absensi dan upload materi.'
+    });
   };
 
   const handleSaveAttendance = () => {
@@ -102,10 +111,12 @@ const DetailSesi = () => {
     
     console.log('Data Kehadiran Tersimpan:', attendanceData);
     setShowSaveConfirm(false);
-    setSuccessMessage('Data kehadiran berhasil disimpan!');
-    setTimeout(() => {
-      setSuccessMessage('');
-    }, 3000);
+    setNotification({
+      isOpen: true,
+      type: 'success',
+      title: 'Data Tersimpan!',
+      message: 'Data kehadiran siswa berhasil disimpan.'
+    });
   };
 
   const getStatusCount = () => {
@@ -148,12 +159,6 @@ const DetailSesi = () => {
             <p className="text-xs uppercase tracking-[0.4em] text-white/60">Sesi Mengajar</p>
             <h1 className="text-3xl md:text-4xl font-display">Detail Sesi</h1>
           </div>
-
-          {successMessage && (
-            <div className="glass-panel bg-emerald-500/20 border-emerald-500/50 p-4 rounded-2xl">
-              <p className="text-emerald-300 font-semibold">✓ {successMessage}</p>
-            </div>
-          )}
 
           {/* Schedule Info */}
           <Card padding="lg">
@@ -232,7 +237,7 @@ const DetailSesi = () => {
           </div>
 
           {/* Upload Materi */}
-          <Card padding="lg">
+          <Card padding="lg" className={!sessionStarted ? 'opacity-50 pointer-events-none' : ''}>
             <h2 className="text-xl font-semibold mb-4">📎 Upload Materi Pembelajaran</h2>
             {uploadError && (
               <div className="glass-panel p-4 mb-3 bg-rose-500/15 border border-rose-400/40 rounded-xl">
@@ -247,8 +252,9 @@ const DetailSesi = () => {
                   onChange={handleFileSelect}
                   className="hidden"
                   accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
+                  disabled={!sessionStarted}
                 />
-                <label htmlFor="fileUpload" className="cursor-pointer">
+                <label htmlFor="fileUpload" className={!sessionStarted ? 'cursor-not-allowed' : 'cursor-pointer'}>
                   <div className="text-4xl mb-2">📄</div>
                   <p className="text-white/70 mb-1">
                     {selectedFile ? selectedFile.name : 'Klik untuk pilih file materi'}
@@ -274,11 +280,12 @@ const DetailSesi = () => {
                     <button
                       onClick={() => setSelectedFile(null)}
                       className="text-red-400 hover:text-red-300 transition-colors"
+                      disabled={!sessionStarted}
                     >
                       ✕
                     </button>
                   </div>
-                  <Button className="w-full" onClick={handleUploadClick}>
+                  <Button className="w-full" onClick={handleUploadClick} disabled={!sessionStarted}>
                     📤 Upload Materi
                   </Button>
                 </div>
@@ -408,6 +415,16 @@ const DetailSesi = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Notification */}
+      <Notification
+        isOpen={notification.isOpen}
+        type={notification.type}
+        title={notification.title}
+        message={notification.message}
+        onClose={() => setNotification({ ...notification, isOpen: false })}
+        duration={3000}
+      />
 
       {/* Confirmation Dialog - Start Session */}
       <ConfirmDialog
