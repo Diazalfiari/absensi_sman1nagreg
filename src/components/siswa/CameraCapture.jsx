@@ -77,6 +77,10 @@ const CameraCapture = ({ onPhotoCapture }) => {
 
   const retakePhoto = () => {
     setPhoto(null);
+    // Reset photo di parent component juga
+    if (onPhotoCapture) {
+      onPhotoCapture(null);
+    }
     startCamera();
   };
 

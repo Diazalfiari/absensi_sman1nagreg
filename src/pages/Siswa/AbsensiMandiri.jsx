@@ -58,6 +58,17 @@ const AbsensiMandiri = () => {
       return;
     }
 
+    // Validasi lokasi harus dalam area sekolah
+    if (!locationData.inArea) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Lokasi Tidak Valid',
+        message: 'Anda berada di luar area sekolah. Absensi hanya dapat dilakukan dari dalam area SMAN 1 Nagreg.'
+      });
+      return;
+    }
+
     setShowSubmitConfirm(true);
   };
 
@@ -69,21 +80,12 @@ const AbsensiMandiri = () => {
     setTimeout(() => {
       setSubmitting(false);
       
-      const notifConfig = locationData.inArea
-        ? {
-            type: 'success',
-            title: 'Absensi Berhasil!',
-            message: 'Terima kasih.'
-          }
-        : {
-            type: 'warning',
-            title: 'Absensi Berhasil!',
-            message: 'Catatan: Lokasi Anda terdeteksi di luar area sekolah.'
-          };
-
+      // Absensi berhasil karena sudah melewati validasi lokasi
       setNotification({
         isOpen: true,
-        ...notifConfig
+        type: 'success',
+        title: 'Absensi Berhasil!',
+        message: 'Kehadiran Anda telah tercatat. Terima kasih.'
       });
 
       // Navigate after notification duration
