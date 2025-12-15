@@ -64,7 +64,7 @@ const SiswaRiwayat = () => {
                             Hadir: 'bg-emerald-500/20 text-emerald-200',
                             Izin: 'bg-accent-500/20 text-accent-200',
                             Sakit: 'bg-amber-500/20 text-amber-200',
-                            Alfa: 'bg-rose-500/20 text-rose-200',
+                            alpa: 'bg-rose-500/20 text-rose-200',
                           }[item.status]}`}
                         >
                           {item.status}

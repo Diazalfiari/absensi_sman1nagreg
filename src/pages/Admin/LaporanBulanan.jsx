@@ -74,7 +74,7 @@ const LaporanBulanan = () => {
       let hadirCount = 0;
       let sakitCount = 0;
       let izinCount = 0;
-      let alfaCount = 0;
+      let alpaCount = 0;
 
       for (let day = 1; day <= daysInMonth; day++) {
         const dayName = getDayName(day, filters.bulan, filters.tahun);
@@ -98,11 +98,11 @@ const LaporanBulanan = () => {
           izinCount++;
         } else {
           absensiPerHari[day] = { status: 'A', color: 'bg-red-500' };
-          alfaCount++;
+          alpaCount++;
         }
       }
 
-      const totalHari = hadirCount + sakitCount + izinCount + alfaCount;
+      const totalHari = hadirCount + sakitCount + izinCount + alpaCount;
       const persentase = totalHari > 0 ? Math.round((hadirCount / totalHari) * 100) : 0;
 
       return {
@@ -112,7 +112,7 @@ const LaporanBulanan = () => {
         hadir: hadirCount,
         sakit: sakitCount,
         izin: izinCount,
-        alfa: alfaCount,
+        alpa: alpaCount,
         persentase
       };
     });
@@ -208,7 +208,7 @@ const LaporanBulanan = () => {
     tableHeaderRow1.getCell(summaryStartCol).value = 'Hadir';
     tableHeaderRow1.getCell(summaryStartCol + 1).value = 'Sakit';
     tableHeaderRow1.getCell(summaryStartCol + 2).value = 'Ijin';
-    tableHeaderRow1.getCell(summaryStartCol + 3).value = 'Alfa';
+    tableHeaderRow1.getCell(summaryStartCol + 3).value = 'alpa';
     tableHeaderRow1.getCell(summaryStartCol + 4).value = '% Kehadiran';
 
     // Style header
@@ -278,7 +278,7 @@ const LaporanBulanan = () => {
       dataRow.getCell(summaryStartCol).value = siswa.hadir;
       dataRow.getCell(summaryStartCol + 1).value = siswa.sakit;
       dataRow.getCell(summaryStartCol + 2).value = siswa.izin;
-      dataRow.getCell(summaryStartCol + 3).value = siswa.alfa;
+      dataRow.getCell(summaryStartCol + 3).value = siswa.alpa;
       dataRow.getCell(summaryStartCol + 4).value = `${siswa.persentase}%`;
       
       dataRow.alignment = { horizontal: 'center' };
@@ -299,7 +299,7 @@ const LaporanBulanan = () => {
       { label: 'TOTAL - Hadir', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'H').length },
       { label: 'Sakit', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'S').length },
       { label: 'Ijin', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'I').length },
-      { label: 'Alfa', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'A').length },
+      { label: 'alpa', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'A').length },
       { label: '% Kehadiran', calc: (day) => {
         const hadir = absensiData.filter(s => s.absensiPerHari[day]?.status === 'H').length;
         const aktif = absensiData.filter(s => {
@@ -497,7 +497,7 @@ const LaporanBulanan = () => {
                   <th className="px-3 py-2 text-center text-xs border border-white/20">Hadir</th>
                   <th className="px-3 py-2 text-center text-xs border border-white/20">Sakit</th>
                   <th className="px-3 py-2 text-center text-xs border border-white/20">Ijin</th>
-                  <th className="px-3 py-2 text-center text-xs border border-white/20">Alfa</th>
+                  <th className="px-3 py-2 text-center text-xs border border-white/20">alpa</th>
                   <th className="px-3 py-2 text-center text-xs border border-white/20">% Kehadiran</th>
                 </tr>
               </thead>
@@ -519,7 +519,7 @@ const LaporanBulanan = () => {
                     <td className="px-3 py-2 text-center border border-white/10 bg-yellow-400/20 font-semibold">{siswa.hadir}</td>
                     <td className="px-3 py-2 text-center border border-white/10 bg-blue-500/20 font-semibold">{siswa.sakit}</td>
                     <td className="px-3 py-2 text-center border border-white/10 bg-purple-500/20 font-semibold">{siswa.izin}</td>
-                    <td className="px-3 py-2 text-center border border-white/10 bg-red-500/20 font-semibold">{siswa.alfa}</td>
+                    <td className="px-3 py-2 text-center border border-white/10 bg-red-500/20 font-semibold">{siswa.alpa}</td>
                     <td className={`px-3 py-2 text-center border border-white/10 font-semibold ${
                       siswa.persentase >= 90 ? 'bg-green-500/20 text-green-200' :
                       siswa.persentase >= 80 ? 'bg-yellow-400/20 text-yellow-200' :
@@ -596,23 +596,23 @@ const LaporanBulanan = () => {
                   })}
                 </tr>
 
-                {/* Alfa Row */}
+                {/* alpa Row */}
                 <tr className="bg-red-500/20 font-semibold">
                   <td colSpan="3" className="px-3 py-2 border border-white/20"></td>
-                  <td className="px-3 py-2 text-center border border-white/20">Alfa</td>
+                  <td className="px-3 py-2 text-center border border-white/20">alpa</td>
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                     const dayName = getDayName(day, filters.bulan, filters.tahun);
                     if (dayName === 'Minggu' || dayName === 'Sabtu') {
                       return <td key={day} className="px-2 py-2 text-center border border-white/20 bg-blue-400/20">-</td>;
                     }
                     
-                    const totalAlfaPerHari = absensiData.filter(siswa => 
+                    const totalalpaPerHari = absensiData.filter(siswa => 
                       siswa.absensiPerHari[day]?.status === 'A'
                     ).length;
                     
                     return (
                       <td key={day} className="px-2 py-2 text-center border border-white/20">
-                        {totalAlfaPerHari}
+                        {totalalpaPerHari}
                       </td>
                     );
                   })}
@@ -671,7 +671,7 @@ const LaporanBulanan = () => {
             </div>
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 bg-red-500 rounded flex items-center justify-center font-bold text-white">A</span>
-              <span>= Alfa</span>
+              <span>= alpa</span>
             </div>
           </div>
         </div>

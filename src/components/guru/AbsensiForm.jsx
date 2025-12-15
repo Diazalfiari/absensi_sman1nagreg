@@ -152,7 +152,7 @@ const AbsensiForm = ({ onSubmit }) => {
                     <td className="px-6 py-4 text-sm font-medium">{siswa.nama}</td>
                     <td className="px-6 py-4">
                       <div className="flex justify-center flex-wrap gap-3">
-                        {['Hadir', 'Izin', 'Sakit', 'Alfa'].map((status) => (
+                        {['Hadir', 'Izin', 'Sakit', 'alpa'].map((status) => (
                           <label key={status} className="flex items-center gap-2 cursor-pointer">
                             <input
                               type="radio"

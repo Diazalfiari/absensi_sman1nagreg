@@ -117,14 +117,14 @@ const SiswaDashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {mapelHariIni.map((item) => {
-                    const total = item.hadir + item.izin + item.sakit + item.alfa;
+                    const total = item.hadir + item.izin + item.sakit + item.alpa;
                     const percent = calculatePercentage(item.hadir, total);
                     return (
                       <div key={item.mapel} className="glass-panel bg-white/5 border-white/10 p-3 rounded-xl">
                         <div className="flex items-center justify-between mb-2">
                           <div>
                             <p className="text-sm sm:text-base font-semibold">{item.mapel}</p>
-                            <p className="text-xs text-white/60">Hadir {item.hadir} • Izin {item.izin} • Sakit {item.sakit} • Alfa {item.alfa}</p>
+                            <p className="text-xs text-white/60">Hadir {item.hadir} • Izin {item.izin} • Sakit {item.sakit} • alpa {item.alpa}</p>
                           </div>
                           <span className="text-sm sm:text-base font-bold">{percent}%</span>
                         </div>

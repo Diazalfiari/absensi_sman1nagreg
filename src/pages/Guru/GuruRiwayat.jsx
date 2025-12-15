@@ -53,7 +53,7 @@ const GuruRiwayat = () => {
                     <th className="px-6 py-3 text-center">Hadir</th>
                     <th className="px-6 py-3 text-center">Izin</th>
                     <th className="px-6 py-3 text-center">Sakit</th>
-                    <th className="px-6 py-3 text-center">Alfa</th>
+                    <th className="px-6 py-3 text-center">alpa</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10 text-sm">
@@ -66,7 +66,7 @@ const GuruRiwayat = () => {
                         <td className="px-6 py-4 text-center text-emerald-300">{item.hadir}</td>
                         <td className="px-6 py-4 text-center text-amber-200">{item.izin}</td>
                         <td className="px-6 py-4 text-center text-amber-400">{item.sakit}</td>
-                        <td className="px-6 py-4 text-center text-rose-300">{item.alfa}</td>
+                        <td className="px-6 py-4 text-center text-rose-300">{item.alpa}</td>
                       </tr>
                     );
                   })}

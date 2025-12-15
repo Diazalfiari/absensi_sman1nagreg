@@ -124,7 +124,7 @@ const DetailSesi = () => {
       hadir: attendance.filter(s => s.status === 'Hadir').length,
       sakit: attendance.filter(s => s.status === 'Sakit').length,
       izin: attendance.filter(s => s.status === 'Izin').length,
-      alfa: attendance.filter(s => s.status === 'Alfa').length,
+      alpa: attendance.filter(s => s.status === 'alpa').length,
     };
   };
 
@@ -230,8 +230,8 @@ const DetailSesi = () => {
             </Card>
             <Card padding="md" className="bg-red-500/10 border-red-500/30">
               <div className="text-center">
-                <p className="text-3xl font-bold text-red-400">{stats.alfa}</p>
-                <p className="text-sm text-white/70">Alfa</p>
+                <p className="text-3xl font-bold text-red-400">{stats.alpa}</p>
+                <p className="text-sm text-white/70">alpa</p>
               </div>
             </Card>
           </div>
@@ -342,7 +342,7 @@ const DetailSesi = () => {
                     <th className="text-center py-3 px-4 text-sm font-semibold text-white/70">Hadir</th>
                     <th className="text-center py-3 px-4 text-sm font-semibold text-white/70">Sakit</th>
                     <th className="text-center py-3 px-4 text-sm font-semibold text-white/70">Izin</th>
-                    <th className="text-center py-3 px-4 text-sm font-semibold text-white/70">Alfa</th>
+                    <th className="text-center py-3 px-4 text-sm font-semibold text-white/70">alpa</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -392,8 +392,8 @@ const DetailSesi = () => {
                         <label className="inline-flex items-center justify-center cursor-pointer">
                           <input
                             type="checkbox"
-                            checked={siswa.status === 'Alfa'}
-                            onChange={() => handleStatusChange(siswa.id, 'Alfa')}
+                            checked={siswa.status === 'alpa'}
+                            onChange={() => handleStatusChange(siswa.id, 'alpa')}
                             className="w-5 h-5 rounded border-2 border-white/30 bg-white/10 checked:bg-red-500 checked:border-red-500 cursor-pointer transition-all"
                           />
                         </label>

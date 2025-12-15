@@ -23,8 +23,8 @@ const StatCard = ({ title, value, icon, color = 'primary' }) => {
 };
 
 const StatusCard = ({ siswaData }) => {
-  const { totalHadir, totalIzin, totalSakit, totalAlfa } = siswaData;
-  const totalKehadiran = totalHadir + totalIzin + totalSakit + totalAlfa;
+  const { totalHadir, totalIzin, totalSakit, totalalpa } = siswaData;
+  const totalKehadiran = totalHadir + totalIzin + totalSakit + totalalpa;
   const persentase = calculatePercentage(totalHadir, totalKehadiran);
 
   return (
@@ -68,8 +68,8 @@ const StatusCard = ({ siswaData }) => {
           color="warning"
         />
         <StatCard
-          title="Alfa"
-          value={totalAlfa}
+          title="alpa"
+          value={totalalpa}
           icon="❌"
           color="danger"
         />

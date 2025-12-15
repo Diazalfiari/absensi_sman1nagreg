@@ -61,13 +61,13 @@ const AdminRekap = () => {
 
   const summary = filteredData.reduce(
     (acc, item) => ({
-      total: acc.total + (item.hadir + item.izin + item.sakit + item.alfa),
+      total: acc.total + (item.hadir + item.izin + item.sakit + item.alpa),
       hadir: acc.hadir + item.hadir,
       izin: acc.izin + item.izin,
       sakit: acc.sakit + item.sakit,
-      alfa: acc.alfa + item.alfa,
+      alpa: acc.alpa + item.alpa,
     }),
-    { total: 0, hadir: 0, izin: 0, sakit: 0, alfa: 0 }
+    { total: 0, hadir: 0, izin: 0, sakit: 0, alpa: 0 }
   );
 
   const persentaseKehadiran = calculatePercentage(summary.hadir, summary.total);
@@ -130,7 +130,7 @@ const AdminRekap = () => {
       'Hadir',
       'Izin',
       'Sakit',
-      'Alfa',
+      'alpa',
       'Total',
       '% Kehadiran'
     ]);
@@ -155,7 +155,7 @@ const AdminRekap = () => {
 
     // Data rows
     filteredData.forEach((item, index) => {
-      const total = item.hadir + item.izin + item.sakit + item.alfa;
+      const total = item.hadir + item.izin + item.sakit + item.alpa;
       const persentase = calculatePercentage(item.hadir, total);
       
       const dataRow = worksheet.addRow([
@@ -165,7 +165,7 @@ const AdminRekap = () => {
         item.hadir,
         item.izin,
         item.sakit,
-        item.alfa,
+        item.alpa,
         total,
         `${persentase}%`
       ]);
@@ -186,7 +186,7 @@ const AdminRekap = () => {
           cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFEF3CD' } };
         } else if (colNumber === 6) { // Sakit
           cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD1ECF1' } };
-        } else if (colNumber === 7) { // Alfa
+        } else if (colNumber === 7) { // alpa
           cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF8D7DA' } };
         } else if (colNumber === 9) { // % Kehadiran
           if (persentase >= 80) {
@@ -211,7 +211,7 @@ const AdminRekap = () => {
       summary.hadir,
       summary.izin,
       summary.sakit,
-      summary.alfa,
+      summary.alpa,
       summary.total,
       `${persentaseKehadiran}%`
     ]);
@@ -240,7 +240,7 @@ const AdminRekap = () => {
     worksheet.getColumn(4).width = 10;  // Hadir
     worksheet.getColumn(5).width = 10;  // Izin
     worksheet.getColumn(6).width = 10;  // Sakit
-    worksheet.getColumn(7).width = 10;  // Alfa
+    worksheet.getColumn(7).width = 10;  // alpa
     worksheet.getColumn(8).width = 10;  // Total
     worksheet.getColumn(9).width = 15;  // % Kehadiran
 
@@ -294,7 +294,7 @@ const AdminRekap = () => {
                 <StatCard title="Hadir" value={summary.hadir} icon="✅" color="success" />
                 <StatCard title="Izin" value={summary.izin} icon="📝" color="info" />
                 <StatCard title="Sakit" value={summary.sakit} icon="🤒" color="warning" />
-                <StatCard title="Alfa" value={summary.alfa} icon="❌" color="danger" />
+                <StatCard title="alpa" value={summary.alpa} icon="❌" color="danger" />
               </div>
             )}
           </div>

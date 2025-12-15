@@ -97,7 +97,7 @@ const Login = () => {
           <p className="text-white/75 max-w-md">
             Masuk dan kelola seluruh kehadiran dengan Digital.
           </p>
-          <div className="glass-panel p-6 space-y-3">
+          {/* <div className="glass-panel p-6 space-y-3">
             <p className="text-xs uppercase tracking-[0.4em] text-white/60">Kredensial Demo</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
               <div className="bg-white/5 p-3 rounded-xl">
@@ -113,7 +113,7 @@ const Login = () => {
                 <p className="font-mono">siswa / siswa123</p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="glass-panel p-8 self-center">

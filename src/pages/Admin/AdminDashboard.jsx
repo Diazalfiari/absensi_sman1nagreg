@@ -23,9 +23,9 @@ const AdminDashboard = () => {
       hadir: acc.hadir + item.hadir,
       izin: acc.izin + item.izin,
       sakit: acc.sakit + item.sakit,
-      alfa: acc.alfa + item.alfa,
+      alpa: acc.alpa + item.alpa,
     }),
-    { total: 0, hadir: 0, izin: 0, sakit: 0, alfa: 0 }
+    { total: 0, hadir: 0, izin: 0, sakit: 0, alpa: 0 }
   );
 
   const persentaseKehadiran = calculatePercentage(totalStats.hadir, totalStats.total);
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
               <StatCard title="Hadir" value={totalStats.hadir} icon="✅" color="success" />
               <StatCard title="Izin" value={totalStats.izin} icon="📝" color="info" />
               <StatCard title="Sakit" value={totalStats.sakit} icon="🤒" color="warning" />
-              <StatCard title="Alfa" value={totalStats.alfa} icon="❌" color="danger" />
+              <StatCard title="alpa" value={totalStats.alpa} icon="❌" color="danger" />
             </div>
           </div>
 

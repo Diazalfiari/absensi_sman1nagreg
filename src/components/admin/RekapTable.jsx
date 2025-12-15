@@ -50,7 +50,7 @@ const RekapTable = ({ data }) => {
               <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">Hadir</th>
               <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">Izin</th>
               <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">Sakit</th>
-              <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">Alfa</th>
+              <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">alpa</th>
               <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">Total</th>
               <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">% Hadir</th>
               <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest">Aksi</th>
@@ -58,7 +58,7 @@ const RekapTable = ({ data }) => {
           </thead>
           <tbody className="divide-y divide-white/10 text-white">
             {currentData.map((item, index) => {
-              const total = item.hadir + item.izin + item.sakit + item.alfa;
+              const total = item.hadir + item.izin + item.sakit + item.alpa;
               const persentase = calculatePercentage(item.hadir, total);
               const globalIndex = startIndex + index;
               return (
@@ -83,7 +83,7 @@ const RekapTable = ({ data }) => {
                   </td>
                   <td className="px-6 py-4 text-center text-sm">
                     <span className="px-3 py-1 bg-rose-500/20 text-rose-100 rounded-full font-semibold">
-                      {item.alfa}
+                      {item.alpa}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center text-lg font-semibold">{total}</td>
@@ -144,7 +144,7 @@ const RekapTable = ({ data }) => {
                         <th className="px-4 py-2 text-center text-xs uppercase tracking-wider text-gray-600">Hadir</th>
                         <th className="px-4 py-2 text-center text-xs uppercase tracking-wider text-gray-600">Izin</th>
                         <th className="px-4 py-2 text-center text-xs uppercase tracking-wider text-gray-600">Sakit</th>
-                        <th className="px-4 py-2 text-center text-xs uppercase tracking-wider text-gray-600">Alfa</th>
+                        <th className="px-4 py-2 text-center text-xs uppercase tracking-wider text-gray-600">alpa</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -170,7 +170,7 @@ const RekapTable = ({ data }) => {
                           </td>
                           <td className="px-4 py-3 text-center">
                             <span className="px-2 py-1 bg-rose-500/20 text-rose-300 rounded-md text-xs font-semibold">
-                              {siswa.alfa}
+                              {siswa.alpa}
                             </span>
                           </td>
                         </tr>
