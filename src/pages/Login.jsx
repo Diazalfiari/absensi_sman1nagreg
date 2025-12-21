@@ -161,7 +161,7 @@ const Login = () => {
             </div>
 
             <Button type="submit" variant="primary" fullWidth disabled={loading}>
-              {loading ? 'Memproses...' : 'Masuk'}
+              {loading ? 'Memproses...' : 'Login'}
             </Button>
           </form>
 
