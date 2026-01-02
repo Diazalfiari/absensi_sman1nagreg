@@ -38,7 +38,7 @@ const SiswaRiwayat = () => {
             <div>
               <p className="text-xs uppercase tracking-[0.4em] text-white/60">Student Panel</p>
               <h1 className="text-4xl font-display">Riwayat Absensi</h1>
-              <p className="text-white/70">Lihat catatan kehadiran lengkap dengan status verifikasi.</p>
+              <p className="text-white/70">Lihat catatan kehadiran.</p>
             </div>
           </div>
 
@@ -50,7 +50,6 @@ const SiswaRiwayat = () => {
                     <th className="px-6 py-3">Tanggal</th>
                     <th className="px-6 py-3">Status</th>
                     <th className="px-6 py-3">Waktu</th>
-                    <th className="px-6 py-3">Verifikasi</th>
                     <th className="px-6 py-3">Catatan</th>
                   </tr>
                 </thead>
@@ -71,13 +70,6 @@ const SiswaRiwayat = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">{item.waktu}</td>
-                      <td className="px-6 py-4">
-                        {item.verified ? (
-                          <span className="text-emerald-300 font-semibold">✓ Terverifikasi</span>
-                        ) : (
-                          <span className="text-white/60">-</span>
-                        )}
-                      </td>
                       <td className="px-6 py-4 text-white/70">{item.keterangan || '-'}</td>
                     </tr>
                   ))}
