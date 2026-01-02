@@ -22,12 +22,31 @@ const AbsensiMandiri = () => {
   const [submitting, setSubmitting] = useState(false);
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [notification, setNotification] = useState({ isOpen: false, type: 'success', title: '', message: '' });
+  const [isMobileDevice, setIsMobileDevice] = useState(true);
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'siswa') {
       navigate('/login');
     }
   }, [currentUser, navigate]);
+
+  // Deteksi perangkat mobile
+  useEffect(() => {
+    const checkMobileDevice = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth <= 768;
+      
+      // Perangkat dianggap mobile jika memenuhi kriteria
+      setIsMobileDevice(isMobile || (hasTouch && isSmallScreen));
+    };
+
+    checkMobileDevice();
+    window.addEventListener('resize', checkMobileDevice);
+    
+    return () => window.removeEventListener('resize', checkMobileDevice);
+  }, []);
 
   const handlePhotoCapture = (photoData) => {
     setPhoto(photoData);
@@ -38,6 +57,16 @@ const AbsensiMandiri = () => {
   };
 
   const handleSubmit = () => {
+    if (!isMobileDevice) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Perangkat Tidak Didukung',
+        message: 'Absensi hanya dapat dilakukan menggunakan perangkat HP/smartphone. Laptop tidak memiliki GPS yang akurat.'
+      });
+      return;
+    }
+
     if (!photo) {
       setNotification({
         isOpen: true,
@@ -114,6 +143,27 @@ const AbsensiMandiri = () => {
             </button>
           </div>
 
+          {/* Warning untuk perangkat non-mobile */}
+          {!isMobileDevice && (
+            <Card padding="lg" className="bg-red-600/20 border border-red-500/30">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-red-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <span className="text-2xl">⚠️</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-white mb-2">Perhatian! Gunakan Perangkat HP</h3>
+                  <p className="text-white/90 mb-2">
+                    Absensi mandiri memerlukan verifikasi lokasi yang akurat menggunakan GPS. 
+                    Laptop/PC tidak memiliki GPS atau akurasi lokasi yang kurang memadai.
+                  </p>
+                  <p className="text-white font-semibold">
+                    📱 Silakan gunakan HP/smartphone Anda untuk melakukan absensi.
+                  </p>
+                </div>
+              </div>
+            </Card>
+          )}
+
           {/* Info Absensi - Only show if coming from DetailPelajaran */}
           {jadwalInfo && (
             <Card padding="lg" className="bg-blue-600/20 border border-blue-500/30">
@@ -161,12 +211,18 @@ const AbsensiMandiri = () => {
             variant="success"
             size="lg"
             fullWidth
-            disabled={submitting || !photo || !locationData}
+            disabled={submitting || !photo || !locationData || !isMobileDevice}
           >
             {submitting ? 'Mengirim Absensi...' : 'Kirim Absensi'}
           </Button>
           
-          {(!photo || !locationData) && (
+          {!isMobileDevice && (
+            <p className="text-center text-sm text-red-400 mt-3 font-semibold">
+              ⚠️ Absensi hanya dapat dilakukan melalui HP/smartphone
+            </p>
+          )}
+          
+          {isMobileDevice && (!photo || !locationData) && (
             <p className="text-center text-sm text-white/60 mt-3">
               Pastikan foto dan lokasi sudah tersedia sebelum mengirim
             </p>
