@@ -237,7 +237,7 @@ const DetailSesi = () => {
           </div>
 
           {/* Upload Materi */}
-          <Card padding="lg" className={!sessionStarted ? 'opacity-50 pointer-events-none' : ''}>
+          <Card padding="lg">
             <h2 className="text-xl font-semibold mb-4">📎 Upload Materi Pembelajaran</h2>
             {uploadError && (
               <div className="glass-panel p-4 mb-3 bg-rose-500/15 border border-rose-400/40 rounded-xl">
@@ -252,9 +252,8 @@ const DetailSesi = () => {
                   onChange={handleFileSelect}
                   className="hidden"
                   accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
-                  disabled={!sessionStarted}
                 />
-                <label htmlFor="fileUpload" className={!sessionStarted ? 'cursor-not-allowed' : 'cursor-pointer'}>
+                <label htmlFor="fileUpload" className="cursor-pointer">
                   <div className="text-4xl mb-2">📄</div>
                   <p className="text-white/70 mb-1">
                     {selectedFile ? selectedFile.name : 'Klik untuk pilih file materi'}
@@ -280,12 +279,11 @@ const DetailSesi = () => {
                     <button
                       onClick={() => setSelectedFile(null)}
                       className="text-red-400 hover:text-red-300 transition-colors"
-                      disabled={!sessionStarted}
                     >
                       ✕
                     </button>
                   </div>
-                  <Button className="w-full" onClick={handleUploadClick} disabled={!sessionStarted}>
+                  <Button className="w-full" onClick={handleUploadClick}>
                     📤 Upload Materi
                   </Button>
                 </div>
