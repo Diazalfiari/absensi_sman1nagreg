@@ -113,7 +113,7 @@ const SiswaDashboard = () => {
                 <span>Hadir / Total</span>
               </div>
               {mapelHariIni.length === 0 ? (
-                <div className="text-xs sm:text-sm text-white/60 py-2">Tidak ada jadwal atau absensi pelajaran hari ini.</div>
+                <div className="text-xs sm:text-sm text-white/60 py-2">Tidak ada jadwal atau presensi pelajaran hari ini.</div>
               ) : (
                 <div className="space-y-3">
                   {mapelHariIni.map((item) => {

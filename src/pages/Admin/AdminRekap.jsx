@@ -7,7 +7,7 @@ import RekapTable from '../../components/admin/RekapTable';
 import StatCard from '../../components/admin/StatCard';
 import Button from '../../components/common/Button';
 import { SkeletonStatCard, SkeletonTable } from '../../components/common/Skeleton';
-import { absensiHarian } from '../../data/mockData';
+import { presensiHarian } from '../../data/mockData';
 import { getCurrentUser, calculatePercentage } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
 
@@ -20,7 +20,7 @@ const AdminRekap = () => {
     startDate: '',
     endDate: '',
   });
-  const [filteredData, setFilteredData] = useState(absensiHarian);
+  const [filteredData, setFilteredData] = useState(presensiHarian);
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'admin') {
@@ -38,8 +38,8 @@ const AdminRekap = () => {
   }, []);
 
   useEffect(() => {
-    // Gunakan semua data dari absensiHarian
-    let filtered = absensiHarian;
+    // Gunakan semua data dari presensiHarian
+    let filtered = presensiHarian;
     
     // Filter berdasarkan kelas jika dipilih
     if (filters.kelas !== 'all') {

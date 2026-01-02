@@ -62,13 +62,13 @@ const LaporanBulanan = () => {
     }));
   };
 
-  // Generate mock data absensi untuk setiap siswa setiap hari
-  const generateAbsensiData = () => {
+  // Generate mock data presensi untuk setiap siswa setiap hari
+  const generatePresensiData = () => {
     const siswaList = dataSiswa[filters.kelas] || [];
     const daysInMonth = getDaysInMonth(filters.bulan, filters.tahun);
     
     return siswaList.map(siswa => {
-      const absensiPerHari = {};
+      const presensiPerHari = {};
       const jenisKelamin = Math.random() > 0.5 ? 'Laki-laki' : 'Perempuan';
       
       let hadirCount = 0;
@@ -81,23 +81,23 @@ const LaporanBulanan = () => {
         
         // Skip Minggu dan Sabtu
         if (dayName === 'Minggu' || dayName === 'Sabtu') {
-          absensiPerHari[day] = { status: '-', color: 'bg-blue-400' };
+          presensiPerHari[day] = { status: '-', color: 'bg-blue-400' };
           continue;
         }
 
         // Generate random status dengan bobot Hadir lebih tinggi
         const rand = Math.random();
         if (rand < 0.85) {
-          absensiPerHari[day] = { status: 'H', color: 'bg-yellow-400' };
+          presensiPerHari[day] = { status: 'H', color: 'bg-yellow-400' };
           hadirCount++;
         } else if (rand < 0.92) {
-          absensiPerHari[day] = { status: 'S', color: 'bg-blue-500' };
+          presensiPerHari[day] = { status: 'S', color: 'bg-blue-500' };
           sakitCount++;
         } else if (rand < 0.97) {
-          absensiPerHari[day] = { status: 'I', color: 'bg-purple-500' };
+          presensiPerHari[day] = { status: 'I', color: 'bg-purple-500' };
           izinCount++;
         } else {
-          absensiPerHari[day] = { status: 'A', color: 'bg-red-500' };
+          presensiPerHari[day] = { status: 'A', color: 'bg-red-500' };
           alpaCount++;
         }
       }
@@ -108,7 +108,7 @@ const LaporanBulanan = () => {
       return {
         ...siswa,
         jenisKelamin,
-        absensiPerHari,
+        presensiPerHari,
         hadir: hadirCount,
         sakit: sakitCount,
         izin: izinCount,
@@ -118,13 +118,13 @@ const LaporanBulanan = () => {
     });
   };
 
-  const absensiData = generateAbsensiData();
+  const presensiData = generatePresensiData();
   const daysInMonth = getDaysInMonth(filters.bulan, filters.tahun);
   const bulanName = bulanOptions.find(b => b.value === filters.bulan)?.label;
 
   const handleExportExcel = async () => {
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Laporan Absensi');
+    const worksheet = workbook.addWorksheet('Laporan Presensi');
 
     // Setup kolom untuk filter
     worksheet.mergeCells('A1:D1');
@@ -172,7 +172,7 @@ const LaporanBulanan = () => {
     worksheet.addRow([]);
 
     // Header informasi
-    const headerRow = worksheet.addRow(['LAPORAN ABSENSI SISWA']);
+    const headerRow = worksheet.addRow(['LAPORAN PRESENSI SISWA']);
     headerRow.font = { bold: true, size: 16 };
     headerRow.alignment = { horizontal: 'center' };
     worksheet.mergeCells(`A${headerRow.number}:D${headerRow.number}`);
@@ -237,7 +237,7 @@ const LaporanBulanan = () => {
     tableHeaderRow2.alignment = { horizontal: 'center' };
 
     // Data rows
-    absensiData.forEach((siswa, index) => {
+    presensiData.forEach((siswa, index) => {
       const dataRow = worksheet.addRow([
         index + 1,
         siswa.nipd,
@@ -248,7 +248,7 @@ const LaporanBulanan = () => {
       // Add attendance status for each day
       for (let day = 1; day <= daysInMonth; day++) {
         const cell = dataRow.getCell(4 + day);
-        const status = siswa.absensiPerHari[day]?.status || '-';
+        const status = siswa.presensiPerHari[day]?.status || '-';
         cell.value = status;
         
         // Color coding
@@ -296,14 +296,14 @@ const LaporanBulanan = () => {
 
     // Summary rows
     const summaryRows = [
-      { label: 'TOTAL - Hadir', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'H').length },
-      { label: 'Sakit', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'S').length },
-      { label: 'Ijin', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'I').length },
-      { label: 'alpa', calc: (day) => absensiData.filter(s => s.absensiPerHari[day]?.status === 'A').length },
+      { label: 'TOTAL - Hadir', calc: (day) => presensiData.filter(s => s.presensiPerHari[day]?.status === 'H').length },
+      { label: 'Sakit', calc: (day) => presensiData.filter(s => s.presensiPerHari[day]?.status === 'S').length },
+      { label: 'Ijin', calc: (day) => presensiData.filter(s => s.presensiPerHari[day]?.status === 'I').length },
+      { label: 'alpa', calc: (day) => presensiData.filter(s => s.presensiPerHari[day]?.status === 'A').length },
       { label: '% Kehadiran', calc: (day) => {
-        const hadir = absensiData.filter(s => s.absensiPerHari[day]?.status === 'H').length;
-        const aktif = absensiData.filter(s => {
-          const status = s.absensiPerHari[day]?.status;
+        const hadir = presensiData.filter(s => s.presensiPerHari[day]?.status === 'H').length;
+        const aktif = presensiData.filter(s => {
+          const status = s.presensiPerHari[day]?.status;
           return status && status !== '-';
         }).length;
         return aktif > 0 ? `${Math.round((hadir / aktif) * 100)}%` : '-';
@@ -356,7 +356,7 @@ const LaporanBulanan = () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Laporan_Absensi_${filters.mataPelajaran}_${filters.kelas}_${bulanName}_${filters.tahun}.xlsx`;
+    link.download = `Laporan_Presensi_${filters.mataPelajaran}_${filters.kelas}_${bulanName}_${filters.tahun}.xlsx`;
     link.click();
     window.URL.revokeObjectURL(url);
   };
@@ -369,7 +369,7 @@ const LaporanBulanan = () => {
         {/* Header */}
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white mb-2">
-            Laporan Absensi Bulanan
+            Laporan Presensi Bulanan
           </h1>
           <p className="text-sm md:text-base text-white/60">
             Laporan detail kehadiran siswa per bulan - {filters.mataPelajaran}
@@ -483,7 +483,7 @@ const LaporanBulanan = () => {
                   <th rowSpan="2" className="px-3 py-3 text-left text-xs font-semibold uppercase border border-white/20">Nama Siswa</th>
                   <th rowSpan="2" className="px-3 py-3 text-center text-xs font-semibold uppercase border border-white/20">Jenis Kelamin</th>
                   <th colSpan={daysInMonth} className="px-3 py-2 text-center text-xs font-semibold uppercase border border-white/20">Tanggal</th>
-                  <th colSpan="5" className="px-3 py-2 text-center text-xs font-semibold uppercase border border-white/20">Rekap Absensi</th>
+                  <th colSpan="5" className="px-3 py-2 text-center text-xs font-semibold uppercase border border-white/20">Rekap Presensi</th>
                 </tr>
                 <tr className="bg-blue-600 text-white">
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
@@ -502,17 +502,17 @@ const LaporanBulanan = () => {
                 </tr>
               </thead>
               <tbody className="text-white">
-                {absensiData.map((siswa, index) => (
+                {presensiData.map((siswa, index) => (
                   <tr key={siswa.id} className="hover:bg-white/5 transition-colors">
                     <td className="px-3 py-2 text-center border border-white/10">{index + 1}</td>
                     <td className="px-3 py-2 text-center border border-white/10">{siswa.nipd}</td>
                     <td className="px-3 py-2 border border-white/10">{siswa.nama}</td>
                     <td className="px-3 py-2 text-center border border-white/10">{siswa.jenisKelamin}</td>
                     {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
-                      const absensi = siswa.absensiPerHari[day];
+                      const presensi = siswa.presensiPerHari[day];
                       return (
-                        <td key={day} className={`px-2 py-2 text-center border border-white/10 ${absensi?.color || ''} font-bold`}>
-                          {absensi?.status || '-'}
+                        <td key={day} className={`px-2 py-2 text-center border border-white/10 ${presensi?.color || ''} font-bold`}>
+                          {presensi?.status || '-'}
                         </td>
                       );
                     })}
@@ -540,8 +540,8 @@ const LaporanBulanan = () => {
                       return <td key={day} className="px-2 py-2 text-center border border-white/20 bg-blue-400/20">-</td>;
                     }
                     
-                    const totalHadirPerHari = absensiData.filter(siswa => 
-                      siswa.absensiPerHari[day]?.status === 'H'
+                    const totalHadirPerHari = presensiData.filter(siswa => 
+                      siswa.presensiPerHari[day]?.status === 'H'
                     ).length;
                     
                     return (
@@ -562,8 +562,8 @@ const LaporanBulanan = () => {
                       return <td key={day} className="px-2 py-2 text-center border border-white/20 bg-blue-400/20">-</td>;
                     }
                     
-                    const totalSakitPerHari = absensiData.filter(siswa => 
-                      siswa.absensiPerHari[day]?.status === 'S'
+                    const totalSakitPerHari = presensiData.filter(siswa => 
+                      siswa.presensiPerHari[day]?.status === 'S'
                     ).length;
                     
                     return (
@@ -584,8 +584,8 @@ const LaporanBulanan = () => {
                       return <td key={day} className="px-2 py-2 text-center border border-white/20 bg-blue-400/20">-</td>;
                     }
                     
-                    const totalIzinPerHari = absensiData.filter(siswa => 
-                      siswa.absensiPerHari[day]?.status === 'I'
+                    const totalIzinPerHari = presensiData.filter(siswa => 
+                      siswa.presensiPerHari[day]?.status === 'I'
                     ).length;
                     
                     return (
@@ -606,8 +606,8 @@ const LaporanBulanan = () => {
                       return <td key={day} className="px-2 py-2 text-center border border-white/20 bg-blue-400/20">-</td>;
                     }
                     
-                    const totalalpaPerHari = absensiData.filter(siswa => 
-                      siswa.absensiPerHari[day]?.status === 'A'
+                    const totalalpaPerHari = presensiData.filter(siswa => 
+                      siswa.presensiPerHari[day]?.status === 'A'
                     ).length;
                     
                     return (
@@ -628,11 +628,11 @@ const LaporanBulanan = () => {
                       return <td key={day} className="px-2 py-2 text-center border border-white/20 bg-blue-400/20">-</td>;
                     }
                     
-                    const totalHadirPerHari = absensiData.filter(siswa => 
-                      siswa.absensiPerHari[day]?.status === 'H'
+                    const totalHadirPerHari = presensiData.filter(siswa => 
+                      siswa.presensiPerHari[day]?.status === 'H'
                     ).length;
-                    const totalSiswaAktifPerHari = absensiData.filter(siswa => {
-                      const status = siswa.absensiPerHari[day]?.status;
+                    const totalSiswaAktifPerHari = presensiData.filter(siswa => {
+                      const status = siswa.presensiPerHari[day]?.status;
                       return status && status !== '-';
                     }).length;
                     

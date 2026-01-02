@@ -136,7 +136,7 @@ function App() {
           }
         />
         <Route
-          path="/siswa/absensi"
+          path="/siswa/presensi"
           element={
             <ProtectedRoute allowedRole="siswa">
               <AbsensiMandiri />

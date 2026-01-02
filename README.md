@@ -1,10 +1,10 @@
 # Sistem Informasi Absensi Siswa SMAN 1 Nagreg
 
-Website absensi siswa berbasis React.js untuk SMAN 1 Nagreg dengan fitur:
+Website presensi siswa berbasis React.js untuk SMAN 1 Nagreg dengan fitur:
 
 - Dashboard Admin dengan rekapitulasi dan filter data
-- Dashboard Guru dengan input absensi manual
-- Dashboard Siswa dengan absensi mandiri (foto selfie & GPS)
+- Dashboard Guru dengan input presensi manual
+- Dashboard Siswa dengan presensi mandiri (foto selfie & GPS)
 - Mock data untuk simulasi sistem (front-end only)
 
 ## Cara Menjalankan

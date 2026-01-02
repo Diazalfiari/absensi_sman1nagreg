@@ -1,4 +1,4 @@
-// Mock data untuk simulasi sistem absensi
+// Mock data untuk simulasi sistem presensi
 
 // Data pengguna untuk autentikasi
 export const users = [
@@ -150,7 +150,7 @@ export const rekapitulasiKelas = [
   { id: 36, kelas: 'XII-12', hadir: 147, izin: 5, sakit: 2, alpa: 2, total: 156 },
 ];
 
-// Data riwayat absensi siswa
+// Data riwayat presensi siswa
 export const riwayatAbsensiSiswa = [
   {
     id: 1,
@@ -329,7 +329,7 @@ export const riwayatAbsensiSiswa = [
   },
 ];
 
-// Data riwayat input absensi guru
+// Data riwayat input presensi guru
 export const riwayatAbsensiGuru = [
   {
     id: 1,
@@ -575,8 +575,8 @@ export const riwayatAbsensiGuru = [
   },
 ];
 
-// Data absensi harian per kelas (untuk filter tanggal)
-export const absensiHarian = [
+// Data presensi harian per kelas (untuk filter tanggal)
+export const presensiHarian = [
   // Kelas X-1
   { tanggal: '2025-12-01', kelas: 'X-1', hadir: 28, izin: 1, sakit: 1, alpa: 0 },
   { tanggal: '2025-12-02', kelas: 'X-1', hadir: 29, izin: 0, sakit: 1, alpa: 0 },

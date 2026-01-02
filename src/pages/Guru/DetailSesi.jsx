@@ -90,7 +90,7 @@ const DetailSesi = () => {
       isOpen: true,
       type: 'success',
       title: 'Sesi Dimulai!',
-      message: 'Sesi mengajar telah dimulai. Anda dapat mengisi absensi dan upload materi.'
+      message: 'Sesi mengajar telah dimulai. Anda dapat mengisi presensi dan upload materi.'
     });
   };
 
@@ -190,7 +190,7 @@ const DetailSesi = () => {
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-1">▶️ Mulai Sesi Mengajar</h3>
-                  <p className="text-sm text-white/70">Klik tombol untuk memulai sesi dan mengaktifkan fitur absensi</p>
+                  <p className="text-sm text-white/70">Klik tombol untuk memulai sesi dan mengaktifkan fitur presensi</p>
                 </div>
                 <Button size="lg" onClick={handleStartSession}>
                   Mulai Sesi

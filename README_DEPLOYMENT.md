@@ -29,7 +29,7 @@ Ikuti prompt:
 - **Set up and deploy?** → Yes
 - **Which scope?** → Pilih akun Anda
 - **Link to existing project?** → No (untuk deploy pertama kali)
-- **What's your project's name?** → absensi-sman1nagreg (atau nama yang Anda inginkan)
+- **What's your project's name?** → presensi-sman1nagreg (atau nama yang Anda inginkan)
 - **In which directory is your code located?** → ./ (tekan Enter)
 - **Want to override the settings?** → No (konfigurasi sudah di vercel.json)
 
@@ -54,7 +54,7 @@ vercel --prod
 
 - Klik **"Add New..."** → **"Project"**
 - Pilih **"Import Git Repository"**
-- Pilih repository **absensi_sman1nagreg**
+- Pilih repository **presensi_sman1nagreg**
 
 ### 3. Configure Project
 
@@ -76,7 +76,7 @@ Vercel akan otomatis mendeteksi Create React App. Pastikan:
 
 ### URL yang Akan Anda Dapatkan:
 
-- **Production URL**: `https://absensi-sman1nagreg.vercel.app` (atau nama yang Anda pilih)
+- **Production URL**: `https://presensi-sman1nagreg.vercel.app` (atau nama yang Anda pilih)
 - **Preview URLs**: Setiap push ke branch akan mendapat preview URL
 
 ### Environment Variables (Jika Diperlukan Nanti)

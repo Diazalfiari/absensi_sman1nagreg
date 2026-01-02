@@ -30,7 +30,7 @@ const DetailPelajaran = () => {
 
   const handleConfirmAbsensi = () => {
     setShowAbsensiConfirm(false);
-    navigate('/siswa/absensi', { 
+    navigate('/siswa/presensi', { 
       state: { 
         jadwal,
         tanggal: location.state?.tanggal 
@@ -242,7 +242,7 @@ const DetailPelajaran = () => {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-lg sm:text-xl font-bold text-white">Absensi Kehadiran</h3>
-                <p className="text-xs sm:text-sm text-white/80 mt-1">Lakukan absensi untuk mata pelajaran ini</p>
+                <p className="text-xs sm:text-sm text-white/80 mt-1">Lakukan presensi untuk mata pelajaran ini</p>
               </div>
               <button 
                 onClick={handleAbsensiClick}
@@ -262,7 +262,7 @@ const DetailPelajaran = () => {
         isOpen={showAbsensiConfirm}
         type="info"
         title="Konfirmasi Absensi"
-        message="Apakah Anda siap untuk melakukan absensi? Pastikan foto selfie dan lokasi Anda sudah aktif."
+        message="Apakah Anda siap untuk melakukan presensi? Pastikan foto selfie dan lokasi Anda sudah aktif."
         confirmText="Ya, Mulai Absensi"
         cancelText="Batal"
         onConfirm={handleConfirmAbsensi}

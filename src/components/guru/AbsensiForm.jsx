@@ -5,7 +5,7 @@ import Button from '../common/Button';
 const AbsensiForm = ({ onSubmit }) => {
   const [selectedKelas, setSelectedKelas] = useState('');
   const [selectedMapel, setSelectedMapel] = useState('');
-  const [absensiData, setAbsensiData] = useState([]);
+  const [presensiData, setAbsensiData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
     () => new Date().toISOString().split('T')[0]
   );
@@ -15,7 +15,7 @@ const AbsensiForm = ({ onSubmit }) => {
     setSelectedKelas(kelas);
     setSelectedMapel('');
     
-    // Initialize absensi data for selected class
+    // Initialize presensi data for selected class
     if (kelas && dataSiswa[kelas]) {
       const initialData = dataSiswa[kelas].map((siswa) => ({
         ...siswa,
@@ -37,7 +37,7 @@ const AbsensiForm = ({ onSubmit }) => {
 
   const handleStatusChange = (siswaId, status) => {
     setAbsensiData(
-      absensiData.map((siswa) =>
+      presensiData.map((siswa) =>
         siswa.id === siswaId ? { ...siswa, status } : siswa
       )
     );
@@ -50,7 +50,7 @@ const AbsensiForm = ({ onSubmit }) => {
     }
 
     // Check if all students have status
-    const allHaveStatus = absensiData.every((siswa) => siswa.status);
+    const allHaveStatus = presensiData.every((siswa) => siswa.status);
     if (!allHaveStatus) {
       alert('Pastikan semua siswa sudah dipilih status kehadirannya');
       return;
@@ -60,14 +60,14 @@ const AbsensiForm = ({ onSubmit }) => {
       kelas: selectedKelas,
       mapel: selectedMapel,
       tanggal: selectedDate,
-      data: absensiData,
+      data: presensiData,
     };
 
     if (onSubmit) {
       onSubmit(submitData);
     }
 
-    alert('Data absensi berhasil disimpan!');
+    alert('Data presensi berhasil disimpan!');
     
     // Reset form
     setSelectedKelas('');
@@ -126,7 +126,7 @@ const AbsensiForm = ({ onSubmit }) => {
       </div>
 
       {/* Student Table */}
-      {selectedKelas && absensiData.length > 0 && (
+      {selectedKelas && presensiData.length > 0 && (
         <div className="rounded-2xl border border-white/10 overflow-hidden bg-white/5 backdrop-blur-xl">
           <div className="px-6 py-4 bg-blue-600">
             <h3 className="text-lg font-semibold text-white">
@@ -145,7 +145,7 @@ const AbsensiForm = ({ onSubmit }) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">
-                {absensiData.map((siswa, index) => (
+                {presensiData.map((siswa, index) => (
                   <tr key={siswa.id} className="hover:bg-white/5">
                     <td className="px-6 py-4 text-sm text-white/80">{index + 1}</td>
                     <td className="px-6 py-4 text-sm text-white/80">{siswa.nis}</td>
@@ -195,7 +195,7 @@ const AbsensiForm = ({ onSubmit }) => {
 
       {!selectedKelas && (
         <div className="bg-accent-500/10 border border-accent-500/30 rounded-2xl p-6 text-center text-accent-100">
-          <p>Silakan pilih kelas dan mata pelajaran untuk memulai input absensi</p>
+          <p>Silakan pilih kelas dan mata pelajaran untuk memulai input presensi</p>
         </div>
       )}
     </div>

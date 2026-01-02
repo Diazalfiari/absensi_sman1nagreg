@@ -1,4 +1,4 @@
-// Utility functions untuk aplikasi absensi
+// Utility functions untuk aplikasi presensi
 
 // Fungsi untuk menghitung jarak antara dua koordinat GPS (Haversine formula)
 export const calculateDistance = (lat1, lon1, lat2, lon2) => {

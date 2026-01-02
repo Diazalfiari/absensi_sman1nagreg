@@ -75,7 +75,7 @@ const GuruDashboard = () => {
                 <p className="text-xs uppercase tracking-[0.4em] text-white/60">Riwayat</p>
                 <h3 className="text-2xl font-semibold">📋 Riwayat Absensi</h3>
                 <p className="text-white/70 text-sm">
-                  Lihat catatan kehadiran siswa, rekap absensi per kelas, dan data pembelajaran sebelumnya.
+                  Lihat catatan kehadiran siswa, rekap presensi per kelas, dan data pembelajaran sebelumnya.
                 </p>
               </div>
               <Button variant="secondary" onClick={() => navigate('/guru/riwayat')}>

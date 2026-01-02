@@ -182,7 +182,7 @@ const AbsensiMandiri = () => {
         isOpen={showSubmitConfirm}
         type="success"
         title="Konfirmasi Absensi"
-        message="Apakah Anda yakin ingin mengirim absensi? Pastikan foto dan lokasi sudah benar."
+        message="Apakah Anda yakin ingin mengirim presensi? Pastikan foto dan lokasi sudah benar."
         confirmText="Ya, Kirim Absensi"
         cancelText="Batal"
         onConfirm={handleConfirmSubmit}
@@ -201,7 +201,7 @@ const AbsensiMandiri = () => {
       />
 
       {/* Loading */}
-      {submitting && <Loading fullscreen text="Mengirim absensi..." />}
+      {submitting && <Loading fullscreen text="Mengirim presensi..." />}
     </div>
   );
 };
