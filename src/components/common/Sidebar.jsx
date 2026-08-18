@@ -50,16 +50,16 @@ const Sidebar = ({ role }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-72 min-h-screen fixed left-0 top-0 flex-col bg-slate-800 border-r border-slate-700 text-white">
+      <aside className="hidden lg:flex w-72 min-h-[100dvh] fixed left-0 top-0 flex-col bg-zinc-950 border-r border-white/5 text-white">
         {/* Logo */}
-        <div className="px-6 py-8 border-b border-white/10">
+        <div className="px-6 py-8 border-b border-white/5">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center">
               <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-12 h-12 object-contain" />
             </div>
             <div>
-              <h1 className="font-display text-xl">SMAN 1 Nagreg</h1>
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">{role}</p>
+              <h1 className="font-display text-xl font-medium">SMAN 1 Nagreg</h1>
+              <p className="text-sm text-zinc-400 capitalize">{role} Panel</p>
             </div>
           </div>
         </div>
@@ -73,14 +73,14 @@ const Sidebar = ({ role }) => {
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className={`flex items-center gap-4 px-5 py-3 rounded-2xl transition-all border ${
+                    className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-colors border ${
                       isActive
-                        ? 'bg-white/10 border-white/30 text-white shadow-glow'
-                        : 'border-transparent text-white/70 hover:text-white hover:bg-white/5'
+                        ? 'bg-primary-500/10 border-primary-500/20 text-primary-400'
+                        : 'border-transparent text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/50'
                     }`}
                   >
                     <span className="text-xl">{item.icon}</span>
-                    <span className="font-semibold tracking-tight">{item.label}</span>
+                    <span className="font-medium">{item.label}</span>
                   </Link>
                 </li>
               );
@@ -89,32 +89,32 @@ const Sidebar = ({ role }) => {
         </nav>
 
         {/* Logout Button */}
-        <div className="p-5 border-t border-white/10">
+        <div className="p-5 border-t border-white/5">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-5 py-3 rounded-2xl bg-white/5 border border-white/20 text-rose-200 hover:bg-rose-500/10 transition-all"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-500/10 text-zinc-400 hover:text-rose-400 transition-colors"
           >
             <span className="text-xl">🚪</span>
-            <span className="font-semibold">Keluar</span>
+            <span className="font-medium">Keluar</span>
           </button>
         </div>
       </aside>
 
       {/* Mobile Top Navigation */}
-      <div className="lg:hidden sticky top-0 z-40 bg-ink-900/80 backdrop-blur-2xl border-b border-white/10">
+      <div className="lg:hidden sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-xl border-b border-white/5">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center">
-              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-10 h-10 object-contain" />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-8 h-8 object-contain" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-white">SMAN 1 Nagreg</p>
-              <p className="text-xs text-white/60 capitalize">{role}</p>
+              <p className="text-sm font-medium text-white">SMAN 1 Nagreg</p>
+              <p className="text-xs text-zinc-400 capitalize">{role}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="text-xs font-semibold text-white px-3 py-2 border border-white/30 rounded-full hover:bg-white/10"
+            className="text-xs font-medium text-zinc-300 px-3 py-1.5 border border-white/10 rounded-lg hover:bg-white/5 transition-colors"
           >
             Keluar
           </button>
@@ -126,14 +126,14 @@ const Sidebar = ({ role }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm whitespace-nowrap border ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm whitespace-nowrap border transition-colors ${
                   isActive
-                    ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-white border-white/0'
-                    : 'bg-white/5 text-white/70 border-white/10'
+                    ? 'bg-primary-500/10 text-primary-400 border-primary-500/20'
+                    : 'bg-zinc-900 text-zinc-400 border-white/5'
                 }`}
               >
                 <span>{item.icon}</span>
-                <span>{item.label}</span>
+                <span className="font-medium">{item.label}</span>
               </Link>
             );
           })}

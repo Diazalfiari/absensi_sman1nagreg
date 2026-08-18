@@ -260,61 +260,56 @@ const AdminRekap = () => {
   };
 
   return (
-    <div className="min-h-screen text-white bg-slate-900">
+    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
       <Sidebar role="admin" />
 
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-6xl mx-auto space-y-10">
-          <div className="glass-panel border border-white/15 border-l-4 border-l-primary-500 p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.5em] text-primary-200">Mode Rekap</p>
-              <h1 className="text-4xl font-display">Rekapitulasi Kehadiran</h1>
-              <p className="text-white/70">Filter kelas dan tanggal untuk detail yang Anda butuhkan.</p>
+              <h1 className="text-3xl sm:text-4xl font-display tracking-tight">Rekapitulasi Kehadiran</h1>
+              <p className="text-zinc-400 mt-1">Filter kelas dan tanggal untuk detail yang Anda butuhkan.</p>
             </div>
             <div className="text-right">
-              <p className="text-xs uppercase tracking-wider text-white/50">Data Hari Ini</p>
-              <p className="text-sm text-white/70">{new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+              <p className="text-sm font-medium text-white">{new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+              <p className="text-xs text-zinc-500 mt-1">Data Hari Ini</p>
             </div>
           </div>
 
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-              <p className="text-sm font-medium text-white/70">📊 Statistik Kehadiran Hari Ini</p>
+              <p className="text-sm font-medium text-zinc-300">Statistik Kehadiran Hari Ini</p>
             </div>
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
                 {Array.from({ length: 5 }).map((_, index) => (
                   <SkeletonStatCard key={index} />
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
-                <StatCard title="Total" value={summary.total} icon="📊" color="primary" />
-                <StatCard title="Hadir" value={summary.hadir} icon="✅" color="success" />
-                <StatCard title="Izin" value={summary.izin} icon="📝" color="info" />
-                <StatCard title="Sakit" value={summary.sakit} icon="🤒" color="warning" />
-                <StatCard title="alpa" value={summary.alpa} icon="❌" color="danger" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+                <StatCard title="Total" value={summary.total} color="primary" />
+                <StatCard title="Hadir" value={summary.hadir} color="success" />
+                <StatCard title="Izin" value={summary.izin} color="info" />
+                <StatCard title="Sakit" value={summary.sakit} color="warning" />
+                <StatCard title="Alpa" value={summary.alpa} color="danger" />
               </div>
             )}
           </div>
 
-          <div className="glass-panel p-6 border border-white/15">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Persentase Kehadiran Hari Ini</p>
-                <h3 className="text-3xl font-semibold">{persentaseKehadiran}%</h3>
-                <p className="text-white/60 text-sm">Mengikuti filter yang diterapkan • {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                <p className="text-xs font-medium text-zinc-400 mb-1">Persentase Kehadiran</p>
+                <h3 className="text-3xl font-semibold tracking-tight text-white">{persentaseKehadiran}%</h3>
+                <p className="text-zinc-500 text-xs mt-1">Mengikuti filter yang diterapkan</p>
               </div>
               <div className="w-full md:max-w-sm">
-                <div className="w-full bg-white/10 rounded-full h-3">
+                <div className="w-full bg-zinc-950 border border-white/5 rounded-full h-3">
                   <div
-                    className={`h-3 rounded-full transition-all ${
-                      persentaseKehadiran >= 80
-                        ? 'bg-emerald-500'
-                        : persentaseKehadiran >= 60
-                        ? 'bg-amber-500'
-                        : 'bg-rose-500'
+                    className={`h-full rounded-full transition-all ${
+                      persentaseKehadiran >= 80 ? 'bg-emerald-500' : persentaseKehadiran >= 60 ? 'bg-amber-500' : 'bg-rose-500'
                     }`}
                     style={{ width: `${persentaseKehadiran}%` }}
                   ></div>
@@ -323,21 +318,20 @@ const AdminRekap = () => {
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-white/15 bg-white/5 p-6 shadow-glow">
-            <p className="text-xs uppercase tracking-[0.4em] text-white/60 mb-4">Filter Data</p>
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+            <p className="text-sm font-medium text-white mb-4">Filter Data</p>
             <FilterSection filters={filters} onFilterChange={handleFilterChange} onResetFilter={handleResetFilters} />
           </div>
 
-          <div className="rounded-[32px] border border-white/15 bg-ink-900/80 p-6">
-            <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-4">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 border-b border-white/5 pb-6">
               <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Rekapitulasi</p>
-                <h3 className="text-2xl font-semibold">Kehadiran</h3>
+                <h3 className="text-xl font-medium text-white">Tabel Rekapitulasi</h3>
+                <p className="text-sm text-zinc-400 mt-1">Total {filteredData.length} entri data</p>
               </div>
-              <div className="flex items-center gap-4">
-                <span className="text-white/50 text-sm">Total kelas: {filteredData.length}</span>
+              <div className="shrink-0">
                 <Button onClick={handleExportExcel} size="md" variant="primary" disabled={loading}>
-                  📥 Export ke Excel
+                  Export ke Excel
                 </Button>
               </div>
             </div>

@@ -125,19 +125,18 @@ const AbsensiMandiri = () => {
   };
 
   return (
-    <div className="bg-ink-900 min-h-screen text-white">
+    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-white/60">Student Panel</p>
-              <h1 className="text-4xl font-display">Absensi Mandiri</h1>
-              <p className="text-white/70">Ambil foto selfie dan pastikan lokasi aktif sebelum mengirim.</p>
+              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-white">Absensi Mandiri</h1>
+              <p className="text-zinc-400 mt-1">Ambil foto selfie dan pastikan lokasi aktif sebelum mengirim.</p>
             </div>
             <button
               onClick={() => navigate(-1)}
-              className="text-white/70 hover:text-white text-sm"
+              className="text-zinc-400 hover:text-white text-sm transition-colors"
             >
               ← Kembali
             </button>
@@ -145,89 +144,95 @@ const AbsensiMandiri = () => {
 
           {/* Warning untuk perangkat non-mobile */}
           {!isMobileDevice && (
-            <Card padding="lg" className="bg-red-600/20 border border-red-500/30">
+            <div className="bg-rose-500/10 border border-rose-500/20 rounded-2xl p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-red-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">⚠️</span>
+                <div className="w-10 h-10 bg-rose-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-white mb-2">Perhatian! Gunakan Perangkat HP</h3>
-                  <p className="text-white/90 mb-2">
+                  <h3 className="text-lg font-medium text-rose-300 mb-2">Perhatian! Gunakan Perangkat HP</h3>
+                  <p className="text-zinc-300 text-sm mb-2">
                     Absensi mandiri memerlukan verifikasi lokasi yang akurat menggunakan GPS. 
                     Laptop/PC tidak memiliki GPS atau akurasi lokasi yang kurang memadai.
                   </p>
-                  <p className="text-white font-semibold">
-                    📱 Silakan gunakan HP/smartphone Anda untuk melakukan absensi.
+                  <p className="text-zinc-300 text-sm font-medium">
+                    Silakan gunakan HP/smartphone Anda untuk melakukan absensi.
                   </p>
                 </div>
               </div>
-            </Card>
+            </div>
           )}
 
           {/* Info Absensi - Only show if coming from DetailPelajaran */}
           {jadwalInfo && (
-            <Card padding="lg" className="bg-blue-600/20 border border-blue-500/30">
+            <div className="bg-primary-500/10 border border-primary-500/20 rounded-2xl p-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-primary-500/30 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">📚</span>
+                <div className="w-10 h-10 bg-primary-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-white mb-1">Absensi untuk Mata Pelajaran</h3>
-                  <div className="space-y-1">
-                    <p className="text-white/90 font-semibold">{jadwalInfo.mataPelajaran} - Kelas {jadwalInfo.kelas}</p>
+                  <h3 className="text-base font-medium text-white mb-2">Absensi untuk Mata Pelajaran</h3>
+                  <div className="space-y-1.5">
+                    <p className="text-white text-sm font-medium">{jadwalInfo.mataPelajaran} - Kelas {jadwalInfo.kelas}</p>
                     {tanggalInfo && (
-                      <p className="text-sm text-white/70">📅 {tanggalInfo}</p>
+                      <p className="text-sm text-zinc-400">Tanggal: {tanggalInfo}</p>
                     )}
-                    <p className="text-sm text-white/70">🕐 {jadwalInfo.waktu}</p>
-                    <p className="text-sm text-white/70">📍 {jadwalInfo.ruang}</p>
+                    <p className="text-sm text-zinc-400">Waktu: {jadwalInfo.waktu}</p>
+                    <p className="text-sm text-zinc-400">Ruang: {jadwalInfo.ruang}</p>
                   </div>
                 </div>
               </div>
-            </Card>
+            </div>
           )}
 
-        {/* Camera Section */}
-        <div className="glass-panel p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold">1. Ambil Foto Selfie</h2>
-            <span className="text-sm text-white/60">Wajah harus terlihat jelas</span>
+          <div className="space-y-6">
+            {/* Camera Section */}
+            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-medium text-white">1. Ambil Foto Selfie</h2>
+                <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Wajah harus terlihat jelas</span>
+              </div>
+              <CameraCapture onPhotoCapture={handlePhotoCapture} />
+            </div>
+
+            {/* Location Section */}
+            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-medium text-white">2. Verifikasi Lokasi</h2>
+                <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Aktifkan GPS pada perangkat</span>
+              </div>
+              <LocationCapture onLocationCapture={handleLocationCapture} />
+            </div>
+
+            {/* Submit Button */}
+            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+              <Button
+                onClick={handleSubmit}
+                variant="success"
+                size="lg"
+                fullWidth
+                disabled={submitting || !photo || !locationData || !isMobileDevice}
+              >
+                {submitting ? 'Mengirim Absensi...' : 'Kirim Absensi'}
+              </Button>
+              
+              {!isMobileDevice && (
+                <p className="text-center text-sm text-rose-400 mt-4 font-medium">
+                  Absensi hanya dapat dilakukan melalui HP/smartphone
+                </p>
+              )}
+              
+              {isMobileDevice && (!photo || !locationData) && (
+                <p className="text-center text-sm text-zinc-500 mt-4">
+                  Pastikan foto dan lokasi sudah tersedia sebelum mengirim
+                </p>
+              )}
+            </div>
           </div>
-          <CameraCapture onPhotoCapture={handlePhotoCapture} />
-        </div>
-
-        {/* Location Section */}
-        <div className="glass-panel p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold">2. Verifikasi Lokasi</h2>
-            <span className="text-sm text-white/60">Aktifkan GPS pada perangkat</span>
-          </div>
-          <LocationCapture onLocationCapture={handleLocationCapture} />
-        </div>
-
-        {/* Submit Button */}
-        <div className="glass-panel p-6">
-          <Button
-            onClick={handleSubmit}
-            variant="success"
-            size="lg"
-            fullWidth
-            disabled={submitting || !photo || !locationData || !isMobileDevice}
-          >
-            {submitting ? 'Mengirim Absensi...' : 'Kirim Absensi'}
-          </Button>
-          
-          {!isMobileDevice && (
-            <p className="text-center text-sm text-red-400 mt-3 font-semibold">
-              ⚠️ Absensi hanya dapat dilakukan melalui HP/smartphone
-            </p>
-          )}
-          
-          {isMobileDevice && (!photo || !locationData) && (
-            <p className="text-center text-sm text-white/60 mt-3">
-              Pastikan foto dan lokasi sudah tersedia sebelum mengirim
-            </p>
-          )}
-        </div>
         </div>
       </main>
 

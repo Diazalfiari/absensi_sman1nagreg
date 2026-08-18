@@ -183,28 +183,27 @@ const TambahJadwal = () => {
   };
 
   return (
-    <div className="bg-ink-900 min-h-screen text-white">
+    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
       <Sidebar role="admin" />
 
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
-            <p className="text-xs uppercase tracking-[0.5em] text-white/50">Admin Panel</p>
-            <h1 className="text-3xl md:text-4xl font-display">Tambah Jadwal Pelajaran</h1>
-            <p className="text-white/70">Buat jadwal baru dengan multiple date selection</p>
+            <h1 className="text-3xl md:text-4xl font-display tracking-tight">Tambah Jadwal Pelajaran</h1>
+            <p className="text-zinc-400 mt-1">Buat jadwal baru dengan seleksi tanggal yang fleksibel</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Left Column - Form Fields */}
               <div className="space-y-6">
-                <div className="glass-panel p-6 md:p-8">
-                  <h2 className="text-xl font-semibold mb-6">Informasi Jadwal</h2>
+                <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 md:p-8">
+                  <h2 className="text-xl font-medium mb-6 text-white">Informasi Jadwal</h2>
                   
                   <div className="space-y-4">
                     {/* Mata Pelajaran */}
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium mb-2 text-zinc-300">
                         Mata Pelajaran <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -213,9 +212,9 @@ const TambahJadwal = () => {
                         value={formData.mataPelajaran}
                         onChange={handleChange}
                         placeholder="Contoh: Matematika"
-                        className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${
+                        className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
                           errors.mataPelajaran ? 'border-red-500' : 'border-white/10'
-                        } focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all`}
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-white placeholder-zinc-500`}
                       />
                       {errors.mataPelajaran && (
                         <p className="text-red-400 text-sm mt-1">{errors.mataPelajaran}</p>
@@ -224,16 +223,16 @@ const TambahJadwal = () => {
 
                     {/* Kelas */}
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium mb-2 text-zinc-300">
                         Kelas <span className="text-red-400">*</span>
                       </label>
                       <select
                         name="kelas"
                         value={formData.kelas}
                         onChange={handleChange}
-                        className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${
+                        className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
                           errors.kelas ? 'border-red-500' : 'border-white/10'
-                        } focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark-select`}
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-white`}
                       >
                         <option value="">Pilih Kelas</option>
                         <option value="X-1">X-1</option>
@@ -281,7 +280,7 @@ const TambahJadwal = () => {
                     {/* Jam Mulai & Selesai */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium mb-2 text-zinc-300">
                           Jam Mulai <span className="text-red-400">*</span>
                         </label>
                         <input
@@ -289,16 +288,16 @@ const TambahJadwal = () => {
                           name="jamMulai"
                           value={formData.jamMulai}
                           onChange={handleChange}
-                          className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${
+                          className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
                             errors.jamMulai ? 'border-red-500' : 'border-white/10'
-                          } focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark-select`}
+                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-white`}
                         />
                         {errors.jamMulai && (
                           <p className="text-red-400 text-sm mt-1">{errors.jamMulai}</p>
                         )}
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium mb-2 text-zinc-300">
                           Jam Selesai <span className="text-red-400">*</span>
                         </label>
                         <input
@@ -306,9 +305,9 @@ const TambahJadwal = () => {
                           name="jamSelesai"
                           value={formData.jamSelesai}
                           onChange={handleChange}
-                          className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${
+                          className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
                             errors.jamSelesai ? 'border-red-500' : 'border-white/10'
-                          } focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all dark-select`}
+                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-white`}
                         />
                         {errors.jamSelesai && (
                           <p className="text-red-400 text-sm mt-1">{errors.jamSelesai}</p>
@@ -318,7 +317,7 @@ const TambahJadwal = () => {
 
                     {/* Guru */}
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium mb-2 text-zinc-300">
                         Nama Guru <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -327,9 +326,9 @@ const TambahJadwal = () => {
                         value={formData.guru}
                         onChange={handleChange}
                         placeholder="Contoh: Budi Santoso, S.Pd"
-                        className={`w-full px-4 py-3 rounded-xl bg-white/5 border ${
+                        className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
                           errors.guru ? 'border-red-500' : 'border-white/10'
-                        } focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all`}
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-white placeholder-zinc-500`}
                       />
                       {errors.guru && (
                         <p className="text-red-400 text-sm mt-1">{errors.guru}</p>
@@ -339,11 +338,11 @@ const TambahJadwal = () => {
                 </div>
 
                 {/* Selected Dates Summary */}
-                <div className="glass-panel p-6 bg-primary-500/10 border-primary-500/30">
-                  <h3 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                    📅 Tanggal Terpilih
+                <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+                  <h3 className="text-sm font-medium text-white mb-2">
+                    Tanggal Terpilih
                   </h3>
-                  <p className="text-white/80 text-sm">
+                  <p className="text-zinc-400 text-sm">
                     {formatSelectedDates()}
                   </p>
                   {errors.dates && (
@@ -353,24 +352,24 @@ const TambahJadwal = () => {
               </div>
 
               {/* Right Column - Calendar */}
-              <div className="glass-panel p-6 md:p-8">
+              <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 md:p-8">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-semibold">Pilih Tanggal</h2>
+                  <h2 className="text-xl font-medium text-white">Pilih Tanggal</h2>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={handlePrevMonth}
-                      className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+                      className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white"
                     >
                       ‹
                     </button>
-                    <span className="text-sm font-medium min-w-[140px] text-center">
+                    <span className="text-sm font-medium min-w-[140px] text-center text-white">
                       {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                     </span>
                     <button
                       type="button"
                       onClick={handleNextMonth}
-                      className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+                      className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white"
                     >
                       ›
                     </button>
@@ -381,7 +380,7 @@ const TambahJadwal = () => {
                 <div className="mb-4">
                   <div className="grid grid-cols-7 gap-2 mb-2">
                     {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((day) => (
-                      <div key={day} className="text-center text-xs font-medium text-white/50 py-2">
+                      <div key={day} className="text-center text-xs font-medium text-zinc-500 py-2">
                         {day}
                       </div>
                     ))}
@@ -398,14 +397,16 @@ const TambahJadwal = () => {
                           onClick={() => toggleDate(day)}
                           disabled={!day || isPast}
                           className={`
-                            aspect-square rounded-lg text-sm font-medium transition-all
+                            aspect-square rounded-lg text-sm font-medium transition-colors
                             ${!day ? 'invisible' : ''}
-                            ${isPast ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}
+                            ${isPast ? 'opacity-30 cursor-not-allowed text-zinc-500' : 'cursor-pointer'}
                             ${
                               isSelected
-                                ? 'bg-primary-500 text-white shadow-lg scale-105'
-                                : day
-                                ? 'bg-white/5 hover:bg-white/10 text-white/80'
+                                ? 'bg-primary-500 text-white'
+                                : day && !isPast
+                                ? 'bg-zinc-950 hover:bg-white/10 text-zinc-300'
+                                : day && isPast
+                                ? 'bg-zinc-950'
                                 : ''
                             }
                           `}
@@ -417,16 +418,16 @@ const TambahJadwal = () => {
                   </div>
                 </div>
 
-                <div className="border-t border-white/10 pt-4 space-y-2 text-xs text-white/60">
-                  <p>💡 Klik tanggal untuk memilih/membatalkan</p>
-                  <p>💡 Anda bisa memilih beberapa tanggal sekaligus</p>
-                  <p>💡 Tanggal yang sudah lewat tidak bisa dipilih</p>
+                <div className="border-t border-white/5 pt-4 space-y-2 text-xs text-zinc-500">
+                  <p>• Klik tanggal untuk memilih/membatalkan</p>
+                  <p>• Anda bisa memilih beberapa tanggal sekaligus</p>
+                  <p>• Tanggal yang sudah lewat tidak bisa dipilih</p>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-end">
+            <div className="flex flex-col sm:flex-row gap-4 justify-end border-t border-white/5 pt-6">
               <Button type="button" variant="secondary" onClick={handleReset}>
                 Reset Form
               </Button>
@@ -437,16 +438,16 @@ const TambahJadwal = () => {
           </form>
 
           {/* Info Card */}
-          <div className="glass-panel p-6 mt-6 bg-accent-500/10 border-accent-500/30">
-            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-              ℹ️ Panduan Pengisian
+          <div className="bg-primary-500/10 border border-primary-500/20 rounded-2xl p-6 mt-6">
+            <h3 className="text-sm font-medium text-white mb-3">
+              Panduan Pengisian
             </h3>
-            <ul className="text-sm text-white/70 space-y-1">
-              <li>• <strong>Mata Pelajaran:</strong> Nama mata pelajaran (wajib diisi)</li>
-              <li>• <strong>Kelas:</strong> Pilih kelas yang akan mengikuti pelajaran</li>
-              <li>• <strong>Jam:</strong> Waktu mulai harus lebih awal dari waktu selesai</li>
-              <li>• <strong>Guru:</strong> Nama lengkap guru pengampu</li>
-              <li>• <strong>Tanggal:</strong> Pilih satu atau beberapa tanggal dari kalender</li>
+            <ul className="text-sm text-zinc-400 space-y-2">
+              <li>• <strong className="text-zinc-200">Mata Pelajaran:</strong> Nama mata pelajaran (wajib diisi)</li>
+              <li>• <strong className="text-zinc-200">Kelas:</strong> Pilih kelas yang akan mengikuti pelajaran</li>
+              <li>• <strong className="text-zinc-200">Jam:</strong> Waktu mulai harus lebih awal dari waktu selesai</li>
+              <li>• <strong className="text-zinc-200">Guru:</strong> Nama lengkap guru pengampu</li>
+              <li>• <strong className="text-zinc-200">Tanggal:</strong> Pilih satu atau beberapa tanggal dari kalender</li>
             </ul>
           </div>
         </div>

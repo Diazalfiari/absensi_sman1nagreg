@@ -56,7 +56,7 @@ const DetailPelajaran = () => {
   };
 
   return (
-    <div className="bg-ink-900 min-h-screen text-white">
+    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
@@ -65,193 +65,183 @@ const DetailPelajaran = () => {
           <div className="flex items-center gap-4 mb-6">
             <button
               onClick={() => navigate(-1)}
-              className="text-white hover:text-blue-400 transition-colors"
+              className="text-zinc-400 hover:text-white transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <div>
-              <h1 className="text-2xl font-bold">{jadwal.mataPelajaran}</h1>
-              <p className="text-sm text-white/60">Detail Pelajaran</p>
+              <h1 className="text-3xl font-display tracking-tight text-white">{jadwal.mataPelajaran}</h1>
+              <p className="text-sm font-medium text-zinc-500">Detail Pelajaran</p>
             </div>
           </div>
 
           {/* Info Utama */}
-          <Card padding="lg" className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
             <div className="space-y-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-white">{jadwal.mataPelajaran}</h2>
-                  <p className="text-sm text-white/70 mt-1">Kelas {jadwal.kelas}</p>
+                  <h2 className="text-xl font-medium text-white">{jadwal.mataPelajaran}</h2>
+                  <p className="text-sm font-medium text-zinc-400 mt-1">Kelas {jadwal.kelas}</p>
                 </div>
-                <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                <span className={`px-4 py-1.5 rounded-full text-xs font-medium ${
                   jadwal.status === 'Online' 
-                    ? 'bg-blue-500/20 text-blue-300 border border-blue-400/30' 
-                    : 'bg-green-500/20 text-green-300 border border-green-400/30'
+                    ? 'bg-zinc-950 text-blue-400 border border-blue-400/20' 
+                    : 'bg-zinc-950 text-emerald-400 border border-emerald-400/20'
                 }`}>
                   {jadwal.status}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-zinc-950 border border-white/5 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs text-white/60">Hari & Tanggal</p>
-                    <p className="font-semibold text-white">{location.state?.tanggal || 'Senin, 1 Desember 2025'}</p>
+                    <p className="text-xs font-medium text-zinc-500">Hari & Tanggal</p>
+                    <p className="text-sm font-medium text-white mt-0.5">{location.state?.tanggal || 'Senin, 1 Desember 2025'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-zinc-950 border border-white/5 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs text-white/60">Waktu</p>
-                    <p className="font-semibold text-white">{jadwal.waktu}</p>
+                    <p className="text-xs font-medium text-zinc-500">Waktu</p>
+                    <p className="text-sm font-medium text-white mt-0.5">{jadwal.waktu}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-zinc-950 border border-white/5 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs text-white/60">Ruangan</p>
-                    <p className="font-semibold text-white">{jadwal.ruang}</p>
+                    <p className="text-xs font-medium text-zinc-500">Ruangan</p>
+                    <p className="text-sm font-medium text-white mt-0.5">{jadwal.ruang}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-zinc-950 border border-white/5 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs text-white/60">Topik Sesi</p>
-                    <p className="font-semibold text-white">{jadwal.sesi}</p>
+                    <p className="text-xs font-medium text-zinc-500">Topik Sesi</p>
+                    <p className="text-sm font-medium text-white mt-0.5">{jadwal.sesi}</p>
                   </div>
                 </div>
               </div>
             </div>
-          </Card>
+          </div>
 
           {/* Materi Pembelajaran */}
-          <Card padding="lg" className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-white">Materi Pembelajaran</h3>
+              <h3 className="text-lg font-medium text-white">Materi Pembelajaran</h3>
             </div>
             <div className="space-y-3">
               {detailPelajaran.materi.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-colors border border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
-                      <span className="text-lg">📄</span>
+                <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-950 border border-white/5 rounded-xl hover:border-white/10 transition-colors gap-4">
+                  <div className="flex items-start sm:items-center gap-3">
+                    <div className="w-10 h-10 bg-zinc-900 border border-white/5 rounded-lg flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-white">{item.judul}</p>
-                      <p className="text-xs text-white/60">{item.tipe} {item.ukuran && `• ${item.ukuran}`}</p>
+                      <p className="font-medium text-white text-sm">{item.judul}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">{item.tipe} {item.ukuran && `• ${item.ukuran}`}</p>
                     </div>
                   </div>
-                  <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition-colors">
+                  <Button size="sm" variant="secondary" className="w-full sm:w-auto shrink-0 text-xs">
                     Download
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
-          </Card>
+          </div>
 
           {/* Tugas & Kuis */}
-          <Card padding="lg" className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-white">Tugas & Kuis</h3>
+              <h3 className="text-lg font-medium text-white">Tugas & Kuis</h3>
             </div>
             <div className="space-y-3">
               {detailPelajaran.tugas.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-colors border border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
-                      <span className="text-lg">📝</span>
+                <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-950 border border-white/5 rounded-xl hover:border-white/10 transition-colors gap-4">
+                  <div className="flex items-start sm:items-center gap-3">
+                    <div className="w-10 h-10 bg-zinc-900 border border-white/5 rounded-lg flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                      </svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-white">{item.judul}</p>
-                      <p className="text-xs text-white/60">Deadline: {item.deadline}</p>
+                      <p className="font-medium text-white text-sm">{item.judul}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">Deadline: {item.deadline}</p>
                     </div>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                  <span className={`px-3 py-1 rounded-full text-[11px] font-medium border shrink-0 ${
                     item.status === 'Belum Dikerjakan' 
-                      ? 'bg-red-500/20 text-red-300 border-red-400/30' 
-                      : 'bg-green-500/20 text-green-300 border-green-400/30'
+                      ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' 
+                      : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                   }`}>
                     {item.status}
                   </span>
                 </div>
               ))}
             </div>
-          </Card>
+          </div>
 
           {/* Video Interaktif */}
-          <Card padding="lg" className="bg-white/10 backdrop-blur-sm border border-white/20">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-white">Video Interaktif</h3>
+              <h3 className="text-lg font-medium text-white">Video Interaktif</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {detailPelajaran.video.map((item) => (
-                <div key={item.id} className="bg-white/5 rounded-lg overflow-hidden hover:bg-white/10 transition-all cursor-pointer border border-white/10">
-                  <div className="aspect-video bg-blue-500/20 flex items-center justify-center">
-                    <span className="text-6xl">{item.thumbnail}</span>
+                <div key={item.id} className="bg-zinc-950 border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-colors cursor-pointer">
+                  <div className="aspect-video bg-zinc-900 flex items-center justify-center relative group">
+                    <svg className="w-12 h-12 text-zinc-700 group-hover:text-primary-500 transition-colors" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                    </svg>
                   </div>
-                  <div className="p-4">
-                    <p className="font-semibold text-white">{item.judul}</p>
-                    <p className="text-xs text-white/60 mt-1">Durasi: {item.durasi}</p>
+                  <div className="p-4 border-t border-white/5">
+                    <p className="font-medium text-white text-sm">{item.judul}</p>
+                    <p className="text-xs text-zinc-500 mt-1">Durasi: {item.durasi}</p>
                   </div>
                 </div>
               ))}
             </div>
-          </Card>
+          </div>
 
           {/* Button Absensi */}
-          <Card padding="lg" className="bg-emerald-600">
+          <div className="bg-primary-600 border border-primary-500 rounded-2xl p-6">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">Absensi Kehadiran</h3>
-                <p className="text-xs sm:text-sm text-white/80 mt-1">Lakukan presensi untuk mata pelajaran ini</p>
+                <h3 className="text-lg font-medium text-white">Absensi Kehadiran</h3>
+                <p className="text-sm text-primary-100 mt-1">Lakukan presensi untuk mata pelajaran ini</p>
               </div>
-              <button 
+              <Button
                 onClick={handleAbsensiClick}
-                className="px-4 sm:px-8 py-3 sm:py-4 bg-white hover:bg-gray-100 text-emerald-600 rounded-lg font-bold text-sm sm:text-lg transition-colors shadow-lg whitespace-nowrap"
+                className="bg-white hover:bg-zinc-100 text-primary-600 hover:text-primary-700 border-none px-6"
               >
                 Absensi Sekarang
-              </button>
+              </Button>
             </div>
-          </Card>
+          </div>
         </div>
       </main>
 

@@ -11,7 +11,6 @@ const GuruDashboard = () => {
   const currentUser = getCurrentUser();
   const today = new Date();
 
-  // Redirect jika bukan guru
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'guru') {
       navigate('/login');
@@ -19,66 +18,57 @@ const GuruDashboard = () => {
   }, [currentUser, navigate]);
 
   return (
-    <div className="bg-ink-900 min-h-screen text-white">
+    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
       <Sidebar role="guru" />
       
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
-          <div className="mb-10 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-white/60">Guru Panel</p>
-              <h1 className="text-4xl font-display">Dashboard Guru</h1>
-              <p className="text-white/70">Selamat datang, {currentUser?.nama}</p>
-            </div>
+          <div className="mb-8 flex flex-col gap-2">
+            <h1 className="text-3xl sm:text-4xl font-display tracking-tight">Dashboard Guru</h1>
+            <p className="text-zinc-400 mt-1">Selamat datang, {currentUser?.nama}</p>
           </div>
 
           {/* Info Card */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <Card className="bg-blue-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Tanggal Hari Ini</h3>
-                <p className="text-2xl font-bold">{getDayName(today)}</p>
-                <p className="text-sm opacity-90 mt-1">{formatDate(today)}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <Card className="bg-primary-500/10 border-primary-500/20 text-white">
+              <div className="flex flex-col">
+                <p className="text-xs font-medium text-primary-400 mb-1">Tanggal Hari Ini</p>
+                <h3 className="text-2xl font-semibold tracking-tight">{getDayName(today)}</h3>
+                <p className="text-sm text-zinc-300 mt-1">{formatDate(today)}</p>
               </div>
-              <div className="text-6xl opacity-80">📅</div>
-            </div>
             </Card>
 
-            <Card className="bg-emerald-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold mb-2">NIP</h3>
-                <p className="text-xl font-bold">{currentUser?.nip || '-'}</p>
+            <Card className="bg-emerald-500/10 border-emerald-500/20 text-white">
+              <div className="flex flex-col">
+                <p className="text-xs font-medium text-emerald-400 mb-1">Nomor Induk Pegawai (NIP)</p>
+                <h3 className="text-2xl font-semibold tracking-tight">{currentUser?.nip || '-'}</h3>
+                <p className="text-sm text-zinc-300 mt-1">Identitas Aktif</p>
               </div>
-              <div className="text-6xl opacity-80">👨‍🏫</div>
-            </div>
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="glass-panel p-6 text-white flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card padding="lg" className="flex flex-col gap-5 justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Jadwal Mengajar</p>
-                <h3 className="text-2xl font-semibold">📅 Kelola Jadwal & Sesi</h3>
-                <p className="text-white/70 text-sm">
-                  Lihat jadwal mengajar, mulai sesi, upload materi pembelajaran, dan input kehadiran siswa.
+                <h3 className="text-xl font-medium text-white mb-2">Kelola Jadwal & Sesi</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Lihat jadwal mengajar, mulai sesi, upload materi pembelajaran, dan input kehadiran siswa harian.
                 </p>
               </div>
-              <Button onClick={() => navigate('/guru/Jadwal-mengajar')}>
+              <Button onClick={() => navigate('/guru/Jadwal-mengajar')} size="md" className="self-start">
                 Buka Jadwal
               </Button>
             </Card>
-            <Card className="glass-panel p-6 text-white flex flex-col gap-4">
+            
+            <Card padding="lg" className="flex flex-col gap-5 justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-white/60">Riwayat</p>
-                <h3 className="text-2xl font-semibold">📋 Riwayat Absensi</h3>
-                <p className="text-white/70 text-sm">
-                  Lihat catatan kehadiran siswa, rekap presensi per kelas, dan data pembelajaran sebelumnya.
+                <h3 className="text-xl font-medium text-white mb-2">Riwayat Absensi</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Lihat catatan kehadiran siswa, rekap presensi per kelas, dan data pembelajaran dari sesi sebelumnya.
                 </p>
               </div>
-              <Button variant="secondary" onClick={() => navigate('/guru/riwayat')}>
+              <Button variant="secondary" onClick={() => navigate('/guru/riwayat')} size="md" className="self-start">
                 Lihat Riwayat
               </Button>
             </Card>

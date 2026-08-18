@@ -1,24 +1,23 @@
 import React from 'react';
 
 const StatCard = ({ title, value, icon, color = 'primary', subtitle }) => {
-  const colorStyles = {
-    primary: 'from-primary-500/30 via-primary-500/10 to-transparent',
-    success: 'from-emerald-400/30 via-emerald-400/10 to-transparent',
-    warning: 'from-amber-400/30 via-amber-400/10 to-transparent',
-    danger: 'from-rose-500/30 via-rose-500/10 to-transparent',
-    info: 'from-accent-400/30 via-accent-400/10 to-transparent',
+  const iconColors = {
+    primary: 'text-primary-400 bg-primary-500/10 border-primary-500/20',
+    success: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+    warning: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+    danger: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
+    info: 'text-accent-400 bg-accent-500/10 border-accent-500/20',
   };
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl border border-white/10 p-6 bg-white/5 backdrop-blur-xl shadow-soft hover:shadow-glow transition-all`}> 
-      <div className={`absolute inset-0 ${colorStyles[color]} opacity-80`}></div>
-      <div className="relative flex items-start justify-between">
+    <div className="rounded-2xl border border-white/10 p-5 bg-zinc-900 transition-colors hover:border-white/20"> 
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-white/70 mb-2">{title}</p>
-          <h3 className="text-4xl font-bold text-white">{value}</h3>
-          {subtitle && <p className="text-xs text-white/70 mt-2">{subtitle}</p>}
+          <p className="text-xs font-medium text-zinc-400 mb-1">{title}</p>
+          <h3 className="text-3xl font-semibold text-white tracking-tight">{value}</h3>
+          {subtitle && <p className="text-xs text-zinc-500 mt-1.5">{subtitle}</p>}
         </div>
-        <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-3xl">
+        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center text-lg ${iconColors[color]}`}>
           <span>{icon}</span>
         </div>
       </div>

@@ -127,7 +127,7 @@ const JadwalPelajaran = () => {
   const selectedSchedule = jadwalData[dateStr] || [];
 
   return (
-    <div className="bg-ink-900 min-h-screen text-white">
+    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
@@ -136,42 +136,38 @@ const JadwalPelajaran = () => {
           <div className="flex items-center gap-4 mb-6">
             <button
               onClick={() => navigate(-1)}
-              className="text-white hover:text-primary-400 transition-colors"
+              className="text-zinc-400 hover:text-white transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-2xl font-bold">Jadwal</h1>
+            <h1 className="text-3xl md:text-4xl font-display tracking-tight">Jadwal</h1>
           </div>
 
           {/* Main Content - Calendar and Schedule Side by Side */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Side - Calendar */}
             <div>
-              <Card padding="lg" className="bg-white text-gray-900">
+              <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
                 {/* Month Navigation */}
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <p className="text-sm text-gray-500">{currentMonth.getFullYear()}</p>
-                    <h2 className="text-2xl font-bold text-gray-200">{monthNames[currentMonth.getMonth()]}</h2>
+                    <p className="text-sm font-medium text-zinc-400">{currentMonth.getFullYear()}</p>
+                    <h2 className="text-2xl font-semibold text-white">{monthNames[currentMonth.getMonth()]}</h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handlePrevMonth}
-                      className="w-10 h-10 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-lg bg-zinc-950 hover:bg-white/10 flex items-center justify-center transition-colors border border-white/5"
                     >
-                      <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
+                      <span className="text-xl">‹</span>
                     </button>
                     <button
                       onClick={handleNextMonth}
-                      className="w-10 h-10 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-lg bg-zinc-950 hover:bg-white/10 flex items-center justify-center transition-colors border border-white/5"
                     >
-                      <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
+                      <span className="text-xl">›</span>
                     </button>
                   </div>
                 </div>
@@ -179,7 +175,7 @@ const JadwalPelajaran = () => {
                 {/* Day Headers */}
                 <div className="grid grid-cols-7 gap-2 mb-3">
                   {dayNames.map((day) => (
-                    <div key={day} className="text-center text-xs font-semibold text-white py-2">
+                    <div key={day} className="text-center text-xs font-medium text-zinc-500 py-2">
                       {day}
                     </div>
                   ))}
@@ -198,11 +194,11 @@ const JadwalPelajaran = () => {
                         onClick={() => handleDateClick(day)}
                         disabled={!day}
                         className={`
-                          relative aspect-square rounded-lg text-sm md:text-base font-medium transition-all
+                          relative aspect-square rounded-lg text-sm md:text-base font-medium transition-colors
                           ${!day ? 'invisible' : ''}
-                          ${today && !selected ? 'ring-2 ring-emerald-500' : ''}
-                          ${selected ? 'bg-emerald-600 text-white shadow-lg' : ''}
-                          ${!selected && day ? 'hover:bg-gray-100 text-gray-400' : ''}
+                          ${today && !selected ? 'ring-1 ring-emerald-500' : ''}
+                          ${selected ? 'bg-emerald-600 text-white' : ''}
+                          ${!selected && day ? 'hover:bg-white/10 text-zinc-400 bg-zinc-950' : ''}
                           ${!day ? '' : 'cursor-pointer'}
                         `}
                       >
@@ -210,7 +206,7 @@ const JadwalPelajaran = () => {
                           <>
                             <span className="relative z-10">{day.getDate()}</span>
                             {hasJadwal && (
-                              <div className="absolute top-0.5 right-0.5 md:top-1 md:right-1 w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-red-500"></div>
+                              <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-red-500"></div>
                             )}
                           </>
                         )}
@@ -218,16 +214,16 @@ const JadwalPelajaran = () => {
                     );
                   })}
                 </div>
-              </Card>
+              </div>
             </div>
 
             {/* Right Side - Schedule Details */}
             <div className="space-y-4">
               {selectedDate && (
                 <>
-                  <div className="bg-white/5 rounded-lg p-4 border-b-2 border-gray-700">
-                    <p className="text-sm text-white/60">Jadwal Kelas</p>
-                    <h3 className="text-lg font-bold">
+                  <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+                    <p className="text-sm font-medium text-zinc-400 mb-1">Jadwal Kelas</p>
+                    <h3 className="text-xl font-medium text-white">
                       {selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}
                     </h3>
                   </div>
@@ -235,32 +231,29 @@ const JadwalPelajaran = () => {
                   {selectedSchedule.length > 0 ? (
                     <div className="space-y-4">
                       {selectedSchedule.map((jadwal) => (
-                        <Card key={jadwal.id} padding="lg" className="bg-white text-gray-900">
-                          <div className="space-y-3">
+                        <div key={jadwal.id} className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+                          <div className="space-y-4">
                             <div className="flex items-start justify-between">
-                              <h4 className="text-lg font-bold text-gray-200">{jadwal.mataPelajaran}</h4>
-                              <span className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">
+                              <h4 className="text-lg font-medium text-white">{jadwal.mataPelajaran}</h4>
+                              <span className="px-3 py-1 bg-zinc-950 text-zinc-300 border border-white/10 rounded-full text-xs font-medium">
                                 {jadwal.status} - {jadwal.ruang}
                               </span>
                             </div>
                             
-                            <div className="flex items-center gap-4 text-sm text-gray-200">
+                            <div className="flex items-center gap-4 text-sm text-zinc-400">
                               <div className="flex items-center gap-2">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
+                                <span className="font-medium text-zinc-300">Kelas</span>
                                 <span>{jadwal.kelas}</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                                <span className="font-medium text-zinc-300">Waktu</span>
                                 <span>{jadwal.waktu}</span>
                               </div>
                             </div>
 
-                            <div className="text-sm text-gray-200">
-                              Sesi {jadwal.sesi}
+                            <div className="text-sm text-zinc-300">
+                              <span className="text-zinc-500 mr-2">Sesi</span>
+                              {jadwal.sesi}
                             </div>
 
                             <button 
@@ -270,21 +263,20 @@ const JadwalPelajaran = () => {
                                   tanggal: selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
                                 } 
                               })}
-                              className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-semibold transition-colors"
+                              className="w-full mt-4 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-medium transition-colors"
                             >
                               Lihat Detail
                             </button>
                           </div>
-                        </Card>
+                        </div>
                       ))}
                     </div>
                   ) : (
-                    <Card padding="lg" className="bg-white/5 text-center">
-                      <div className="py-8">
-                        <div className="text-4xl mb-3">📅</div>
-                        <p className="text-white/70">Tidak ada jadwal untuk tanggal ini</p>
+                    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 text-center">
+                      <div className="py-12">
+                        <p className="text-zinc-500">Tidak ada jadwal untuk tanggal ini</p>
                       </div>
-                    </Card>
+                    </div>
                   )}
                 </>
               )}

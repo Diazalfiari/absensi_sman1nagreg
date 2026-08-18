@@ -19,10 +19,8 @@ const SiswaDashboard = () => {
   const currentData = riwayatAbsensiSiswa.slice(startIndex, startIndex + itemsPerPage);
   const mapelHariIni = statistikMapelHarianSiswa[today] || [];
   
-  // Check if already absened today (simulasi)
   const todayAbsensi = riwayatAbsensiSiswa.find((item) => item.tanggal === today);
 
-  // Redirect jika bukan siswa
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'siswa') {
       navigate('/login');
@@ -30,107 +28,95 @@ const SiswaDashboard = () => {
   }, [currentUser, navigate]);
 
   return (
-    <div className="bg-ink-900 min-h-screen text-white">
+    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
-          <div className="mb-6 space-y-3">
+          <div className="mb-6 space-y-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">Student Panel</p>
-              <h1 className="text-3xl sm:text-4xl font-display">Dashboard Siswa</h1>
+              <h1 className="text-3xl sm:text-4xl font-display tracking-tight">Dashboard Siswa</h1>
             </div>
-            <div className="glass-panel flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4">
+            <div className="bg-zinc-900 border border-white/10 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-5">
               <div>
-                <p className="text-base sm:text-lg font-semibold">{currentUser?.nama}</p>
-                <p className="text-xs sm:text-sm text-white/70">NIS: {currentUser?.nis} • Kelas: {currentUser?.kelas}</p>
+                <p className="text-base sm:text-lg font-medium">{currentUser?.nama}</p>
+                <p className="text-sm text-zinc-400 mt-1">NIS: {currentUser?.nis} • Kelas: {currentUser?.kelas}</p>
               </div>
-              <p className="text-xs sm:text-sm text-white/60">Pantau status kehadiran kapan pun.</p>
+              <p className="text-sm text-zinc-500">Pantau status kehadiran secara langsung.</p>
             </div>
           </div>
 
           {/* Date & Status Card */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-            <Card className="bg-blue-600 text-white">
-            <div className="flex items-center justify-between">
+            <Card className="bg-primary-500/10 border-primary-500/20 text-white flex flex-col justify-center">
               <div>
-                <h3 className="text-sm sm:text-base font-semibold mb-1">{getDayName(new Date())}</h3>
-                <p className="text-lg sm:text-xl font-bold">{formatDate(new Date())}</p>
+                <p className="text-xs font-medium text-primary-400 mb-1">{getDayName(new Date())}</p>
+                <h3 className="text-2xl font-semibold tracking-tight">{formatDate(new Date())}</h3>
               </div>
-              <div className="text-4xl sm:text-5xl opacity-80">📅</div>
-            </div>
             </Card>
 
             <Card className={`${
               todayAbsensi 
-                ? 'bg-emerald-600' 
-                : 'bg-amber-500'
-            } text-white`}>
-            <div className="flex items-center justify-between">
+                ? 'bg-emerald-500/10 border-emerald-500/20' 
+                : 'bg-amber-500/10 border-amber-500/20'
+            } text-white flex flex-col justify-center`}>
               <div>
-                <h3 className="text-sm sm:text-base font-semibold mb-1">Status Absensi Hari Ini</h3>
-                <p className="text-lg sm:text-xl font-bold">
-                  {todayAbsensi ? '✅ Sudah Absen' : '⏳ Belum Absen'}
+                <p className={`text-xs font-medium mb-1 ${todayAbsensi ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  Status Kehadiran
                 </p>
+                <h3 className="text-2xl font-semibold tracking-tight">
+                  {todayAbsensi ? 'Sudah Presensi' : 'Belum Presensi'}
+                </h3>
                 {todayAbsensi && (
-                  <p className="text-xs sm:text-sm opacity-90 mt-1">Waktu: {todayAbsensi.waktu}</p>
+                  <p className="text-sm text-zinc-300 mt-1">Waktu: {todayAbsensi.waktu}</p>
                 )}
               </div>
-              <div className="text-4xl sm:text-5xl opacity-80">
-                {todayAbsensi ? '✅' : '📱'}
-              </div>
-            </div>
             </Card>
           </div>
 
           {/* CTA Jadwal Pelajaran */}
           {!todayAbsensi && (
-            <Card className="mb-5 bg-blue-500/20 border border-blue-500/30">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
-                    <span className="text-2xl sm:text-3xl">📚</span>
-                  </div>
-                  <div>
-                    <h3 className="text-base sm:text-lg font-bold">Lihat Jadwal Pelajaran</h3>
-                    <p className="text-xs sm:text-sm text-white/70">Cek jadwal pelajaran terbaru Anda</p>
-                  </div>
+            <Card className="mb-8 bg-zinc-900 border border-white/10" padding="lg">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-medium text-white mb-1">Lihat Jadwal Pelajaran</h3>
+                  <p className="text-sm text-zinc-400">Pastikan Anda tidak tertinggal materi dan segera lakukan presensi di kelas.</p>
                 </div>
                 <Button onClick={() => navigate('/siswa/jadwal')} variant="primary" size="md">
-                  Lihat Jadwal →
+                  Lihat Jadwal
                 </Button>
               </div>
             </Card>
           )}
 
-          {/* Statistik Kehadiran per Pelajaran (Hari Ini) */}
-          <div className="mb-5">
-            <h2 className="text-xl sm:text-2xl font-bold mb-3">Statistik Kehadiran per Pelajaran (Hari Ini)</h2>
-            <div className="bg-blue-600/15 border border-blue-500/30 rounded-2xl p-4 sm:p-5 space-y-3">
-              <div className="flex items-center justify-between text-xs sm:text-sm text-white/70">
+          {/* Statistik Kehadiran per Pelajaran */}
+          <div className="mb-8">
+            <h2 className="text-xl font-medium mb-4 text-white">Statistik Kehadiran per Pelajaran</h2>
+            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-5 space-y-4">
+              <div className="flex items-center justify-between text-xs font-medium text-zinc-400 uppercase tracking-wider">
                 <span>Pelajaran</span>
-                <span>Hadir / Total</span>
+                <span>Persentase</span>
               </div>
               {mapelHariIni.length === 0 ? (
-                <div className="text-xs sm:text-sm text-white/60 py-2">Tidak ada jadwal atau presensi pelajaran hari ini.</div>
+                <div className="text-sm text-zinc-500 py-2">Tidak ada jadwal pelajaran hari ini.</div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {mapelHariIni.map((item) => {
                     const total = item.hadir + item.izin + item.sakit + item.alpa;
                     const percent = calculatePercentage(item.hadir, total);
                     return (
-                      <div key={item.mapel} className="glass-panel bg-white/5 border-white/10 p-3 rounded-xl">
+                      <div key={item.mapel}>
                         <div className="flex items-center justify-between mb-2">
                           <div>
-                            <p className="text-sm sm:text-base font-semibold">{item.mapel}</p>
-                            <p className="text-xs text-white/60">Hadir {item.hadir} • Izin {item.izin} • Sakit {item.sakit} • alpa {item.alpa}</p>
+                            <p className="text-base font-medium text-white">{item.mapel}</p>
+                            <p className="text-xs text-zinc-400 mt-0.5">Hadir {item.hadir} • Izin {item.izin} • Sakit {item.sakit} • Alpa {item.alpa}</p>
                           </div>
-                          <span className="text-sm sm:text-base font-bold">{percent}%</span>
+                          <span className="text-base font-semibold text-white">{percent}%</span>
                         </div>
-                        <div className="w-full bg-white/10 rounded-full h-2">
+                        <div className="w-full bg-zinc-950 border border-white/5 rounded-full h-2">
                           <div
-                            className="h-2 rounded-full bg-emerald-400"
+                            className="h-full rounded-full bg-primary-500 transition-all"
                             style={{ width: `${percent}%` }}
                           ></div>
                         </div>
@@ -144,60 +130,55 @@ const SiswaDashboard = () => {
 
           {/* Riwayat Absensi Terbaru */}
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-              <h2 className="text-xl sm:text-2xl font-bold">Riwayat Absensi Terbaru</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+              <h2 className="text-xl font-medium text-white">Riwayat Absensi Terbaru</h2>
               <button
                 onClick={() => navigate('/siswa/riwayat')}
-                className="text-white/70 hover:text-white font-semibold text-xs sm:text-sm"
+                className="text-zinc-400 hover:text-white font-medium text-sm transition-colors"
               >
-                Lihat Semua →
+                Lihat Semua &rarr;
               </button>
             </div>
 
             <div className="space-y-2">
               {currentData.map((item) => (
-                <Card key={item.id} className="hover:shadow-glow transition-shadow">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center border ${
-                        item.status === 'Hadir' 
-                          ? 'bg-emerald-500/20 border-emerald-400/30 text-emerald-100' 
-                          : item.status === 'Izin'
-                          ? 'bg-accent-500/20 border-accent-400/40 text-accent-100'
-                          : item.status === 'Sakit'
-                          ? 'bg-amber-500/20 border-amber-400/30 text-amber-100'
-                          : 'bg-rose-500/20 border-rose-400/30 text-rose-100'
-                      }`}>
-                        <span className="text-lg sm:text-xl">
-                          {item.status === 'Hadir' ? '✅' : 
-                           item.status === 'Izin' ? '📝' : 
-                           item.status === 'Sakit' ? '🤒' : '❌'}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="text-sm sm:text-base font-semibold">{formatDate(item.tanggal)}</p>
-                        <p className="text-xs sm:text-sm text-white/70">
-                          {item.status} {item.waktu !== '-' && `• ${item.waktu}`}
-                        </p>
-                      </div>
+                <div key={item.id} className="bg-zinc-900 border border-white/5 rounded-xl p-4 flex items-center justify-between transition-colors hover:border-white/10">
+                  <div className="flex items-center gap-4">
+                    <div className={`px-3 py-1.5 rounded-lg text-xs font-medium border ${
+                      item.status === 'Hadir' 
+                        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                        : item.status === 'Izin'
+                        ? 'bg-accent-500/10 border-accent-500/20 text-accent-400'
+                        : item.status === 'Sakit'
+                        ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                        : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                    }`}>
+                      {item.status}
                     </div>
-                    {item.verified && (
-                      <span className="text-emerald-300 text-xs sm:text-sm font-medium">
-                        ✓ Terverifikasi
-                      </span>
-                    )}
+                    <div>
+                      <p className="text-sm font-medium text-white">{formatDate(item.tanggal)}</p>
+                      {item.waktu !== '-' && (
+                        <p className="text-xs text-zinc-400 mt-0.5">Waktu: {item.waktu}</p>
+                      )}
+                    </div>
                   </div>
-                </Card>
+                  {item.verified && (
+                    <span className="text-emerald-400/80 text-xs font-medium">
+                      ✓ Terverifikasi
+                    </span>
+                  )}
+                </div>
               ))}
-              <Pagination
-                currentPage={recentPage}
-                totalPages={totalPages}
-                onPageChange={setRecentPage}
-                itemsPerPage={itemsPerPage}
-                totalItems={riwayatAbsensiSiswa.length}
-                showInfo
-                className="pt-2"
-              />
+              <div className="pt-4">
+                <Pagination
+                  currentPage={recentPage}
+                  totalPages={totalPages}
+                  onPageChange={setRecentPage}
+                  itemsPerPage={itemsPerPage}
+                  totalItems={riwayatAbsensiSiswa.length}
+                  showInfo
+                />
+              </div>
             </div>
           </div>
         </div>
