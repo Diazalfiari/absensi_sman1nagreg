@@ -4,7 +4,6 @@ import CameraCapture from '../../components/siswa/CameraCapture';
 import LocationCapture from '../../components/siswa/LocationCapture';
 import Button from '../../components/common/Button';
 import Sidebar from '../../components/common/Sidebar';
-import Card from '../../components/common/Card';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import Notification from '../../components/common/Notification';
 import Loading from '../../components/common/Loading';

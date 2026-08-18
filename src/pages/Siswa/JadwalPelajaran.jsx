@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
-import Card from '../../components/common/Card';
 import { getCurrentUser } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
 
