@@ -14,10 +14,10 @@ const Button = ({
   const baseStyles = 'font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2 tracking-tight disabled:cursor-not-allowed active:scale-[0.98] active:translate-y-[1px]';
   
   const variants = {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-60 disabled:hover:bg-primary-600',
+    primary: 'bg-primary-600 text-zinc-50 hover:bg-primary-700 disabled:opacity-60 disabled:hover:bg-primary-600',
     secondary: 'bg-zinc-100 text-zinc-900 border border-zinc-200 hover:bg-zinc-200 disabled:opacity-50',
-    success: 'bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50',
-    danger: 'bg-rose-600 text-white hover:bg-rose-700 disabled:opacity-50',
+    success: 'bg-emerald-600 text-zinc-50 hover:bg-emerald-700 disabled:opacity-50',
+    danger: 'bg-rose-600 text-zinc-50 hover:bg-rose-700 disabled:opacity-50',
     outline: 'border border-zinc-700 text-zinc-200 hover:bg-zinc-800 disabled:opacity-40',
   };
 

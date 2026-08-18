@@ -260,7 +260,7 @@ const AdminRekap = () => {
   };
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="admin" />
 
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
@@ -271,7 +271,7 @@ const AdminRekap = () => {
               <p className="text-zinc-400 mt-1">Filter kelas dan tanggal untuk detail yang Anda butuhkan.</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium text-white">{new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+              <p className="text-sm font-medium text-zinc-50">{new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
               <p className="text-xs text-zinc-500 mt-1">Data Hari Ini</p>
             </div>
           </div>
@@ -298,15 +298,15 @@ const AdminRekap = () => {
             )}
           </div>
 
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs font-medium text-zinc-400 mb-1">Persentase Kehadiran</p>
-                <h3 className="text-3xl font-semibold tracking-tight text-white">{persentaseKehadiran}%</h3>
+                <h3 className="text-3xl font-semibold tracking-tight text-zinc-50">{persentaseKehadiran}%</h3>
                 <p className="text-zinc-500 text-xs mt-1">Mengikuti filter yang diterapkan</p>
               </div>
               <div className="w-full md:max-w-sm">
-                <div className="w-full bg-zinc-950 border border-white/5 rounded-full h-3">
+                <div className="w-full bg-zinc-950 border border-zinc-800 rounded-full h-3">
                   <div
                     className={`h-full rounded-full transition-all ${
                       persentaseKehadiran >= 80 ? 'bg-emerald-500' : persentaseKehadiran >= 60 ? 'bg-amber-500' : 'bg-rose-500'
@@ -318,15 +318,15 @@ const AdminRekap = () => {
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
-            <p className="text-sm font-medium text-white mb-4">Filter Data</p>
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+            <p className="text-sm font-medium text-zinc-50 mb-4">Filter Data</p>
             <FilterSection filters={filters} onFilterChange={handleFilterChange} onResetFilter={handleResetFilters} />
           </div>
 
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 border-b border-white/5 pb-6">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 border-b border-zinc-800 pb-6">
               <div>
-                <h3 className="text-xl font-medium text-white">Tabel Rekapitulasi</h3>
+                <h3 className="text-xl font-medium text-zinc-50">Tabel Rekapitulasi</h3>
                 <p className="text-sm text-zinc-400 mt-1">Total {filteredData.length} entri data</p>
               </div>
               <div className="shrink-0">

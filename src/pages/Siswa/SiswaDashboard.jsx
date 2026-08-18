@@ -28,7 +28,7 @@ const SiswaDashboard = () => {
   }, [currentUser, navigate]);
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
@@ -38,7 +38,7 @@ const SiswaDashboard = () => {
             <div>
               <h1 className="text-3xl sm:text-4xl font-display tracking-tight">Dashboard Siswa</h1>
             </div>
-            <div className="bg-zinc-900 border border-white/10 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-5">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 sm:p-5">
               <div>
                 <p className="text-base sm:text-lg font-medium">{currentUser?.nama}</p>
                 <p className="text-sm text-zinc-400 mt-1">NIS: {currentUser?.nis} • Kelas: {currentUser?.kelas}</p>
@@ -49,7 +49,7 @@ const SiswaDashboard = () => {
 
           {/* Date & Status Card */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-            <Card className="bg-primary-500/10 border-primary-500/20 text-white flex flex-col justify-center">
+            <Card className="bg-primary-500/10 border-primary-500/20 text-zinc-50 flex flex-col justify-center">
               <div>
                 <p className="text-xs font-medium text-primary-400 mb-1">{getDayName(new Date())}</p>
                 <h3 className="text-2xl font-semibold tracking-tight">{formatDate(new Date())}</h3>
@@ -60,7 +60,7 @@ const SiswaDashboard = () => {
               todayAbsensi 
                 ? 'bg-emerald-500/10 border-emerald-500/20' 
                 : 'bg-amber-500/10 border-amber-500/20'
-            } text-white flex flex-col justify-center`}>
+            } text-zinc-50 flex flex-col justify-center`}>
               <div>
                 <p className={`text-xs font-medium mb-1 ${todayAbsensi ? 'text-emerald-400' : 'text-amber-400'}`}>
                   Status Kehadiran
@@ -77,10 +77,10 @@ const SiswaDashboard = () => {
 
           {/* CTA Jadwal Pelajaran */}
           {!todayAbsensi && (
-            <Card className="mb-8 bg-zinc-900 border border-white/10" padding="lg">
+            <Card className="mb-8 bg-zinc-900 border border-zinc-800" padding="lg">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-medium text-white mb-1">Lihat Jadwal Pelajaran</h3>
+                  <h3 className="text-lg font-medium text-zinc-50 mb-1">Lihat Jadwal Pelajaran</h3>
                   <p className="text-sm text-zinc-400">Pastikan Anda tidak tertinggal materi dan segera lakukan presensi di kelas.</p>
                 </div>
                 <Button onClick={() => navigate('/siswa/jadwal')} variant="primary" size="md">
@@ -92,8 +92,8 @@ const SiswaDashboard = () => {
 
           {/* Statistik Kehadiran per Pelajaran */}
           <div className="mb-8">
-            <h2 className="text-xl font-medium mb-4 text-white">Statistik Kehadiran per Pelajaran</h2>
-            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-5 space-y-4">
+            <h2 className="text-xl font-medium mb-4 text-zinc-50">Statistik Kehadiran per Pelajaran</h2>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 space-y-4">
               <div className="flex items-center justify-between text-xs font-medium text-zinc-400 uppercase tracking-wider">
                 <span>Pelajaran</span>
                 <span>Persentase</span>
@@ -109,12 +109,12 @@ const SiswaDashboard = () => {
                       <div key={item.mapel}>
                         <div className="flex items-center justify-between mb-2">
                           <div>
-                            <p className="text-base font-medium text-white">{item.mapel}</p>
+                            <p className="text-base font-medium text-zinc-50">{item.mapel}</p>
                             <p className="text-xs text-zinc-400 mt-0.5">Hadir {item.hadir} • Izin {item.izin} • Sakit {item.sakit} • Alpa {item.alpa}</p>
                           </div>
-                          <span className="text-base font-semibold text-white">{percent}%</span>
+                          <span className="text-base font-semibold text-zinc-50">{percent}%</span>
                         </div>
-                        <div className="w-full bg-zinc-950 border border-white/5 rounded-full h-2">
+                        <div className="w-full bg-zinc-950 border border-zinc-800 rounded-full h-2">
                           <div
                             className="h-full rounded-full bg-primary-500 transition-all"
                             style={{ width: `${percent}%` }}
@@ -131,10 +131,10 @@ const SiswaDashboard = () => {
           {/* Riwayat Absensi Terbaru */}
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-              <h2 className="text-xl font-medium text-white">Riwayat Absensi Terbaru</h2>
+              <h2 className="text-xl font-medium text-zinc-50">Riwayat Absensi Terbaru</h2>
               <button
                 onClick={() => navigate('/siswa/riwayat')}
-                className="text-zinc-400 hover:text-white font-medium text-sm transition-colors"
+                className="text-zinc-400 hover:text-zinc-50 font-medium text-sm transition-colors"
               >
                 Lihat Semua &rarr;
               </button>
@@ -142,7 +142,7 @@ const SiswaDashboard = () => {
 
             <div className="space-y-2">
               {currentData.map((item) => (
-                <div key={item.id} className="bg-zinc-900 border border-white/5 rounded-xl p-4 flex items-center justify-between transition-colors hover:border-white/10">
+                <div key={item.id} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-center justify-between transition-colors hover:border-zinc-800">
                   <div className="flex items-center gap-4">
                     <div className={`px-3 py-1.5 rounded-lg text-xs font-medium border ${
                       item.status === 'Hadir' 
@@ -156,7 +156,7 @@ const SiswaDashboard = () => {
                       {item.status}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-white">{formatDate(item.tanggal)}</p>
+                      <p className="text-sm font-medium text-zinc-50">{formatDate(item.tanggal)}</p>
                       {item.waktu !== '-' && (
                         <p className="text-xs text-zinc-400 mt-0.5">Waktu: {item.waktu}</p>
                       )}

@@ -63,7 +63,7 @@ const Notification = ({
           transform transition-all duration-300
         `}>
           <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl bg-white/10">
+            <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl bg-zinc-800">
               <span className="text-2xl sm:text-3xl">{icons[type]}</span>
             </div>
             <div className="flex-1 min-w-0">
@@ -71,12 +71,12 @@ const Notification = ({
                 <h3 className="font-bold text-base sm:text-lg mb-1">{title}</h3>
               )}
               {message && (
-                <p className="text-sm sm:text-base text-white/90">{message}</p>
+                <p className="text-sm sm:text-base text-zinc-100">{message}</p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+              className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg hover:bg-zinc-800 transition-colors"
             >
               <span className="text-lg">×</span>
             </button>

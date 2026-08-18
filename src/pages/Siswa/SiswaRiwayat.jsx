@@ -29,21 +29,21 @@ const SiswaRiwayat = () => {
   }, [currentUser, navigate]);
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-white">Riwayat Absensi</h1>
+              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-zinc-50">Riwayat Absensi</h1>
               <p className="text-zinc-400 mt-1">Lihat catatan kehadiran.</p>
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-zinc-950 text-zinc-400 text-sm border-b border-white/10">
+                <thead className="bg-zinc-950 text-zinc-400 text-sm border-b border-zinc-800">
                   <tr>
                     <th className="px-6 py-4 font-medium">Tanggal</th>
                     <th className="px-6 py-4 font-medium">Status</th>
@@ -53,8 +53,8 @@ const SiswaRiwayat = () => {
                 </thead>
                 <tbody className="divide-y divide-white/5 text-sm text-zinc-300">
                   {currentData.map((item) => (
-                    <tr key={item.id} className="hover:bg-white/5 transition-colors">
-                      <td className="px-6 py-4 font-medium text-white">{formatDate(item.tanggal)}</td>
+                    <tr key={item.id} className="hover:bg-zinc-900 transition-colors">
+                      <td className="px-6 py-4 font-medium text-zinc-50">{formatDate(item.tanggal)}</td>
                       <td className="px-6 py-4">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-medium border ${
@@ -76,7 +76,7 @@ const SiswaRiwayat = () => {
             </div>
 
             {/* Pagination */}
-            <div className="p-4 border-t border-white/5">
+            <div className="p-4 border-t border-zinc-800">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

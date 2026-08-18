@@ -7,7 +7,7 @@ import Button from '../components/common/Button';
 
 const Home = () => {
   return (
-    <div className="min-h-[100dvh] bg-zinc-950 text-white selection:bg-primary-500/30">
+    <div className="min-h-[100dvh] bg-zinc-950 text-zinc-50 selection:bg-primary-500/30">
       <Navbar transparent={true} />
       <main className="max-w-7xl mx-auto px-6 pt-24 pb-16">
         <section className="grid lg:grid-cols-2 gap-16 items-center">
@@ -27,7 +27,7 @@ const Home = () => {
             </div>
           </div>
           <div className="relative isolate">
-            <div className="rounded-2xl overflow-hidden bg-zinc-900 border border-white/10 ring-1 ring-white/5">
+            <div className="rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 ring-1 ring-zinc-700">
               <img
                 src={heroImage}
                 alt="SMAN 1 Nagreg"

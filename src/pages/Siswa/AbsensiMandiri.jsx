@@ -124,18 +124,18 @@ const AbsensiMandiri = () => {
   };
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-white">Absensi Mandiri</h1>
+              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-zinc-50">Absensi Mandiri</h1>
               <p className="text-zinc-400 mt-1">Ambil foto selfie dan pastikan lokasi aktif sebelum mengirim.</p>
             </div>
             <button
               onClick={() => navigate(-1)}
-              className="text-zinc-400 hover:text-white text-sm transition-colors"
+              className="text-zinc-400 hover:text-zinc-50 text-sm transition-colors"
             >
               ← Kembali
             </button>
@@ -174,9 +174,9 @@ const AbsensiMandiri = () => {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-base font-medium text-white mb-2">Absensi untuk Mata Pelajaran</h3>
+                  <h3 className="text-base font-medium text-zinc-50 mb-2">Absensi untuk Mata Pelajaran</h3>
                   <div className="space-y-1.5">
-                    <p className="text-white text-sm font-medium">{jadwalInfo.mataPelajaran} - Kelas {jadwalInfo.kelas}</p>
+                    <p className="text-zinc-50 text-sm font-medium">{jadwalInfo.mataPelajaran} - Kelas {jadwalInfo.kelas}</p>
                     {tanggalInfo && (
                       <p className="text-sm text-zinc-400">Tanggal: {tanggalInfo}</p>
                     )}
@@ -190,25 +190,25 @@ const AbsensiMandiri = () => {
 
           <div className="space-y-6">
             {/* Camera Section */}
-            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-medium text-white">1. Ambil Foto Selfie</h2>
+                <h2 className="text-lg font-medium text-zinc-50">1. Ambil Foto Selfie</h2>
                 <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Wajah harus terlihat jelas</span>
               </div>
               <CameraCapture onPhotoCapture={handlePhotoCapture} />
             </div>
 
             {/* Location Section */}
-            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-medium text-white">2. Verifikasi Lokasi</h2>
+                <h2 className="text-lg font-medium text-zinc-50">2. Verifikasi Lokasi</h2>
                 <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Aktifkan GPS pada perangkat</span>
               </div>
               <LocationCapture onLocationCapture={handleLocationCapture} />
             </div>
 
             {/* Submit Button */}
-            <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
               <Button
                 onClick={handleSubmit}
                 variant="success"

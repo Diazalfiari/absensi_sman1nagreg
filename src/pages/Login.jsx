@@ -53,11 +53,11 @@ const Login = () => {
   return (
     <>
       {loading && <Loading fullscreen text="Sedang memproses login..." />}
-      <div className="min-h-[100dvh] flex items-center justify-center px-6 py-12 bg-zinc-950 text-white selection:bg-primary-500/30">
+      <div className="min-h-[100dvh] flex items-center justify-center px-6 py-12 bg-zinc-950 text-zinc-50 selection:bg-primary-500/30">
         <div className="w-full max-w-md">
           <div className="text-center mb-10 space-y-4">
             <Link to="/" className="inline-block">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mx-auto mb-6">
                 <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-10 h-10 object-contain" />
               </div>
             </Link>
@@ -65,9 +65,9 @@ const Login = () => {
             <p className="text-zinc-400">Gunakan akun yang terdaftar untuk mengakses panel.</p>
           </div>
 
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 sm:p-8">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 sm:p-8">
             {error && (
-              <div className="bg-rose-500/10 border border-rose-500/30 text-rose-300 px-4 py-3 rounded-xl mb-6">
+              <div className="bg-rose-500/10 border border-rose-500/30 text-rose-400 px-4 py-3 rounded-xl mb-6">
                 <p className="text-sm">{error}</p>
               </div>
             )}
@@ -79,7 +79,7 @@ const Login = () => {
                   name="username"
                   value={formData.username}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-950/50 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 placeholder-zinc-600 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50 focus:outline-none focus:ring-2 focus:ring-primary-500/50 placeholder-zinc-500 transition-colors"
                   placeholder="Masukkan username"
                 />
               </div>
@@ -90,7 +90,7 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-950/50 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/50 placeholder-zinc-600 transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50 focus:outline-none focus:ring-2 focus:ring-primary-500/50 placeholder-zinc-500 transition-colors"
                   placeholder="Masukkan password"
                 />
               </div>
@@ -102,7 +102,7 @@ const Login = () => {
             </form>
           </div>
           <div className="mt-8 text-center">
-            <Link to="/" className="text-zinc-400 hover:text-white font-medium text-sm transition-colors">
+            <Link to="/" className="text-zinc-400 hover:text-zinc-100 font-medium text-sm transition-colors">
               &larr; Kembali ke Beranda
             </Link>
           </div>

@@ -6,12 +6,47 @@
 @tailwind utilities;
 /* stylelint-enable at-rule-no-unknown */
 
-:root {
-  --brand-bg: #04030f;
-  --brand-surface: rgba(15, 23, 42, 0.55);
-  --brand-border: rgba(255, 255, 255, 0.1);
-  --brand-card: rgba(124, 58, 237, 0.12);
-  --brand-glass: rgba(15, 23, 42, 0.72);
+@layer base {
+  :root {
+    --color-zinc-50: 9 9 11;
+    --color-zinc-100: 24 24 27;
+    --color-zinc-200: 39 39 42;
+    --color-zinc-300: 63 63 70;
+    --color-zinc-400: 82 82 91;
+    --color-zinc-500: 113 113 122;
+    --color-zinc-600: 161 161 170;
+    --color-zinc-700: 212 212 216;
+    --color-zinc-800: 228 228 231;
+    --color-zinc-900: 255 255 255; /* Cards pure white */
+    --color-zinc-950: 244 244 245; /* Page bg light gray */
+
+    /* Semantic colors for light mode (600 shades) */
+    --color-emerald-400: 5 150 105;
+    --color-amber-400: 217 119 6;
+    --color-rose-400: 225 29 72;
+    --color-blue-400: 37 99 235;
+    --color-red-400: 220 38 38;
+  }
+  .dark {
+    --color-zinc-50: 250 250 250;
+    --color-zinc-100: 244 244 245;
+    --color-zinc-200: 228 228 231;
+    --color-zinc-300: 212 212 216;
+    --color-zinc-400: 161 161 170;
+    --color-zinc-500: 113 113 122;
+    --color-zinc-600: 82 82 91;
+    --color-zinc-700: 63 63 70;
+    --color-zinc-800: 39 39 42;
+    --color-zinc-900: 24 24 27; /* Cards dark */
+    --color-zinc-950: 9 9 11; /* Page bg darkest */
+
+    /* Semantic colors for dark mode (400 shades) */
+    --color-emerald-400: 52 211 153;
+    --color-amber-400: 251 191 36;
+    --color-rose-400: 251 113 133;
+    --color-blue-400: 96 165 250;
+    --color-red-400: 248 113 113;
+  }
 }
 
 * {
@@ -27,8 +62,8 @@ body,
 body {
   margin: 0;
   font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-  background-color: var(--brand-bg);
-  color: #e2e8f0;
+  background-color: rgb(var(--color-zinc-950));
+  color: rgb(var(--color-zinc-50));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -171,18 +206,18 @@ code {
   color: rgba(226, 232, 240, 0.5);
 }
 
-/* Force autofill to follow dark input styling */
+/* Force autofill to follow theme styling */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus {
-  -webkit-text-fill-color: #e2e8f0;
-  caret-color: #e2e8f0;
+  -webkit-text-fill-color: rgb(var(--color-zinc-50)) !important;
+  caret-color: rgb(var(--color-zinc-50)) !important;
   transition: background-color 9999s ease-out 0s;
-  box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0px 1000px rgb(var(--color-zinc-800)) inset !important;
+  border: 1px solid rgb(var(--color-zinc-700)) !important;
 }
 
 @keyframes slideDown {

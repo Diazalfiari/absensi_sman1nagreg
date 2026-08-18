@@ -29,21 +29,21 @@ const GuruRiwayat = () => {
   }, [currentUser, navigate]);
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="guru" />
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-white">Catatan Pengisian</h1>
+              <h1 className="text-3xl sm:text-4xl font-display tracking-tight text-zinc-50">Catatan Pengisian</h1>
               <p className="text-zinc-400 mt-1">Lihat histori kelas dan status kehadiran yang pernah dicatat.</p>
             </div>
           </div>
 
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="text-zinc-400 text-sm border-b border-white/10 bg-zinc-950">
+                <thead className="text-zinc-400 text-sm border-b border-zinc-800 bg-zinc-950">
                   <tr>
                     <th className="px-6 py-4 font-medium">Tanggal</th>
                     <th className="px-6 py-4 font-medium">Kelas</th>
@@ -57,8 +57,8 @@ const GuruRiwayat = () => {
                 <tbody className="divide-y divide-white/5 text-sm text-zinc-300">
                   {currentData.map((item, index) => {
                     return (
-                      <tr key={item.id} className="hover:bg-white/5 transition-colors">
-                        <td className="px-6 py-4 font-medium text-white">{item.tanggal}</td>
+                      <tr key={item.id} className="hover:bg-zinc-900 transition-colors">
+                        <td className="px-6 py-4 font-medium text-zinc-50">{item.tanggal}</td>
                         <td className="px-6 py-4">{item.kelas}</td>
                         <td className="px-6 py-4">{item.mapel}</td>
                         <td className="px-6 py-4 text-center text-emerald-400">{item.hadir}</td>
@@ -73,7 +73,7 @@ const GuruRiwayat = () => {
             </div>
 
             {/* Pagination */}
-            <div className="p-4 border-t border-white/5">
+            <div className="p-4 border-t border-zinc-800">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

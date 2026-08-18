@@ -37,19 +37,19 @@ const ConfirmDialog = ({
       ></div>
 
       {/* Dialog */}
-      <div className="relative glass-panel max-w-md w-full p-6 md:p-8 rounded-2xl border-2 border-white/20 animate-scale-in">
+      <div className="relative bg-zinc-900 border border-zinc-800 max-w-md w-full p-6 md:p-8 rounded-2xl animate-scale-in">
         {/* Icon */}
         <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-${color}-500/20 border border-${color}-500/50 flex items-center justify-center`}>
           <span className="text-3xl">{icon}</span>
         </div>
 
         {/* Title */}
-        <h3 className="text-xl md:text-2xl font-semibold text-center mb-3">
+        <h3 className="text-xl md:text-2xl font-semibold text-zinc-50 text-center mb-3">
           {title}
         </h3>
 
         {/* Message */}
-        <p className="text-white/70 text-center mb-6">
+        <p className="text-zinc-400 text-center mb-6">
           {message}
         </p>
 

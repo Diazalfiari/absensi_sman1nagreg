@@ -10,10 +10,10 @@ const StatCard = ({ title, value, icon, color = 'primary' }) => {
   };
 
   return (
-    <div className={`rounded-2xl p-5 border border-white/10 ${colorStyles[color]} backdrop-blur-lg`}> 
+    <div className={`rounded-2xl p-5 border border-zinc-800 ${colorStyles[color]} backdrop-blur-lg`}> 
       <div className="flex items-center justify-between mb-2">
-        <p className="text-white/70 text-sm font-medium">{title}</p>
-        <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20">
+        <p className="text-zinc-300 text-sm font-medium">{title}</p>
+        <div className="w-12 h-12 rounded-2xl bg-zinc-800 flex items-center justify-center border border-zinc-700">
           <span className="text-xl">{icon}</span>
         </div>
       </div>
@@ -30,7 +30,7 @@ const StatusCard = ({ siswaData }) => {
   return (
     <div className="space-y-6">
       {/* Main Stat Card */}
-      <div className="bg-blue-600 rounded-2xl shadow-sm p-6 text-white">
+      <div className="bg-blue-600 rounded-2xl shadow-sm p-6 text-zinc-50">
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm opacity-90 mb-1">Persentase Kehadiran</p>
@@ -39,7 +39,7 @@ const StatusCard = ({ siswaData }) => {
           <div className="text-6xl opacity-80">📊</div>
         </div>
         
-        <div className="w-full bg-white/20 rounded-full h-3">
+        <div className="w-full bg-zinc-700 rounded-full h-3">
           <div
             className="bg-white rounded-full h-3 transition-all duration-500"
             style={{ width: `${persentase}%` }}

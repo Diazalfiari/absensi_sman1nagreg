@@ -362,13 +362,13 @@ const LaporanBulanan = () => {
   };
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="admin" />
       
       <div className="lg:ml-64 p-4 md:py-6 md:pr-6 md:pl-10 lg:py-8 lg:pr-8 lg:pl-14">
         {/* Header */}
         <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-display tracking-tight text-white mb-2">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-display tracking-tight text-zinc-50 mb-2">
             Laporan Presensi Bulanan
           </h1>
           <p className="text-sm md:text-base text-zinc-400">
@@ -377,7 +377,7 @@ const LaporanBulanan = () => {
         </div>
 
         {/* Filter Section */}
-        <div className="bg-zinc-900 border border-white/10 rounded-2xl p-4 md:p-6 mb-4 md:mb-6">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 md:p-6 mb-4 md:mb-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
             <div>
               <label className="block text-sm font-medium text-zinc-300 mb-2">
@@ -387,7 +387,7 @@ const LaporanBulanan = () => {
                 name="bulan"
                 value={filters.bulan}
                 onChange={handleFilterChange}
-                className="w-full px-4 py-3 bg-zinc-950 border border-white/10 rounded-xl text-white dark-select focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-50 dark-select focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               >
                 {bulanOptions.map(bulan => (
                   <option key={bulan.value} value={bulan.value}>
@@ -406,7 +406,7 @@ const LaporanBulanan = () => {
                 name="tahun"
                 value={filters.tahun}
                 onChange={handleFilterChange}
-                className="w-full px-4 py-3 bg-zinc-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-50 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                 min="2020"
                 max="2030"
               />
@@ -420,7 +420,7 @@ const LaporanBulanan = () => {
                 name="kelas"
                 value={filters.kelas}
                 onChange={handleFilterChange}
-                className="w-full px-4 py-3 bg-zinc-950 border border-white/10 rounded-xl text-white dark-select focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-50 dark-select focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               >
                 {kelasOptions.map(kelas => (
                   <option key={kelas} value={kelas}>
@@ -438,7 +438,7 @@ const LaporanBulanan = () => {
                 name="mataPelajaran"
                 value={filters.mataPelajaran}
                 onChange={handleFilterChange}
-                className="w-full px-4 py-3 bg-zinc-950 border border-white/10 rounded-xl text-white dark-select focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                className="w-full px-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-50 dark-select focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               >
                 {dataMapel.map(mapel => (
                   <option key={mapel.id} value={mapel.nama}>
@@ -463,51 +463,51 @@ const LaporanBulanan = () => {
         {/* Info Box - Active Filter */}
         <div className="bg-primary-500/10 border border-primary-500/20 rounded-xl p-4 mb-4">
           <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-300">
-            <span className="font-medium text-white">Menampilkan:</span>
-            <span className="bg-zinc-950 border border-white/10 px-3 py-1 rounded-lg whitespace-nowrap">{filters.mataPelajaran}</span>
-            <span className="bg-zinc-950 border border-white/10 px-3 py-1 rounded-lg whitespace-nowrap">{filters.kelas}</span>
-            <span className="bg-zinc-950 border border-white/10 px-3 py-1 rounded-lg whitespace-nowrap">{bulanName} {filters.tahun}</span>
+            <span className="font-medium text-zinc-50">Menampilkan:</span>
+            <span className="bg-zinc-950 border border-zinc-800 px-3 py-1 rounded-lg whitespace-nowrap">{filters.mataPelajaran}</span>
+            <span className="bg-zinc-950 border border-zinc-800 px-3 py-1 rounded-lg whitespace-nowrap">{filters.kelas}</span>
+            <span className="bg-zinc-950 border border-zinc-800 px-3 py-1 rounded-lg whitespace-nowrap">{bulanName} {filters.tahun}</span>
           </div>
         </div>
 
         {/* Table Section */}
-        <div className="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <div className="inline-block min-w-full align-middle">
               <div className="overflow-hidden">
                 <table className="w-full text-xs md:text-sm border-collapse min-w-max">
               <thead>
                 <tr className="bg-zinc-950 text-zinc-300">
-                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-white/5">No</th>
-                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-white/5">NIPD</th>
-                  <th rowSpan="2" className="px-3 py-3 text-left text-xs font-medium uppercase border border-white/5">Nama Siswa</th>
-                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-white/5">Gender</th>
-                  <th colSpan={daysInMonth} className="px-3 py-2 text-center text-xs font-medium uppercase border border-white/5">Tanggal</th>
-                  <th colSpan="5" className="px-3 py-2 text-center text-xs font-medium uppercase border border-white/5">Rekap</th>
+                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-zinc-800">No</th>
+                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-zinc-800">NIPD</th>
+                  <th rowSpan="2" className="px-3 py-3 text-left text-xs font-medium uppercase border border-zinc-800">Nama Siswa</th>
+                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-zinc-800">Gender</th>
+                  <th colSpan={daysInMonth} className="px-3 py-2 text-center text-xs font-medium uppercase border border-zinc-800">Tanggal</th>
+                  <th colSpan="5" className="px-3 py-2 text-center text-xs font-medium uppercase border border-zinc-800">Rekap</th>
                 </tr>
-                <tr className="bg-zinc-950 text-zinc-400 border-b border-white/10">
+                <tr className="bg-zinc-950 text-zinc-400 border-b border-zinc-800">
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
-                    <th key={day} className="px-2 py-2 text-center text-xs border border-white/5">
+                    <th key={day} className="px-2 py-2 text-center text-xs border border-zinc-800">
                       <div>{day.toString().padStart(2, '0')}</div>
                       <div className="text-[10px] font-normal text-zinc-500">
                         {getDayName(day, filters.bulan, filters.tahun).substring(0, 3)}
                       </div>
                     </th>
                   ))}
-                  <th className="px-3 py-2 text-center text-xs border border-white/5 text-emerald-400">H</th>
-                  <th className="px-3 py-2 text-center text-xs border border-white/5 text-amber-400">S</th>
-                  <th className="px-3 py-2 text-center text-xs border border-white/5 text-accent-400">I</th>
-                  <th className="px-3 py-2 text-center text-xs border border-white/5 text-rose-400">A</th>
-                  <th className="px-3 py-2 text-center text-xs border border-white/5">%</th>
+                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-emerald-400">H</th>
+                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-amber-400">S</th>
+                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-accent-400">I</th>
+                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-rose-400">A</th>
+                  <th className="px-3 py-2 text-center text-xs border border-zinc-800">%</th>
                 </tr>
               </thead>
               <tbody className="text-zinc-300">
                 {presensiData.map((siswa, index) => (
-                  <tr key={siswa.id} className="hover:bg-white/5 transition-colors border-b border-white/5">
-                    <td className="px-3 py-2 text-center border-r border-white/5">{index + 1}</td>
-                    <td className="px-3 py-2 text-center border-r border-white/5 text-zinc-400">{siswa.nipd}</td>
-                    <td className="px-3 py-2 border-r border-white/5 font-medium text-white">{siswa.nama}</td>
-                    <td className="px-3 py-2 text-center border-r border-white/5">{siswa.jenisKelamin === 'Laki-laki' ? 'L' : 'P'}</td>
+                  <tr key={siswa.id} className="hover:bg-zinc-900 transition-colors border-b border-zinc-800">
+                    <td className="px-3 py-2 text-center border-r border-zinc-800">{index + 1}</td>
+                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-zinc-400">{siswa.nipd}</td>
+                    <td className="px-3 py-2 border-r border-zinc-800 font-medium text-zinc-50">{siswa.nama}</td>
+                    <td className="px-3 py-2 text-center border-r border-zinc-800">{siswa.jenisKelamin === 'Laki-laki' ? 'L' : 'P'}</td>
                     {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                       const presensi = siswa.presensiPerHari[day];
                       let textColor = '';
@@ -518,29 +518,29 @@ const LaporanBulanan = () => {
                       if (presensi?.status === '-') textColor = 'text-zinc-600';
 
                       return (
-                        <td key={day} className={`px-2 py-2 text-center border-r border-white/5 ${textColor} font-medium`}>
+                        <td key={day} className={`px-2 py-2 text-center border-r border-zinc-800 ${textColor} font-medium`}>
                           {presensi?.status || '-'}
                         </td>
                       );
                     })}
-                    <td className="px-3 py-2 text-center border-r border-white/5 text-emerald-400">{siswa.hadir}</td>
-                    <td className="px-3 py-2 text-center border-r border-white/5 text-amber-400">{siswa.sakit}</td>
-                    <td className="px-3 py-2 text-center border-r border-white/5 text-accent-400">{siswa.izin}</td>
-                    <td className="px-3 py-2 text-center border-r border-white/5 text-rose-400">{siswa.alpa}</td>
-                    <td className="px-3 py-2 text-center font-medium text-white">
+                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-emerald-400">{siswa.hadir}</td>
+                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-amber-400">{siswa.sakit}</td>
+                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-accent-400">{siswa.izin}</td>
+                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-rose-400">{siswa.alpa}</td>
+                    <td className="px-3 py-2 text-center font-medium text-zinc-50">
                       {siswa.persentase}%
                     </td>
                   </tr>
                 ))}
                 
                 {/* Hadir Row */}
-                <tr className="bg-zinc-950 font-medium border-b border-white/5">
-                  <td colSpan="3" className="px-3 py-2 text-center border-r border-white/5 text-zinc-400 uppercase text-xs">TOTAL</td>
-                  <td className="px-3 py-2 text-center border-r border-white/5 text-emerald-400">H</td>
+                <tr className="bg-zinc-950 font-medium border-b border-zinc-800">
+                  <td colSpan="3" className="px-3 py-2 text-center border-r border-zinc-800 text-zinc-400 uppercase text-xs">TOTAL</td>
+                  <td className="px-3 py-2 text-center border-r border-zinc-800 text-emerald-400">H</td>
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                     const dayName = getDayName(day, filters.bulan, filters.tahun);
                     if (dayName === 'Minggu' || dayName === 'Sabtu') {
-                      return <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-zinc-600">-</td>;
+                      return <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-zinc-600">-</td>;
                     }
                     
                     const totalHadirPerHari = presensiData.filter(siswa => 
@@ -548,7 +548,7 @@ const LaporanBulanan = () => {
                     ).length;
                     
                     return (
-                      <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-emerald-400">
+                      <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-emerald-400">
                         {totalHadirPerHari}
                       </td>
                     );
@@ -556,13 +556,13 @@ const LaporanBulanan = () => {
                 </tr>
 
                 {/* Sakit Row */}
-                <tr className="bg-zinc-950 font-medium border-b border-white/5">
-                  <td colSpan="3" className="px-3 py-2 border-r border-white/5"></td>
-                  <td className="px-3 py-2 text-center border-r border-white/5 text-amber-400">S</td>
+                <tr className="bg-zinc-950 font-medium border-b border-zinc-800">
+                  <td colSpan="3" className="px-3 py-2 border-r border-zinc-800"></td>
+                  <td className="px-3 py-2 text-center border-r border-zinc-800 text-amber-400">S</td>
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                     const dayName = getDayName(day, filters.bulan, filters.tahun);
                     if (dayName === 'Minggu' || dayName === 'Sabtu') {
-                      return <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-zinc-600">-</td>;
+                      return <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-zinc-600">-</td>;
                     }
                     
                     const totalSakitPerHari = presensiData.filter(siswa => 
@@ -570,7 +570,7 @@ const LaporanBulanan = () => {
                     ).length;
                     
                     return (
-                      <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-amber-400">
+                      <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-amber-400">
                         {totalSakitPerHari}
                       </td>
                     );
@@ -578,13 +578,13 @@ const LaporanBulanan = () => {
                 </tr>
 
                 {/* Ijin Row */}
-                <tr className="bg-zinc-950 font-medium border-b border-white/5">
-                  <td colSpan="3" className="px-3 py-2 border-r border-white/5"></td>
-                  <td className="px-3 py-2 text-center border-r border-white/5 text-accent-400">I</td>
+                <tr className="bg-zinc-950 font-medium border-b border-zinc-800">
+                  <td colSpan="3" className="px-3 py-2 border-r border-zinc-800"></td>
+                  <td className="px-3 py-2 text-center border-r border-zinc-800 text-accent-400">I</td>
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                     const dayName = getDayName(day, filters.bulan, filters.tahun);
                     if (dayName === 'Minggu' || dayName === 'Sabtu') {
-                      return <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-zinc-600">-</td>;
+                      return <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-zinc-600">-</td>;
                     }
                     
                     const totalIzinPerHari = presensiData.filter(siswa => 
@@ -592,7 +592,7 @@ const LaporanBulanan = () => {
                     ).length;
                     
                     return (
-                      <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-accent-400">
+                      <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-accent-400">
                         {totalIzinPerHari}
                       </td>
                     );
@@ -600,13 +600,13 @@ const LaporanBulanan = () => {
                 </tr>
 
                 {/* Alpa Row */}
-                <tr className="bg-zinc-950 font-medium border-b border-white/5">
-                  <td colSpan="3" className="px-3 py-2 border-r border-white/5"></td>
-                  <td className="px-3 py-2 text-center border-r border-white/5 text-rose-400">A</td>
+                <tr className="bg-zinc-950 font-medium border-b border-zinc-800">
+                  <td colSpan="3" className="px-3 py-2 border-r border-zinc-800"></td>
+                  <td className="px-3 py-2 text-center border-r border-zinc-800 text-rose-400">A</td>
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                     const dayName = getDayName(day, filters.bulan, filters.tahun);
                     if (dayName === 'Minggu' || dayName === 'Sabtu') {
-                      return <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-zinc-600">-</td>;
+                      return <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-zinc-600">-</td>;
                     }
                     
                     const totalalpaPerHari = presensiData.filter(siswa => 
@@ -614,7 +614,7 @@ const LaporanBulanan = () => {
                     ).length;
                     
                     return (
-                      <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-rose-400">
+                      <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-rose-400">
                         {totalalpaPerHari}
                       </td>
                     );
@@ -623,12 +623,12 @@ const LaporanBulanan = () => {
 
                 {/* % Kehadiran Row */}
                 <tr className="bg-zinc-900 font-medium">
-                  <td colSpan="3" className="px-3 py-2 border-r border-white/5"></td>
-                  <td className="px-3 py-2 text-center border-r border-white/5 text-white">%</td>
+                  <td colSpan="3" className="px-3 py-2 border-r border-zinc-800"></td>
+                  <td className="px-3 py-2 text-center border-r border-zinc-800 text-zinc-50">%</td>
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                     const dayName = getDayName(day, filters.bulan, filters.tahun);
                     if (dayName === 'Minggu' || dayName === 'Sabtu') {
-                      return <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-zinc-600">-</td>;
+                      return <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-zinc-600">-</td>;
                     }
                     
                     const totalHadirPerHari = presensiData.filter(siswa => 
@@ -643,7 +643,7 @@ const LaporanBulanan = () => {
                       Math.round((totalHadirPerHari / totalSiswaAktifPerHari) * 100) : 0;
                     
                     return (
-                      <td key={day} className="px-2 py-2 text-center border-r border-white/5 text-white">
+                      <td key={day} className="px-2 py-2 text-center border-r border-zinc-800 text-zinc-50">
                         {persentasePerHari}%
                       </td>
                     );
@@ -657,8 +657,8 @@ const LaporanBulanan = () => {
         </div>
 
         {/* Keterangan */}
-        <div className="bg-zinc-900 border border-white/10 rounded-2xl p-4 md:p-6 mt-4 md:mt-6">
-          <h3 className="text-white font-medium mb-3 md:mb-4 text-sm md:text-base">Keterangan:</h3>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 md:p-6 mt-4 md:mt-6">
+          <h3 className="text-zinc-50 font-medium mb-3 md:mb-4 text-sm md:text-base">Keterangan:</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-xs md:text-sm text-zinc-400">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center font-medium text-emerald-400">H</span>

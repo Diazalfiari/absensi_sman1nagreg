@@ -8,7 +8,7 @@ const Skeleton = ({
   count = 1,
   animation = 'pulse'
 }) => {
-  const baseClasses = 'bg-white/10 rounded';
+  const baseClasses = 'bg-zinc-800 rounded';
   
   const animationClasses = {
     pulse: 'animate-pulse',
@@ -45,7 +45,7 @@ const Skeleton = ({
 // Skeleton untuk Table Row
 export const SkeletonTableRow = ({ columns = 5 }) => {
   return (
-    <tr className="border-b border-white/10">
+    <tr className="border-b border-zinc-800">
       {Array.from({ length: columns }).map((_, index) => (
         <td key={index} className="px-6 py-4">
           <Skeleton height="20px" />
@@ -58,7 +58,7 @@ export const SkeletonTableRow = ({ columns = 5 }) => {
 // Skeleton untuk Card
 export const SkeletonCard = ({ className = '' }) => {
   return (
-    <div className={`glass-panel p-6 ${className}`}>
+    <div className={`bg-zinc-900 border border-zinc-800 rounded-2xl p-6 ${className}`}>
       <Skeleton variant="rectangular" height="24px" width="60%" className="mb-4" />
       <Skeleton variant="rectangular" height="16px" width="80%" className="mb-2" />
       <Skeleton variant="rectangular" height="16px" width="70%" />
@@ -69,7 +69,7 @@ export const SkeletonCard = ({ className = '' }) => {
 // Skeleton untuk Stat Card
 export const SkeletonStatCard = () => {
   return (
-    <div className="glass-panel p-6 border border-white/15">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 border border-white/15">
       <div className="flex items-center justify-between mb-4">
         <Skeleton variant="circular" width="40px" height="40px" />
         <Skeleton variant="rectangular" width="60px" height="20px" />
@@ -83,19 +83,19 @@ export const SkeletonStatCard = () => {
 // Skeleton untuk Table
 export const SkeletonTable = ({ rows = 5, columns = 10 }) => {
   return (
-    <div className="glass-panel overflow-hidden">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="bg-gradient-to-r from-primary-700/80 via-primary-500/80 to-accent-500/70">
               {Array.from({ length: columns }).map((_, index) => (
                 <th key={index} className="px-6 py-4">
-                  <Skeleton height="16px" className="bg-white/20" />
+                  <Skeleton height="16px" className="bg-zinc-700" />
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/10">
+          <tbody className="divide-y divide-zinc-800">
             {Array.from({ length: rows }).map((_, rowIndex) => (
               <SkeletonTableRow key={rowIndex} columns={columns} />
             ))}
@@ -103,7 +103,7 @@ export const SkeletonTable = ({ rows = 5, columns = 10 }) => {
         </table>
       </div>
       {/* Pagination Skeleton */}
-      <div className="flex items-center justify-between px-6 py-4 border-t border-white/10">
+      <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-800">
         <Skeleton height="20px" width="200px" />
         <div className="flex items-center gap-2">
           <Skeleton height="36px" width="120px" />

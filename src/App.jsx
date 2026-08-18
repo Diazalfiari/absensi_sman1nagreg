@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { getCurrentUser } from './utils/helpers';
+import { ThemeProvider } from './contexts/ThemeContext';
+import ThemeToggle from './components/common/ThemeToggle';
 
 // Pages
 import Home from './pages/Home';
@@ -36,126 +38,129 @@ const ProtectedRoute = ({ children, allowedRole }) => {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+    <ThemeProvider>
+      <Router>
+        <ThemeToggle />
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute allowedRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/rekapitulasi"
-          element={
-            <ProtectedRoute allowedRole="admin">
-              <AdminRekap />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/laporan-bulanan"
-          element={
-            <ProtectedRoute allowedRole="admin">
-              <LaporanBulanan />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/tambah-jadwal"
-          element={
-            <ProtectedRoute allowedRole="admin">
-              <TambahJadwal />
-            </ProtectedRoute>
-          }
-        />
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/rekapitulasi"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <AdminRekap />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/laporan-bulanan"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <LaporanBulanan />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/tambah-jadwal"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <TambahJadwal />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Guru Routes */}
-        <Route
-          path="/guru"
-          element={
-            <ProtectedRoute allowedRole="guru">
-              <GuruDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/guru/Jadwal-mengajar"
-          element={
-            <ProtectedRoute allowedRole="guru">
-              <JadwalMengajar />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/guru/detail-sesi"
-          element={
-            <ProtectedRoute allowedRole="guru">
-              <DetailSesi />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/guru/riwayat"
-          element={
-            <ProtectedRoute allowedRole="guru">
-              <GuruRiwayat />
-            </ProtectedRoute>
-          }
-        />
+          {/* Guru Routes */}
+          <Route
+            path="/guru"
+            element={
+              <ProtectedRoute allowedRole="guru">
+                <GuruDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/guru/Jadwal-mengajar"
+            element={
+              <ProtectedRoute allowedRole="guru">
+                <JadwalMengajar />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/guru/detail-sesi"
+            element={
+              <ProtectedRoute allowedRole="guru">
+                <DetailSesi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/guru/riwayat"
+            element={
+              <ProtectedRoute allowedRole="guru">
+                <GuruRiwayat />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Siswa Routes */}
-        <Route
-          path="/siswa"
-          element={
-            <ProtectedRoute allowedRole="siswa">
-              <SiswaDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/siswa/jadwal"
-          element={
-            <ProtectedRoute allowedRole="siswa">
-              <JadwalPelajaran />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/siswa/detail-pelajaran"
-          element={
-            <ProtectedRoute allowedRole="siswa">
-              <DetailPelajaran />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/siswa/presensi"
-          element={
-            <ProtectedRoute allowedRole="siswa">
-              <AbsensiMandiri />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/siswa/riwayat"
-          element={
-            <ProtectedRoute allowedRole="siswa">
-              <SiswaRiwayat />
-            </ProtectedRoute>
-          }
-        />
+          {/* Siswa Routes */}
+          <Route
+            path="/siswa"
+            element={
+              <ProtectedRoute allowedRole="siswa">
+                <SiswaDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/siswa/jadwal"
+            element={
+              <ProtectedRoute allowedRole="siswa">
+                <JadwalPelajaran />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/siswa/detail-pelajaran"
+            element={
+              <ProtectedRoute allowedRole="siswa">
+                <DetailPelajaran />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/siswa/presensi"
+            element={
+              <ProtectedRoute allowedRole="siswa">
+                <AbsensiMandiri />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/siswa/riwayat"
+            element={
+              <ProtectedRoute allowedRole="siswa">
+                <SiswaRiwayat />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Fallback Route */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+          {/* Fallback Route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

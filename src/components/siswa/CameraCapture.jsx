@@ -101,7 +101,7 @@ const CameraCapture = ({ onPhotoCapture }) => {
       )}
 
       {/* Camera Preview or Captured Photo */}
-      <div className="relative bg-black/40 rounded-2xl overflow-hidden border border-white/10">
+      <div className="relative bg-black/40 rounded-2xl overflow-hidden border border-zinc-800">
         <div className="w-full aspect-[4/3] md:aspect-video">
           <video
             ref={videoRef}
@@ -122,7 +122,7 @@ const CameraCapture = ({ onPhotoCapture }) => {
           )}
 
           {!cameraActive && !photo && (
-            <div className="absolute inset-0 flex items-center justify-center text-white/70">
+            <div className="absolute inset-0 flex items-center justify-center text-zinc-300">
               <div className="text-center">
                 <div className="text-6xl mb-4">📷</div>
                 <p>Kamera belum diaktifkan</p>

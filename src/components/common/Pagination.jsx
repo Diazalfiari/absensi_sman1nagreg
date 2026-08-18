@@ -40,8 +40,8 @@ const Pagination = ({
             onClick={() => onPageChange(i)}
             className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm transition-all ${
               currentPage === i
-                ? 'bg-blue-700 text-white'
-                : 'bg-white/10 text-white/70 hover:bg-white/20 border border-white/20'
+                ? 'bg-blue-600 text-zinc-50'
+                : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
             }`}
           >
             {i}
@@ -49,7 +49,7 @@ const Pagination = ({
         );
       } else if (i === currentPage - 2 || i === currentPage + 2) {
         pages.push(
-          <span key={i} className="px-1 sm:px-2 text-white/50 text-xs sm:text-sm">
+          <span key={i} className="px-1 sm:px-2 text-zinc-500 text-xs sm:text-sm">
             ...
           </span>
         );
@@ -64,9 +64,9 @@ const Pagination = ({
   }
 
   return (
-    <div className={`flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-4 border-t border-white/10 ${className}`}>
+    <div className={`flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-4 border-t border-zinc-800 ${className}`}>
       {showInfo && (
-        <div className="text-xs sm:text-sm text-white/70 order-2 sm:order-1">
+        <div className="text-xs sm:text-sm text-zinc-500 order-2 sm:order-1">
           Menampilkan {startIndex + 1} - {endIndex} dari {totalItems} data
         </div>
       )}
@@ -77,8 +77,8 @@ const Pagination = ({
           disabled={currentPage === 1}
           className={`px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm transition-all ${
             currentPage === 1
-              ? 'bg-white/5 text-white/30 cursor-not-allowed'
-              : 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
+              ? 'bg-zinc-900 text-zinc-600 cursor-not-allowed'
+              : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
           }`}
         >
           <span className="hidden sm:inline">← Sebelumnya</span>
@@ -94,8 +94,8 @@ const Pagination = ({
           disabled={currentPage === totalPages}
           className={`px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm transition-all ${
             currentPage === totalPages
-              ? 'bg-white/5 text-white/30 cursor-not-allowed'
-              : 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
+              ? 'bg-zinc-900 text-zinc-600 cursor-not-allowed'
+              : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
           }`}
         >
           <span className="hidden sm:inline">Selanjutnya →</span>

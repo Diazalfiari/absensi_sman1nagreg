@@ -183,7 +183,7 @@ const TambahJadwal = () => {
   };
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="admin" />
 
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
@@ -197,8 +197,8 @@ const TambahJadwal = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Left Column - Form Fields */}
               <div className="space-y-6">
-                <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 md:p-8">
-                  <h2 className="text-xl font-medium mb-6 text-white">Informasi Jadwal</h2>
+                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8">
+                  <h2 className="text-xl font-medium mb-6 text-zinc-50">Informasi Jadwal</h2>
                   
                   <div className="space-y-4">
                     {/* Mata Pelajaran */}
@@ -213,8 +213,8 @@ const TambahJadwal = () => {
                         onChange={handleChange}
                         placeholder="Contoh: Matematika"
                         className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                          errors.mataPelajaran ? 'border-red-500' : 'border-white/10'
-                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-white placeholder-zinc-500`}
+                          errors.mataPelajaran ? 'border-red-500' : 'border-zinc-800'
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 placeholder-zinc-500`}
                       />
                       {errors.mataPelajaran && (
                         <p className="text-red-400 text-sm mt-1">{errors.mataPelajaran}</p>
@@ -231,8 +231,8 @@ const TambahJadwal = () => {
                         value={formData.kelas}
                         onChange={handleChange}
                         className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                          errors.kelas ? 'border-red-500' : 'border-white/10'
-                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-white`}
+                          errors.kelas ? 'border-red-500' : 'border-zinc-800'
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-zinc-50`}
                       >
                         <option value="">Pilih Kelas</option>
                         <option value="X-1">X-1</option>
@@ -289,8 +289,8 @@ const TambahJadwal = () => {
                           value={formData.jamMulai}
                           onChange={handleChange}
                           className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                            errors.jamMulai ? 'border-red-500' : 'border-white/10'
-                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-white`}
+                            errors.jamMulai ? 'border-red-500' : 'border-zinc-800'
+                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-zinc-50`}
                         />
                         {errors.jamMulai && (
                           <p className="text-red-400 text-sm mt-1">{errors.jamMulai}</p>
@@ -306,8 +306,8 @@ const TambahJadwal = () => {
                           value={formData.jamSelesai}
                           onChange={handleChange}
                           className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                            errors.jamSelesai ? 'border-red-500' : 'border-white/10'
-                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-white`}
+                            errors.jamSelesai ? 'border-red-500' : 'border-zinc-800'
+                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-zinc-50`}
                         />
                         {errors.jamSelesai && (
                           <p className="text-red-400 text-sm mt-1">{errors.jamSelesai}</p>
@@ -327,8 +327,8 @@ const TambahJadwal = () => {
                         onChange={handleChange}
                         placeholder="Contoh: Budi Santoso, S.Pd"
                         className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                          errors.guru ? 'border-red-500' : 'border-white/10'
-                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-white placeholder-zinc-500`}
+                          errors.guru ? 'border-red-500' : 'border-zinc-800'
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 placeholder-zinc-500`}
                       />
                       {errors.guru && (
                         <p className="text-red-400 text-sm mt-1">{errors.guru}</p>
@@ -338,8 +338,8 @@ const TambahJadwal = () => {
                 </div>
 
                 {/* Selected Dates Summary */}
-                <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
-                  <h3 className="text-sm font-medium text-white mb-2">
+                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+                  <h3 className="text-sm font-medium text-zinc-50 mb-2">
                     Tanggal Terpilih
                   </h3>
                   <p className="text-zinc-400 text-sm">
@@ -352,24 +352,24 @@ const TambahJadwal = () => {
               </div>
 
               {/* Right Column - Calendar */}
-              <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 md:p-8">
+              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-medium text-white">Pilih Tanggal</h2>
+                  <h2 className="text-xl font-medium text-zinc-50">Pilih Tanggal</h2>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={handlePrevMonth}
-                      className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white"
+                      className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 flex items-center justify-center transition-colors text-zinc-50"
                     >
                       ‹
                     </button>
-                    <span className="text-sm font-medium min-w-[140px] text-center text-white">
+                    <span className="text-sm font-medium min-w-[140px] text-center text-zinc-50">
                       {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                     </span>
                     <button
                       type="button"
                       onClick={handleNextMonth}
-                      className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white"
+                      className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 flex items-center justify-center transition-colors text-zinc-50"
                     >
                       ›
                     </button>
@@ -402,9 +402,9 @@ const TambahJadwal = () => {
                             ${isPast ? 'opacity-30 cursor-not-allowed text-zinc-500' : 'cursor-pointer'}
                             ${
                               isSelected
-                                ? 'bg-primary-500 text-white'
+                                ? 'bg-primary-500 text-zinc-50'
                                 : day && !isPast
-                                ? 'bg-zinc-950 hover:bg-white/10 text-zinc-300'
+                                ? 'bg-zinc-950 hover:bg-zinc-800 text-zinc-300'
                                 : day && isPast
                                 ? 'bg-zinc-950'
                                 : ''
@@ -418,7 +418,7 @@ const TambahJadwal = () => {
                   </div>
                 </div>
 
-                <div className="border-t border-white/5 pt-4 space-y-2 text-xs text-zinc-500">
+                <div className="border-t border-zinc-800 pt-4 space-y-2 text-xs text-zinc-500">
                   <p>• Klik tanggal untuk memilih/membatalkan</p>
                   <p>• Anda bisa memilih beberapa tanggal sekaligus</p>
                   <p>• Tanggal yang sudah lewat tidak bisa dipilih</p>
@@ -427,7 +427,7 @@ const TambahJadwal = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-end border-t border-white/5 pt-6">
+            <div className="flex flex-col sm:flex-row gap-4 justify-end border-t border-zinc-800 pt-6">
               <Button type="button" variant="secondary" onClick={handleReset}>
                 Reset Form
               </Button>
@@ -439,7 +439,7 @@ const TambahJadwal = () => {
 
           {/* Info Card */}
           <div className="bg-primary-500/10 border border-primary-500/20 rounded-2xl p-6 mt-6">
-            <h3 className="text-sm font-medium text-white mb-3">
+            <h3 className="text-sm font-medium text-zinc-50 mb-3">
               Panduan Pengisian
             </h3>
             <ul className="text-sm text-zinc-400 space-y-2">

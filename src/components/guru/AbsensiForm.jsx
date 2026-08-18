@@ -81,11 +81,11 @@ const AbsensiForm = ({ onSubmit }) => {
       {/* Kelas, Mapel & Tanggal Selection */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-white/70 font-medium mb-2">Kelas</label>
+          <label className="block text-zinc-300 font-medium mb-2">Kelas</label>
           <select
             value={selectedKelas}
             onChange={handleKelasChange}
-            className="dark-select w-full px-4 py-3 rounded-2xl border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-primary-400"
+            className="dark-select w-full px-4 py-3 rounded-2xl border border-zinc-700 text-zinc-50 focus:outline-none focus:ring-2 focus:ring-primary-400"
           >
             <option value="">Pilih Kelas</option>
             {dataKelas.map((kelas) => (
@@ -97,12 +97,12 @@ const AbsensiForm = ({ onSubmit }) => {
         </div>
 
         <div>
-          <label className="block text-white/70 font-medium mb-2">Mata Pelajaran</label>
+          <label className="block text-zinc-300 font-medium mb-2">Mata Pelajaran</label>
           <select
             value={selectedMapel}
             onChange={handleMapelChange}
             disabled={!selectedKelas}
-            className="dark-select w-full px-4 py-3 rounded-2xl border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-primary-400 disabled:opacity-40"
+            className="dark-select w-full px-4 py-3 rounded-2xl border border-zinc-700 text-zinc-50 focus:outline-none focus:ring-2 focus:ring-primary-400 disabled:opacity-40"
           >
             <option value="">Pilih Mata Pelajaran</option>
             {dataMapel.map((mapel) => (
@@ -114,41 +114,41 @@ const AbsensiForm = ({ onSubmit }) => {
         </div>
 
         <div>
-          <label className="block text-white/70 font-medium mb-2">Tanggal Absensi</label>
+          <label className="block text-zinc-300 font-medium mb-2">Tanggal Absensi</label>
           <input
             type="date"
             value={selectedDate}
             max={new Date().toISOString().split('T')[0]}
             onChange={handleDateChange}
-            className="dark-select w-full px-4 py-3 rounded-2xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-primary-400"
+            className="dark-select w-full px-4 py-3 rounded-2xl border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-primary-400"
           />
         </div>
       </div>
 
       {/* Student Table */}
       {selectedKelas && presensiData.length > 0 && (
-        <div className="rounded-2xl border border-white/10 overflow-hidden bg-white/5 backdrop-blur-xl">
+        <div className="rounded-2xl border border-zinc-800 overflow-hidden bg-zinc-900 backdrop-blur-xl">
           <div className="px-6 py-4 bg-blue-600">
-            <h3 className="text-lg font-semibold text-white">
+            <h3 className="text-lg font-semibold text-zinc-50">
               Daftar Siswa Kelas {selectedKelas}
             </h3>
           </div>
           
           <div className="overflow-x-auto">
-            <table className="w-full text-white">
-              <thead className="bg-white/10">
+            <table className="w-full text-zinc-50">
+              <thead className="bg-zinc-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.3em] text-white/60">No</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.3em] text-white/60">NIS</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.3em] text-white/60">Nama Siswa</th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.3em] text-white/60">Status Kehadiran</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400">No</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400">NIS</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400">Nama Siswa</th>
+                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400">Status Kehadiran</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10">
+              <tbody className="divide-y divide-zinc-800">
                 {presensiData.map((siswa, index) => (
-                  <tr key={siswa.id} className="hover:bg-white/5">
-                    <td className="px-6 py-4 text-sm text-white/80">{index + 1}</td>
-                    <td className="px-6 py-4 text-sm text-white/80">{siswa.nis}</td>
+                  <tr key={siswa.id} className="hover:bg-zinc-900">
+                    <td className="px-6 py-4 text-sm text-zinc-200">{index + 1}</td>
+                    <td className="px-6 py-4 text-sm text-zinc-200">{siswa.nis}</td>
                     <td className="px-6 py-4 text-sm font-medium">{siswa.nama}</td>
                     <td className="px-6 py-4">
                       <div className="flex justify-center flex-wrap gap-3">
@@ -180,7 +180,7 @@ const AbsensiForm = ({ onSubmit }) => {
             </table>
           </div>
 
-          <div className="px-6 py-4 bg-white/5 border-t border-white/10">
+          <div className="px-6 py-4 bg-zinc-900 border-t border-zinc-800">
             <Button
               onClick={handleSubmit}
               variant="primary"

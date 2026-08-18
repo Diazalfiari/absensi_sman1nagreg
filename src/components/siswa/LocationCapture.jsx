@@ -80,7 +80,7 @@ const LocationCapture = ({ onLocationCapture }) => {
   }, []);
 
   return (
-    <div className="glass-panel p-6">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
       <h3 className="text-lg font-semibold mb-4">Informasi Lokasi</h3>
 
       {error && (
@@ -114,21 +114,21 @@ const LocationCapture = ({ onLocationCapture }) => {
             </div>
           </div>
 
-          <div className="bg-white/5 rounded-xl p-4 space-y-2 border border-white/10">
+          <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800">
             <div className="flex justify-between text-sm">
-              <span className="text-white/60">Latitude:</span>
+              <span className="text-zinc-400">Latitude:</span>
               <span className="font-mono font-semibold">
                 {location.lat.toFixed(6)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-white/60">Longitude:</span>
+              <span className="text-zinc-400">Longitude:</span>
               <span className="font-mono font-semibold">
                 {location.lng.toFixed(6)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-white/60">Akurasi:</span>
+              <span className="text-zinc-400">Akurasi:</span>
               <span className="font-semibold">
                 ±{location.accuracy} meter
               </span>
@@ -138,7 +138,7 @@ const LocationCapture = ({ onLocationCapture }) => {
           <button
             onClick={getLocation}
             disabled={loading}
-            className="w-full px-4 py-2 text-sm text-white hover:bg-white/10 rounded-xl transition-colors border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full px-4 py-2 text-sm text-zinc-50 hover:bg-zinc-800 rounded-xl transition-colors border border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

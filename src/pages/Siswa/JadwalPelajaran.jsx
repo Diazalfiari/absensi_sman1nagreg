@@ -126,7 +126,7 @@ const JadwalPelajaran = () => {
   const selectedSchedule = jadwalData[dateStr] || [];
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-white selection:bg-primary-500/30">
+    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
       <Sidebar role="siswa" />
       
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
@@ -135,7 +135,7 @@ const JadwalPelajaran = () => {
           <div className="flex items-center gap-4 mb-6">
             <button
               onClick={() => navigate(-1)}
-              className="text-zinc-400 hover:text-white transition-colors"
+              className="text-zinc-400 hover:text-zinc-50 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -148,23 +148,23 @@ const JadwalPelajaran = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Side - Calendar */}
             <div>
-              <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
                 {/* Month Navigation */}
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <p className="text-sm font-medium text-zinc-400">{currentMonth.getFullYear()}</p>
-                    <h2 className="text-2xl font-semibold text-white">{monthNames[currentMonth.getMonth()]}</h2>
+                    <h2 className="text-2xl font-semibold text-zinc-50">{monthNames[currentMonth.getMonth()]}</h2>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handlePrevMonth}
-                      className="w-10 h-10 rounded-lg bg-zinc-950 hover:bg-white/10 flex items-center justify-center transition-colors border border-white/5"
+                      className="w-10 h-10 rounded-lg bg-zinc-950 hover:bg-zinc-800 flex items-center justify-center transition-colors border border-zinc-800"
                     >
                       <span className="text-xl">‹</span>
                     </button>
                     <button
                       onClick={handleNextMonth}
-                      className="w-10 h-10 rounded-lg bg-zinc-950 hover:bg-white/10 flex items-center justify-center transition-colors border border-white/5"
+                      className="w-10 h-10 rounded-lg bg-zinc-950 hover:bg-zinc-800 flex items-center justify-center transition-colors border border-zinc-800"
                     >
                       <span className="text-xl">›</span>
                     </button>
@@ -196,8 +196,8 @@ const JadwalPelajaran = () => {
                           relative aspect-square rounded-lg text-sm md:text-base font-medium transition-colors
                           ${!day ? 'invisible' : ''}
                           ${today && !selected ? 'ring-1 ring-emerald-500' : ''}
-                          ${selected ? 'bg-emerald-600 text-white' : ''}
-                          ${!selected && day ? 'hover:bg-white/10 text-zinc-400 bg-zinc-950' : ''}
+                          ${selected ? 'bg-emerald-600 text-zinc-50' : ''}
+                          ${!selected && day ? 'hover:bg-zinc-800 text-zinc-400 bg-zinc-950' : ''}
                           ${!day ? '' : 'cursor-pointer'}
                         `}
                       >
@@ -220,9 +220,9 @@ const JadwalPelajaran = () => {
             <div className="space-y-4">
               {selectedDate && (
                 <>
-                  <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
                     <p className="text-sm font-medium text-zinc-400 mb-1">Jadwal Kelas</p>
-                    <h3 className="text-xl font-medium text-white">
+                    <h3 className="text-xl font-medium text-zinc-50">
                       {selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}
                     </h3>
                   </div>
@@ -230,11 +230,11 @@ const JadwalPelajaran = () => {
                   {selectedSchedule.length > 0 ? (
                     <div className="space-y-4">
                       {selectedSchedule.map((jadwal) => (
-                        <div key={jadwal.id} className="bg-zinc-900 border border-white/10 rounded-2xl p-6">
+                        <div key={jadwal.id} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
                           <div className="space-y-4">
                             <div className="flex items-start justify-between">
-                              <h4 className="text-lg font-medium text-white">{jadwal.mataPelajaran}</h4>
-                              <span className="px-3 py-1 bg-zinc-950 text-zinc-300 border border-white/10 rounded-full text-xs font-medium">
+                              <h4 className="text-lg font-medium text-zinc-50">{jadwal.mataPelajaran}</h4>
+                              <span className="px-3 py-1 bg-zinc-950 text-zinc-300 border border-zinc-800 rounded-full text-xs font-medium">
                                 {jadwal.status} - {jadwal.ruang}
                               </span>
                             </div>
@@ -262,7 +262,7 @@ const JadwalPelajaran = () => {
                                   tanggal: selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
                                 } 
                               })}
-                              className="w-full mt-4 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-lg font-medium transition-colors"
+                              className="w-full mt-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-50 py-3 rounded-lg font-medium transition-colors"
                             >
                               Lihat Detail
                             </button>
@@ -271,7 +271,7 @@ const JadwalPelajaran = () => {
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 text-center">
+                    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 text-center">
                       <div className="py-12">
                         <p className="text-zinc-500">Tidak ada jadwal untuk tanggal ini</p>
                       </div>
