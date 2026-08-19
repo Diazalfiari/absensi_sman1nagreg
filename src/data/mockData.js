@@ -834,3 +834,12 @@ export const jadwalPelajaranSiswa = {
     { id: 121, mataPelajaran: 'Sejarah', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas XII-1', sesi: 'Orde Baru', status: 'Offline' },
   ],
 };
+
+// Jadwal mata pelajaran per hari untuk simulasi schedule-based attendance
+export const mockJadwal = {
+  'Senin': ['Matematika', 'Sejarah', 'Fisika', 'PJOK', 'Geografi'],
+  'Selasa': ['Bahasa Indonesia', 'Kimia', 'Biologi'],
+  'Rabu': ['Matematika', 'Geografi', 'Fisika', 'Bahasa Inggris'],
+  'Kamis': ['Bahasa Indonesia', 'Kimia', 'Sejarah'],
+  'Jumat': ['Bahasa Inggris', 'Biologi', 'Geografi', 'PJOK']
+};
