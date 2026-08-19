@@ -33,6 +33,7 @@ const Sidebar = ({ role }) => {
       { path: '/admin/laporan-bulanan', label: 'Laporan Bulanan', icon: '📅' },
       { path: '/admin/tambah-jadwal', label: 'Tambah Jadwal', icon: '🗓️' },
       { path: '/admin/manajemen-pengguna', label: 'Manajemen Pengguna', icon: '👥' },
+      { path: '/admin/manajemen-kelas', label: 'Manajemen Kelas', icon: '📚' },
     ],
     guru: [
       { path: '/guru', label: 'Dashboard', icon: '📊' },

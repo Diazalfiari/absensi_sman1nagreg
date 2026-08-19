@@ -12,6 +12,8 @@ import AdminRekap from './pages/Admin/AdminRekap';
 import LaporanBulanan from './pages/Admin/LaporanBulanan';
 import TambahJadwal from './pages/Admin/TambahJadwal';
 import ManajemenPengguna from './pages/Admin/ManajemenPengguna';
+import ManajemenKelas from './pages/Admin/ManajemenKelas';
+import DetailKelas from './pages/Admin/DetailKelas';
 import GuruDashboard from './pages/Guru/GuruDashboard';
 import JadwalMengajar from './pages/Guru/JadwalMengajar';
 import DetailSesi from './pages/Guru/DetailSesi';
@@ -88,6 +90,22 @@ function App() {
             }
           />
 
+                    <Route
+            path="/admin/manajemen-kelas"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <ManajemenKelas />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/manajemen-kelas/:kelasId"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <DetailKelas />
+              </ProtectedRoute>
+            }
+          />
           {/* Guru Routes */}
           <Route
             path="/guru"
