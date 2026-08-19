@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
-import Button from '../../components/common/Button';
 import { getCurrentUser } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
 
