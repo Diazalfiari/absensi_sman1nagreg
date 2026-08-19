@@ -34,6 +34,28 @@ const JadwalMengajar = () => {
     { tanggal: '2025-12-26', mataPelajaran: 'Matematika', kelas: 'XI-3', jamMulai: '10:45', jamSelesai: '12:15' },
     { tanggal: '2025-12-29', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '07:30', jamSelesai: '09:00' },
     { tanggal: '2025-12-30', mataPelajaran: 'Fisika', kelas: 'X-2', jamMulai: '09:15', jamSelesai: '10:45' },
+    // Agustus 2026
+    { tanggal: '2026-08-03', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '08:50', jamSelesai: '10:30' },
+    { tanggal: '2026-08-04', mataPelajaran: 'Matematika', kelas: 'XI-1', jamMulai: '07:30', jamSelesai: '09:00' },
+    { tanggal: '2026-08-05', mataPelajaran: 'Matematika', kelas: 'XII-1', jamMulai: '09:15', jamSelesai: '10:45' },
+    { tanggal: '2026-08-06', mataPelajaran: 'Matematika', kelas: 'XI-1', jamMulai: '10:45', jamSelesai: '12:15' },
+    { tanggal: '2026-08-07', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '12:45', jamSelesai: '14:15' },
+    { tanggal: '2026-08-10', mataPelajaran: 'Matematika', kelas: 'XII-1', jamMulai: '07:30', jamSelesai: '09:00' },
+    { tanggal: '2026-08-11', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '09:15', jamSelesai: '10:45' },
+    { tanggal: '2026-08-12', mataPelajaran: 'Matematika', kelas: 'XI-1', jamMulai: '08:50', jamSelesai: '10:30' },
+    { tanggal: '2026-08-13', mataPelajaran: 'Matematika', kelas: 'XII-1', jamMulai: '10:45', jamSelesai: '12:15' },
+    { tanggal: '2026-08-14', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '12:45', jamSelesai: '14:15' },
+    { tanggal: '2026-08-17', mataPelajaran: 'Matematika', kelas: 'XII-1', jamMulai: '07:30', jamSelesai: '09:00' },
+    { tanggal: '2026-08-18', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '09:15', jamSelesai: '10:45' },
+    { tanggal: '2026-08-19', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '10:45', jamSelesai: '12:15' },
+    { tanggal: '2026-08-20', mataPelajaran: 'Matematika', kelas: 'XI-1', jamMulai: '12:45', jamSelesai: '14:15' },
+    { tanggal: '2026-08-21', mataPelajaran: 'Matematika', kelas: 'XII-1', jamMulai: '07:30', jamSelesai: '09:00' },
+    { tanggal: '2026-08-24', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '08:50', jamSelesai: '10:30' },
+    { tanggal: '2026-08-25', mataPelajaran: 'Matematika', kelas: 'XI-1', jamMulai: '07:30', jamSelesai: '09:00' },
+    { tanggal: '2026-08-26', mataPelajaran: 'Matematika', kelas: 'XII-1', jamMulai: '09:15', jamSelesai: '10:45' },
+    { tanggal: '2026-08-27', mataPelajaran: 'Matematika', kelas: 'XI-1', jamMulai: '10:45', jamSelesai: '12:15' },
+    { tanggal: '2026-08-28', mataPelajaran: 'Matematika', kelas: 'X-1', jamMulai: '12:45', jamSelesai: '14:15' },
+    { tanggal: '2026-08-31', mataPelajaran: 'Matematika', kelas: 'XII-1', jamMulai: '07:30', jamSelesai: '09:00' },
   ];
 
   const monthNames = [

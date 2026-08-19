@@ -47,7 +47,6 @@ const SiswaRiwayat = () => {
                   <tr>
                     <th className="px-6 py-4 font-medium">Tanggal</th>
                     <th className="px-6 py-4 font-medium">Status</th>
-                    <th className="px-6 py-4 font-medium">Waktu</th>
                     <th className="px-6 py-4 font-medium">Catatan</th>
                   </tr>
                 </thead>
@@ -67,7 +66,6 @@ const SiswaRiwayat = () => {
                           {item.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4">{item.waktu}</td>
                       <td className="px-6 py-4 text-zinc-400">{item.keterangan || '-'}</td>
                     </tr>
                   ))}

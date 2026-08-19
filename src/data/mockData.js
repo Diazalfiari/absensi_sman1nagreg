@@ -725,3 +725,112 @@ export const statistikMapelHarianSiswa = {
     { mapel: 'Kimia', hadir: 16, izin: 0, sakit: 0, alpa: 0 },
   ],
 };
+
+// Data jadwal pelajaran siswa
+export const jadwalPelajaranSiswa = {
+  '2025-12-01': [
+    { id: 1, mataPelajaran: 'Matematika', kelas: 'X-1', waktu: '08:50 - 10:30', ruang: 'Kelas X-1', sesi: '12: Report and Abstract writing', status: 'Offline' },
+  ],
+  '2025-12-02': [
+    { id: 2, mataPelajaran: 'Bahasa Indonesia', kelas: 'XI-1', waktu: '07:30 - 09:00', ruang: 'Kelas X-1', sesi: 'Teks Eksposisi', status: 'Offline' },
+  ],
+  '2025-12-05': [
+    { id: 3, mataPelajaran: 'Fisika', kelas: 'XII-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Hukum Newton', status: 'Online' },
+  ],
+  '2025-12-08': [
+    { id: 4, mataPelajaran: 'Kimia', kelas: 'XI-1', waktu: '10:45 - 12:15', ruang: 'Kelas X-1', sesi: 'Reaksi Kimia', status: 'Offline' },
+  ],
+  '2025-12-09': [
+    { id: 5, mataPelajaran: 'Biologi', kelas: 'X-1', waktu: '12:45 - 14:15', ruang: 'Kelas X-1', sesi: 'Sel dan Jaringan', status: 'Offline' },
+  ],
+  '2025-12-12': [
+    { id: 6, mataPelajaran: 'Sejarah', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas X-1', sesi: 'Kemerdekaan Indonesia', status: 'Offline' },
+  ],
+  '2025-12-15': [
+    { id: 7, mataPelajaran: 'Matematika', kelas: 'X-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Kalkulus Integral', status: 'Offline' },
+  ],
+  '2025-12-16': [
+    { id: 8, mataPelajaran: 'Bahasa Inggris', kelas: 'XI-1', waktu: '08:50 - 10:30', ruang: 'Kelas X-1', sesi: '12: Report and Abstract writing', status: 'Offline' },
+  ],
+  '2025-12-19': [
+    { id: 9, mataPelajaran: 'Geografi', kelas: 'XII-1', waktu: '10:45 - 12:15', ruang: 'Kelas X-1', sesi: 'Peta dan Atlas', status: 'Online' },
+  ],
+  '2025-12-22': [
+    { id: 10, mataPelajaran: 'Ekonomi', kelas: 'X-1', waktu: '12:45 - 14:15', ruang: 'Kelas X-1', sesi: 'Pasar Modal', status: 'Offline' },
+  ],
+  '2025-12-23': [
+    { id: 11, mataPelajaran: 'Sosiologi', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas X-1', sesi: 'Interaksi Sosial', status: 'Offline' },
+  ],
+  '2025-12-26': [
+    { id: 12, mataPelajaran: 'Pendidikan Agama', kelas: 'X-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Akhlak Mulia', status: 'Offline' },
+  ],
+  '2025-12-29': [
+    { id: 13, mataPelajaran: 'Seni Budaya', kelas: 'X-1', waktu: '10:45 - 12:15', ruang: 'Kelas X-1', sesi: 'Seni Rupa', status: 'Offline' },
+  ],
+  '2025-12-30': [
+    { id: 14, mataPelajaran: 'Pendidikan Jasmani', kelas: 'XI-1', waktu: '12:45 - 14:15', ruang: 'Lapangan', sesi: 'Bola Basket', status: 'Offline' },
+  ],
+  '2026-08-03': [
+    { id: 101, mataPelajaran: 'Matematika', kelas: 'X-1', waktu: '08:50 - 10:30', ruang: 'Kelas X-1', sesi: 'Matriks', status: 'Offline' },
+  ],
+  '2026-08-04': [
+    { id: 102, mataPelajaran: 'Bahasa Indonesia', kelas: 'XI-1', waktu: '07:30 - 09:00', ruang: 'Kelas XI-1', sesi: 'Teks Prosedur', status: 'Offline' },
+  ],
+  '2026-08-05': [
+    { id: 103, mataPelajaran: 'Fisika', kelas: 'XII-1', waktu: '09:15 - 10:45', ruang: 'Laboratorium', sesi: 'Listrik Dinamis', status: 'Offline' },
+  ],
+  '2026-08-06': [
+    { id: 104, mataPelajaran: 'Kimia', kelas: 'XI-1', waktu: '10:45 - 12:15', ruang: 'Laboratorium', sesi: 'Termokimia', status: 'Offline' },
+  ],
+  '2026-08-07': [
+    { id: 105, mataPelajaran: 'Biologi', kelas: 'X-1', waktu: '12:45 - 14:15', ruang: 'Kelas X-1', sesi: 'Ekosistem', status: 'Offline' },
+  ],
+  '2026-08-10': [
+    { id: 106, mataPelajaran: 'Sejarah', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas XII-1', sesi: 'Perang Dingin', status: 'Offline' },
+  ],
+  '2026-08-11': [
+    { id: 107, mataPelajaran: 'Matematika', kelas: 'X-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Logika Matematika', status: 'Offline' },
+  ],
+  '2026-08-12': [
+    { id: 108, mataPelajaran: 'Bahasa Inggris', kelas: 'XI-1', waktu: '08:50 - 10:30', ruang: 'Kelas XI-1', sesi: 'Narrative Text', status: 'Offline' },
+  ],
+  '2026-08-13': [
+    { id: 109, mataPelajaran: 'Geografi', kelas: 'XII-1', waktu: '10:45 - 12:15', ruang: 'Kelas XII-1', sesi: 'Sistem Informasi Geografis', status: 'Offline' },
+  ],
+  '2026-08-14': [
+    { id: 110, mataPelajaran: 'Ekonomi', kelas: 'X-1', waktu: '12:45 - 14:15', ruang: 'Kelas X-1', sesi: 'Koperasi', status: 'Offline' },
+  ],
+  '2026-08-17': [
+    { id: 111, mataPelajaran: 'Pendidikan Kewarganegaraan', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas XII-1', sesi: 'Hari Kemerdekaan', status: 'Offline' },
+  ],
+  '2026-08-18': [
+    { id: 112, mataPelajaran: 'Pendidikan Agama', kelas: 'X-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Hukum Islam', status: 'Offline' },
+  ],
+  '2026-08-19': [
+    { id: 113, mataPelajaran: 'Seni Budaya', kelas: 'X-1', waktu: '10:45 - 12:15', ruang: 'Ruang Seni', sesi: 'Seni Musik', status: 'Offline' },
+  ],
+  '2026-08-20': [
+    { id: 114, mataPelajaran: 'Pendidikan Jasmani', kelas: 'XI-1', waktu: '12:45 - 14:15', ruang: 'Lapangan', sesi: 'Atletik', status: 'Offline' },
+  ],
+  '2026-08-21': [
+    { id: 115, mataPelajaran: 'Sosiologi', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas XII-1', sesi: 'Konflik Sosial', status: 'Offline' },
+  ],
+  '2026-08-24': [
+    { id: 116, mataPelajaran: 'Matematika', kelas: 'X-1', waktu: '08:50 - 10:30', ruang: 'Kelas X-1', sesi: 'Statistika', status: 'Offline' },
+  ],
+  '2026-08-25': [
+    { id: 117, mataPelajaran: 'Bahasa Indonesia', kelas: 'XI-1', waktu: '07:30 - 09:00', ruang: 'Kelas XI-1', sesi: 'Ceramah', status: 'Offline' },
+  ],
+  '2026-08-26': [
+    { id: 118, mataPelajaran: 'Fisika', kelas: 'XII-1', waktu: '09:15 - 10:45', ruang: 'Laboratorium', sesi: 'Fisika Kuantum', status: 'Offline' },
+  ],
+  '2026-08-27': [
+    { id: 119, mataPelajaran: 'Kimia', kelas: 'XI-1', waktu: '10:45 - 12:15', ruang: 'Laboratorium', sesi: 'Laju Reaksi', status: 'Offline' },
+  ],
+  '2026-08-28': [
+    { id: 120, mataPelajaran: 'Biologi', kelas: 'X-1', waktu: '12:45 - 14:15', ruang: 'Kelas X-1', sesi: 'Keanekaragaman Hayati', status: 'Offline' },
+  ],
+  '2026-08-31': [
+    { id: 121, mataPelajaran: 'Sejarah', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas XII-1', sesi: 'Orde Baru', status: 'Offline' },
+  ],
+};

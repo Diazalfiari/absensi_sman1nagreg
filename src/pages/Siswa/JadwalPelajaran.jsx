@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import { getCurrentUser } from '../../utils/helpers';
+import { jadwalPelajaranSiswa } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
 
 const JadwalPelajaran = () => {
@@ -15,52 +16,6 @@ const JadwalPelajaran = () => {
       navigate('/login');
     }
   }, [currentUser, navigate]);
-
-  // Mock data jadwal pelajaran berdasarkan tanggal
-  const jadwalData = {
-    '2025-12-01': [
-      { id: 1, mataPelajaran: 'Matematika', kelas: 'X-1', waktu: '08:50 - 10:30', ruang: 'Kelas X-1', sesi: '12: Report and Abstract writing', status: 'Offline' },
-    ],
-    '2025-12-02': [
-      { id: 2, mataPelajaran: 'Bahasa Indonesia', kelas: 'XI-1', waktu: '07:30 - 09:00', ruang: 'Kelas X-1', sesi: 'Teks Eksposisi', status: 'Offline' },
-    ],
-    '2025-12-05': [
-      { id: 3, mataPelajaran: 'Fisika', kelas: 'XII-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Hukum Newton', status: 'Online' },
-    ],
-    '2025-12-08': [
-      { id: 4, mataPelajaran: 'Kimia', kelas: 'XI-1', waktu: '10:45 - 12:15', ruang: 'Kelas X-1', sesi: 'Reaksi Kimia', status: 'Offline' },
-    ],
-    '2025-12-09': [
-      { id: 5, mataPelajaran: 'Biologi', kelas: 'X-1', waktu: '12:45 - 14:15', ruang: 'Kelas X-1', sesi: 'Sel dan Jaringan', status: 'Offline' },
-    ],
-    '2025-12-12': [
-      { id: 6, mataPelajaran: 'Sejarah', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas X-1', sesi: 'Kemerdekaan Indonesia', status: 'Offline' },
-    ],
-    '2025-12-15': [
-      { id: 7, mataPelajaran: 'Matematika', kelas: 'X-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Kalkulus Integral', status: 'Offline' },
-    ],
-    '2025-12-16': [
-      { id: 8, mataPelajaran: 'Bahasa Inggris', kelas: 'XI-1', waktu: '08:50 - 10:30', ruang: 'Kelas X-1', sesi: '12: Report and Abstract writing', status: 'Offline' },
-    ],
-    '2025-12-19': [
-      { id: 9, mataPelajaran: 'Geografi', kelas: 'XII-1', waktu: '10:45 - 12:15', ruang: 'Kelas X-1', sesi: 'Peta dan Atlas', status: 'Online' },
-    ],
-    '2025-12-22': [
-      { id: 10, mataPelajaran: 'Ekonomi', kelas: 'X-1', waktu: '12:45 - 14:15', ruang: 'Kelas X-1', sesi: 'Pasar Modal', status: 'Offline' },
-    ],
-    '2025-12-23': [
-      { id: 11, mataPelajaran: 'Sosiologi', kelas: 'XII-1', waktu: '07:30 - 09:00', ruang: 'Kelas X-1', sesi: 'Interaksi Sosial', status: 'Offline' },
-    ],
-    '2025-12-26': [
-      { id: 12, mataPelajaran: 'Pendidikan Agama', kelas: 'X-1', waktu: '09:15 - 10:45', ruang: 'Kelas X-1', sesi: 'Akhlak Mulia', status: 'Offline' },
-    ],
-    '2025-12-29': [
-      { id: 13, mataPelajaran: 'Seni Budaya', kelas: 'X-1', waktu: '10:45 - 12:15', ruang: 'Kelas X-1', sesi: 'Seni Rupa', status: 'Offline' },
-    ],
-    '2025-12-30': [
-      { id: 14, mataPelajaran: 'Pendidikan Jasmani', kelas: 'XI-1', waktu: '12:45 - 14:15', ruang: 'Lapangan', sesi: 'Bola Basket', status: 'Offline' },
-    ],
-  };
 
   const monthNames = [
     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -93,7 +48,7 @@ const JadwalPelajaran = () => {
   const hasSchedule = (date) => {
     if (!date) return false;
     const dateStr = date.toISOString().split('T')[0];
-    return jadwalData[dateStr] !== undefined;
+    return jadwalPelajaranSiswa[dateStr] !== undefined;
   };
 
   const isToday = (date) => {
@@ -123,7 +78,7 @@ const JadwalPelajaran = () => {
 
   const days = getDaysInMonth(currentMonth);
   const dateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
-  const selectedSchedule = jadwalData[dateStr] || [];
+  const selectedSchedule = jadwalPelajaranSiswa[dateStr] || [];
 
   return (
     <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">

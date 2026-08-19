@@ -11,13 +11,13 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import AdminRekap from './pages/Admin/AdminRekap';
 import LaporanBulanan from './pages/Admin/LaporanBulanan';
 import TambahJadwal from './pages/Admin/TambahJadwal';
+import ManajemenPengguna from './pages/Admin/ManajemenPengguna';
 import GuruDashboard from './pages/Guru/GuruDashboard';
 import JadwalMengajar from './pages/Guru/JadwalMengajar';
 import DetailSesi from './pages/Guru/DetailSesi';
 import GuruRiwayat from './pages/Guru/GuruRiwayat';
 import SiswaDashboard from './pages/Siswa/SiswaDashboard';
 import SiswaRiwayat from './pages/Siswa/SiswaRiwayat';
-import AbsensiMandiri from './pages/Siswa/AbsensiMandiri';
 import JadwalPelajaran from './pages/Siswa/JadwalPelajaran';
 import DetailPelajaran from './pages/Siswa/DetailPelajaran';
 
@@ -76,6 +76,14 @@ function App() {
             element={
               <ProtectedRoute allowedRole="admin">
                 <TambahJadwal />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/manajemen-pengguna"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <ManajemenPengguna />
               </ProtectedRoute>
             }
           />
@@ -139,14 +147,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/siswa/presensi"
-            element={
-              <ProtectedRoute allowedRole="siswa">
-                <AbsensiMandiri />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/siswa/riwayat"
             element={
