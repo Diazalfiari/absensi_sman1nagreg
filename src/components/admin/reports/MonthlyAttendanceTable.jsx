@@ -3,63 +3,63 @@ import { getDayName } from '../../../utils/reportHelpers';
 
 const MonthlyAttendanceTable = ({ presensiData, daysInMonth, bulan, tahun }) => {
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
-      <div className="overflow-x-auto">
+    <div className="overflow-hidden border-t border-zinc-800/80 bg-zinc-900/60">
+      <div className="max-h-[70vh] overflow-auto">
         <div className="inline-block min-w-full align-middle">
           <div className="overflow-hidden">
-            <table className="w-full text-xs md:text-sm border-collapse min-w-max">
-              <thead>
-                <tr className="bg-zinc-950 text-zinc-300">
-                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-zinc-800">No</th>
-                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-zinc-800">NIPD</th>
-                  <th rowSpan="2" className="px-3 py-3 text-left text-xs font-medium uppercase border border-zinc-800">Nama Siswa</th>
-                  <th rowSpan="2" className="px-3 py-3 text-center text-xs font-medium uppercase border border-zinc-800">Gender</th>
-                  <th colSpan={daysInMonth} className="px-3 py-2 text-center text-xs font-medium uppercase border border-zinc-800">Tanggal</th>
-                  <th colSpan="5" className="px-3 py-2 text-center text-xs font-medium uppercase border border-zinc-800">Rekap</th>
+            <table className="min-w-[1280px] w-full border-collapse text-xs md:text-sm">
+              <caption className="sr-only">Laporan presensi bulanan siswa berdasarkan tanggal dan status</caption>
+              <thead className="sticky top-0 z-20">
+                <tr className="bg-[#172654] text-[#eef2ff] dark:bg-[#111b3c]">
+                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">No</th>
+                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">NIPD</th>
+                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em]">Nama Siswa</th>
+                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">Gender</th>
+                  <th colSpan={daysInMonth} className="border border-[#30457f] px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em]">Tanggal</th>
+                  <th colSpan="5" className="border border-[#30457f] px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em]">Rekap</th>
                 </tr>
-                <tr className="bg-zinc-950 text-zinc-400 border-b border-zinc-800">
+                <tr className="border-b border-[#30457f] bg-[#eaf0ff] text-[#52628e] dark:bg-[#152143] dark:text-[#b4bfdf]">
                   {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => (
-                    <th key={day} className="px-2 py-2 text-center text-xs border border-zinc-800">
+                    <th key={day} className="border border-[#c8d4f4] px-2 py-2 text-center text-xs dark:border-[#30457f]">
                       <div>{day.toString().padStart(2, '0')}</div>
-                      <div className="text-[10px] font-normal text-zinc-500">
+                        <div className="text-[10px] font-normal text-zinc-500">
                         {getDayName(day, bulan, tahun).substring(0, 3)}
                       </div>
                     </th>
                   ))}
-                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-emerald-400">H</th>
-                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-amber-400">S</th>
-                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-accent-400">I</th>
-                  <th className="px-3 py-2 text-center text-xs border border-zinc-800 text-rose-400">A</th>
-                  <th className="px-3 py-2 text-center text-xs border border-zinc-800">%</th>
+                  <th className="border border-[#c8d4f4] px-3 py-2 text-center text-xs text-emerald-700 dark:border-[#30457f] dark:text-emerald-300">H</th>
+                  <th className="border border-[#c8d4f4] px-3 py-2 text-center text-xs text-amber-700 dark:border-[#30457f] dark:text-amber-300">S</th>
+                  <th className="border border-[#c8d4f4] px-3 py-2 text-center text-xs text-blue-700 dark:border-[#30457f] dark:text-blue-300">I</th>
+                  <th className="border border-[#c8d4f4] px-3 py-2 text-center text-xs text-rose-700 dark:border-[#30457f] dark:text-rose-300">A</th>
+                  <th className="border border-[#c8d4f4] px-3 py-2 text-center text-xs dark:border-[#30457f]">%</th>
                 </tr>
               </thead>
               <tbody className="text-zinc-300">
                 {presensiData.map((siswa, index) => (
-                  <tr key={siswa.id} className="hover:bg-zinc-900 transition-colors border-b border-zinc-800">
-                    <td className="px-3 py-2 text-center border-r border-zinc-800">{index + 1}</td>
-                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-zinc-400">{siswa.nipd}</td>
-                    <td className="px-3 py-2 border-r border-zinc-800 font-medium text-zinc-50">{siswa.nama}</td>
-                    <td className="px-3 py-2 text-center border-r border-zinc-800">{siswa.jenisKelamin === 'Laki-laki' ? 'L' : 'P'}</td>
+                  <tr key={siswa.id} className="border-b border-zinc-800/80 transition-colors hover:bg-[#eaf0ff]/50 dark:hover:bg-[#152143]/50">
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center text-zinc-500">{index + 1}</td>
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center text-zinc-500">{siswa.nipd}</td>
+                    <td className="border-r border-zinc-800/80 px-3 py-2 font-semibold text-zinc-50">{siswa.nama}</td>
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center text-zinc-500">{siswa.jenisKelamin === 'Laki-laki' ? 'L' : 'P'}</td>
                     {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
                       const presensi = siswa.presensiPerHari[day];
-                      let textColor = '';
-                      if (presensi?.status === 'H') textColor = 'text-emerald-400';
-                      if (presensi?.status === 'S') textColor = 'text-amber-400';
-                      if (presensi?.status === 'I') textColor = 'text-accent-400';
-                      if (presensi?.status === 'A') textColor = 'text-rose-400';
-                      if (presensi?.status === '-') textColor = 'text-zinc-600';
+                      let statusStyle = 'text-zinc-500';
+                      if (presensi?.status === 'H') statusStyle = 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
+                      if (presensi?.status === 'S') statusStyle = 'bg-amber-500/10 text-amber-700 dark:text-amber-300';
+                      if (presensi?.status === 'I') statusStyle = 'bg-blue-500/10 text-blue-700 dark:text-blue-300';
+                      if (presensi?.status === 'A') statusStyle = 'bg-rose-500/10 text-rose-700 dark:text-rose-300';
 
                       return (
-                        <td key={day} className={`px-2 py-2 text-center border-r border-zinc-800 ${textColor} font-medium`}>
+                        <td key={day} className={`border-r border-zinc-800/80 px-2 py-2 text-center font-semibold ${statusStyle}`}>
                           {presensi?.status || '-'}
                         </td>
                       );
                     })}
-                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-emerald-400">{siswa.hadir}</td>
-                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-amber-400">{siswa.sakit}</td>
-                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-accent-400">{siswa.izin}</td>
-                    <td className="px-3 py-2 text-center border-r border-zinc-800 text-rose-400">{siswa.alpa}</td>
-                    <td className="px-3 py-2 text-center font-medium text-zinc-50">
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center font-semibold text-emerald-700 dark:text-emerald-300">{siswa.hadir}</td>
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center font-semibold text-amber-700 dark:text-amber-300">{siswa.sakit}</td>
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center font-semibold text-blue-700 dark:text-blue-300">{siswa.izin}</td>
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center font-semibold text-rose-700 dark:text-rose-300">{siswa.alpa}</td>
+                    <td className="px-3 py-2 text-center font-semibold text-zinc-50">
                       {siswa.persentase}%
                     </td>
                   </tr>
