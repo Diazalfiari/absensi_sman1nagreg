@@ -6,7 +6,7 @@ const Footer = ({ containerClassName = 'max-w-6xl mx-auto px-4' }) => {
   return (
     <footer className="border-t border-zinc-800 py-8 text-zinc-500 text-sm">
       <div className={`text-center ${containerClassName}`}>
-        © {year} SMAN 1 Nagreg
+        &copy; {year} SMAN 1 Nagreg
       </div>
     </footer>
   );
