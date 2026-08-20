@@ -1,15 +1,37 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../utils/helpers';
 import ConfirmDialog from './ConfirmDialog';
 import Loading from './Loading';
 import logoSmansan from '../../assets/images/logosmansan.png';
+
+const menuItems = {
+  admin: [
+    { path: '/admin', label: 'Dashboard', mark: 'D' },
+    { path: '/admin/rekapitulasi', label: 'Rekapitulasi', mark: 'R' },
+    { path: '/admin/laporan-bulanan', label: 'Laporan Bulanan', mark: 'L' },
+    { path: '/admin/tambah-jadwal', label: 'Tambah Jadwal', mark: 'J' },
+    { path: '/admin/manajemen-pengguna', label: 'Manajemen Pengguna', mark: 'P' },
+    { path: '/admin/manajemen-kelas', label: 'Manajemen Kelas', mark: 'K' },
+  ],
+  guru: [
+    { path: '/guru', label: 'Dashboard', mark: 'D' },
+    { path: '/guru/Jadwal-mengajar', label: 'Jadwal Mengajar', mark: 'J' },
+    { path: '/guru/riwayat', label: 'Riwayat', mark: 'R' },
+  ],
+  siswa: [
+    { path: '/siswa', label: 'Dashboard', mark: 'D' },
+    { path: '/siswa/jadwal', label: 'Jadwal Pelajaran', mark: 'J' },
+    { path: '/siswa/riwayat', label: 'Riwayat', mark: 'R' },
+  ],
+};
 
 const Sidebar = ({ role }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const items = menuItems[role] || [];
 
   const handleLogout = () => {
     setShowLogoutConfirm(true);
@@ -18,7 +40,7 @@ const Sidebar = ({ role }) => {
   const handleConfirmLogout = () => {
     setShowLogoutConfirm(false);
     setIsLoggingOut(true);
-    
+
     // Simulate logout process
     setTimeout(() => {
       logout();
@@ -26,123 +48,96 @@ const Sidebar = ({ role }) => {
     }, 1000);
   };
 
-  const menuItems = {
-    admin: [
-      { path: '/admin', label: 'Dashboard', icon: '📊' },
-      { path: '/admin/rekapitulasi', label: 'Rekapitulasi', icon: '📈' },
-      { path: '/admin/laporan-bulanan', label: 'Laporan Bulanan', icon: '📅' },
-      { path: '/admin/tambah-jadwal', label: 'Tambah Jadwal', icon: '🗓️' },
-      { path: '/admin/manajemen-pengguna', label: 'Manajemen Pengguna', icon: '👥' },
-      { path: '/admin/manajemen-kelas', label: 'Manajemen Kelas', icon: '📚' },
-    ],
-    guru: [
-      { path: '/guru', label: 'Dashboard', icon: '📊' },
-      { path: '/guru/Jadwal-mengajar', label: 'Jadwal Mengajar', icon: '📅' },
-      { path: '/guru/riwayat', label: 'Riwayat', icon: '📋' },
-    ],
-    siswa: [
-      { path: '/siswa', label: 'Dashboard', icon: '🏠' },
-      { path: '/siswa/jadwal', label: 'Jadwal Pelajaran', icon: '📚' },
-      { path: '/siswa/riwayat', label: 'Riwayat', icon: '📋' },
-    ],
-  };
-
-  const items = menuItems[role] || [];
+  const renderMenu = (mobile = false) => (
+    <nav className={mobile ? 'flex gap-2 overflow-x-auto px-4 pb-3 no-scrollbar' : 'flex-1 p-5'}>
+      <ul className={mobile ? 'flex gap-2' : 'space-y-2'}>
+        {items.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                aria-current={isActive ? 'page' : undefined}
+                className={mobile
+                  ? `flex items-center gap-2 whitespace-nowrap rounded-xl border px-3 py-2 text-sm transition-colors ${
+                    isActive
+                      ? 'border-[#c8d4f4] bg-[#eaf0ff] text-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#aebcff]'
+                      : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-100'
+                  }`
+                  : `flex items-center gap-3 rounded-xl border px-3 py-3 transition-colors ${
+                    isActive
+                      ? 'border-[#c8d4f4] bg-[#eaf0ff] text-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#aebcff]'
+                      : 'border-transparent text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100'
+                  }`}
+              >
+                <span
+                  className={`flex shrink-0 items-center justify-center font-bold ${mobile ? 'h-5 w-5 rounded-md text-[0.65rem]' : 'h-8 w-8 rounded-lg text-xs'} ${
+                    isActive
+                      ? 'bg-[#29438f] text-white dark:bg-[#9eafff] dark:text-[#172654]'
+                      : 'bg-zinc-800 text-zinc-500'
+                  }`}
+                  aria-hidden="true"
+                >
+                  {item.mark}
+                </span>
+                <span className="font-medium">{item.label}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
 
   return (
     <>
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-72 min-h-[100dvh] fixed left-0 top-0 flex-col bg-zinc-950 border-r border-zinc-800 text-zinc-50">
-        {/* Logo */}
-        <div className="px-6 py-8 border-b border-zinc-800">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center">
-              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-12 h-12 object-contain" />
+      <aside className="fixed left-0 top-0 hidden min-h-[100dvh] w-72 flex-col border-r border-zinc-800 bg-zinc-950 text-zinc-50 lg:flex">
+        <div className="border-b border-zinc-800 px-6 py-7">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 p-1.5">
+              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="h-full w-full object-contain" />
             </div>
             <div>
-              <h1 className="font-display text-xl font-medium">SMAN 1 Nagreg</h1>
-              <p className="text-sm text-zinc-500 capitalize">{role} Panel</p>
+              <h1 className="font-display text-lg font-semibold tracking-[-0.02em]">SMAN 1 Nagreg</h1>
+              <p className="mt-1 text-xs uppercase tracking-[0.16em] text-zinc-500">{role} panel</p>
             </div>
           </div>
         </div>
 
-        {/* Menu Items */}
-        <nav className="p-5 flex-1">
-          <ul className="space-y-2">
-            {items.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-colors border ${
-                      isActive
-                        ? 'bg-primary-500/10 border-primary-500/20 text-primary-400'
-                        : 'border-transparent text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'
-                    }`}
-                  >
-                    <span className="text-xl">{item.icon}</span>
-                    <span className="font-medium">{item.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        {renderMenu()}
 
-        {/* Logout Button */}
-        <div className="p-5 border-t border-zinc-800">
+        <div className="border-t border-zinc-800 p-5">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-rose-500/10 text-zinc-400 hover:text-rose-400 transition-colors"
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-zinc-400 transition-colors hover:bg-rose-500/10 hover:text-rose-400"
           >
-            <span className="text-xl">🚪</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-xs font-bold text-zinc-500" aria-hidden="true">K</span>
             <span className="font-medium">Keluar</span>
           </button>
         </div>
       </aside>
 
-      {/* Mobile Top Navigation */}
-      <div className="lg:hidden sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-800">
-        <div className="px-4 py-3 flex items-center justify-between">
+      <div className="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl lg:hidden">
+        <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center">
-              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="w-8 h-8 object-contain" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 p-1">
+              <img src={logoSmansan} alt="Logo SMAN 1 Nagreg" className="h-full w-full object-contain" />
             </div>
             <div>
-              <p className="text-sm font-medium text-zinc-50">SMAN 1 Nagreg</p>
-              <p className="text-xs text-zinc-500 capitalize">{role}</p>
+              <p className="text-sm font-semibold text-zinc-50">SMAN 1 Nagreg</p>
+              <p className="mt-0.5 text-[0.65rem] uppercase tracking-[0.14em] text-zinc-500">{role} panel</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="text-xs font-medium text-zinc-400 px-3 py-1.5 border border-zinc-700 rounded-lg hover:bg-zinc-800 transition-colors"
+            className="rounded-lg border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-50"
           >
             Keluar
           </button>
         </div>
-        <div className="flex gap-2 overflow-x-auto no-scrollbar px-4 pb-3">
-          {items.map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm whitespace-nowrap border transition-colors ${
-                  isActive
-                    ? 'bg-primary-500/10 text-primary-400 border-primary-500/20'
-                    : 'bg-zinc-900 text-zinc-400 border-zinc-800'
-                }`}
-              >
-                <span>{item.icon}</span>
-                <span className="font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
+        {renderMenu(true)}
       </div>
 
-      {/* Logout Confirmation Dialog */}
       <ConfirmDialog
         isOpen={showLogoutConfirm}
         onClose={() => setShowLogoutConfirm(false)}
@@ -154,7 +149,6 @@ const Sidebar = ({ role }) => {
         type="warning"
       />
 
-      {/* Loading during logout */}
       {isLoggingOut && <Loading fullscreen text="Sedang keluar dari sistem..." />}
     </>
   );

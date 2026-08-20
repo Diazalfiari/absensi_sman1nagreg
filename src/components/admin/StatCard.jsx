@@ -2,26 +2,25 @@ import React from 'react';
 
 const StatCard = ({ title, value, icon, color = 'primary', subtitle }) => {
   const iconColors = {
-    primary: 'text-primary-400 bg-primary-500/10 border-primary-500/20',
-    success: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-    warning: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-    danger: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
-    info: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+    primary: 'text-[#29438f] bg-[#eaf0ff] border-[#c8d4f4] dark:text-[#aebcff] dark:bg-[#1c2c5e] dark:border-[#30457f]',
+    success: 'text-emerald-700 bg-emerald-500/10 border-emerald-500/20 dark:text-emerald-300',
+    warning: 'text-amber-700 bg-amber-500/10 border-amber-500/20 dark:text-amber-300',
+    danger: 'text-rose-700 bg-rose-500/10 border-rose-500/20 dark:text-rose-300',
+    info: 'text-[#29438f] bg-[#eaf0ff] border-[#c8d4f4] dark:text-[#aebcff] dark:bg-[#1c2c5e] dark:border-[#30457f]',
   };
 
   return (
-    <div className="rounded-2xl border border-zinc-800 p-5 bg-zinc-900 transition-colors hover:border-zinc-700">
+    <article className="rounded-2xl border border-zinc-800/80 bg-zinc-900 p-5 transition duration-200 hover:-translate-y-0.5 hover:border-zinc-700">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-medium text-zinc-500 mb-1">{title}</p>
-          <h3 className="text-3xl font-semibold text-zinc-50 tracking-tight">{value}</h3>
-          {subtitle && <p className="text-xs text-zinc-600 mt-1.5">{subtitle}</p>}
+          <p className="text-xs font-medium text-zinc-500">{title}</p>
+          <h3 className="mt-3 font-display text-3xl font-semibold tracking-[-0.04em] text-zinc-50">{value}</h3>
+          {subtitle && <p className="mt-2 text-xs leading-5 text-zinc-500">{subtitle}</p>}
         </div>
-        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center text-lg ${iconColors[color]}`}>
-          <span>{icon}</span>
-        </div>
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold ${iconColors[color]}`} aria-hidden="true">{icon || title.charAt(0)}</span>
       </div>
-    </div>
+      <div className={`mt-5 h-1 w-12 rounded-full ${color === 'success' ? 'bg-emerald-600 dark:bg-emerald-400' : color === 'warning' ? 'bg-amber-600 dark:bg-amber-400' : color === 'danger' ? 'bg-rose-600 dark:bg-rose-400' : 'bg-[#29438f] dark:bg-[#9eafff]'}`} aria-hidden="true" />
+    </article>
   );
 };
 
