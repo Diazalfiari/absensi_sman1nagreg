@@ -72,17 +72,15 @@ const JadwalMengajar = () => {
     const startingDayOfWeek = firstDay.getDay();
 
     const days = [];
-    
-    // Add empty cells for days before month starts
+
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
-    
-    // Add actual days
+
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
-    
+
     return days;
   };
 
@@ -131,179 +129,220 @@ const JadwalMengajar = () => {
 
   const days = getDaysInMonth(currentMonth);
   const selectedSchedules = selectedDate ? getScheduleForDate(selectedDate) : [];
+  const currentMonthSchedules = jadwalMengajar.filter((schedule) => {
+    const [year, month] = schedule.tanggal.split('-').map(Number);
+    return year === currentMonth.getFullYear() && month === currentMonth.getMonth() + 1;
+  });
+  const scheduledDaysCount = new Set(currentMonthSchedules.map((schedule) => schedule.tanggal)).size;
 
   return (
-    <div className="bg-zinc-950 min-h-[100dvh] text-zinc-50 selection:bg-primary-500/30">
+    <div className="flex min-h-[100dvh] flex-col bg-zinc-950 text-zinc-50 selection:bg-[#29438f]/30">
       <Sidebar role="guru" />
-      <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
-        <div className="max-w-7xl mx-auto space-y-8">
-          <div className="flex flex-col gap-2">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-display tracking-tight">Jadwal Mengajar</h1>
-              <p className="text-zinc-400 mt-1">Lihat jadwal mengajar Anda dalam kalender bulanan</p>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Calendar Section */}
-            <div className="lg:col-span-2">
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-semibold">
+      <main className="mt-16 flex-1 p-5 sm:p-7 lg:ml-72 lg:mt-0 lg:p-10">
+        <div className="mx-auto max-w-7xl space-y-8">
+          <section className="grid overflow-hidden rounded-[28px] border border-[#30457f] bg-[#172654] text-white shadow-[0_24px_70px_rgba(23,38,84,0.2)] dark:bg-[#111b3c] lg:grid-cols-[1.3fr_0.7fr]">
+            <div className="relative overflow-hidden p-6 sm:p-8 lg:p-10">
+              <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-[#9eafff]/10 blur-3xl" aria-hidden="true" />
+              <p className="relative text-xs font-semibold uppercase tracking-[0.2em] text-[#aebcff]">Aktivitas mengajar</p>
+              <h1 className="relative mt-5 max-w-xl font-display text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">Jadwal Mengajar</h1>
+              <p className="relative mt-4 max-w-lg text-sm leading-7 text-[#c5cfe0] sm:text-base">
+                Kelola ritme kelas Anda dari satu kalender. Pilih tanggal yang memiliki sesi untuk membuka detail presensi.
+              </p>
+              <div className="relative mt-7 flex flex-wrap items-center gap-3">
+                <span className="rounded-full border border-[#9eafff]/30 bg-[#9eafff]/10 px-3 py-1.5 text-xs font-semibold text-[#d8deff]">Guru aktif</span>
+                <span className="text-xs text-[#c5cfe0]">NIP {currentUser?.nip || '-'}</span>
+              </div>
+            </div>
+
+            <div className="border-t border-white/10 p-6 sm:p-8 lg:border-l lg:border-t-0">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Periode aktif</p>
+                  <p className="mt-3 font-display text-2xl font-semibold tracking-[-0.05em] text-white">
+                    {monthNames[currentMonth.getMonth()]}
+                  </p>
+                  <p className="mt-1 text-sm text-[#c5cfe0]">Tahun {currentMonth.getFullYear()}</p>
+                </div>
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-sm font-bold text-[#172654]" aria-hidden="true">J</span>
+              </div>
+              <div className="mt-10 grid grid-cols-2 gap-3 border-t border-white/10 pt-5">
+                <div>
+                  <p className="text-2xl font-semibold text-white">{scheduledDaysCount}</p>
+                  <p className="mt-1 text-xs text-[#aeb9d0]">Hari terjadwal</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold text-white">{currentMonthSchedules.length}</p>
+                  <p className="mt-1 text-xs text-[#aeb9d0]">Total sesi</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.28fr)_minmax(320px,0.72fr)]">
+            <section className="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-[0_16px_45px_rgba(15,23,42,0.06)] sm:p-7">
+              <div className="flex flex-col gap-5 border-b border-zinc-800/80 pb-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9eafff]">Kalender bulanan</p>
+                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-zinc-50 sm:text-3xl">
                     {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                   </h2>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handlePrevMonth}
-                      className="w-10 h-10 rounded-xl bg-zinc-900 hover:bg-zinc-800 flex items-center justify-center transition-colors border border-zinc-800"
-                    >
-                      <span className="text-xl">‹</span>
-                    </button>
-                    <button
-                      onClick={handleNextMonth}
-                      className="w-10 h-10 rounded-xl bg-zinc-900 hover:bg-zinc-800 flex items-center justify-center transition-colors border border-zinc-800"
-                    >
-                      <span className="text-xl">›</span>
-                    </button>
-                  </div>
                 </div>
-
-                {/* Calendar Grid */}
-                <div>
-                  {/* Day Headers */}
-                  <div className="grid grid-cols-7 gap-2 mb-3">
-                    {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((day) => (
-                      <div key={day} className="text-center text-xs font-medium text-zinc-500 py-2">
-                        {day}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Calendar Days */}
-                  <div className="grid grid-cols-7 gap-2">
-                    {days.map((day, index) => {
-                      const hasClass = hasSchedule(day);
-                      const today = isToday(day);
-                      const isSelected = selectedDate && day && selectedDate.toDateString() === day.toDateString();
-                      
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => handleDateClick(day)}
-                          disabled={!day}
-                          className={`
-                            relative aspect-square rounded-xl text-base font-medium transition-colors
-                            ${!day ? 'invisible' : ''}
-                            ${!hasClass && day ? 'bg-zinc-950 text-zinc-600 cursor-default' : ''}
-                            ${hasClass ? 'cursor-pointer hover:bg-zinc-800' : ''}
-                            ${today && !isSelected ? 'ring-1 ring-emerald-500' : ''}
-                            ${isSelected ? 'bg-emerald-600 text-zinc-50 shadow-sm' : ''}
-                            ${hasClass && !isSelected ? 'bg-zinc-800 text-zinc-50' : ''}
-                          `}
-                        >
-                          {day ? (
-                            <>
-                              <span className="relative z-10">{day.getDate()}</span>
-                              {hasClass && !isSelected && (
-                                <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                              )}
-                            </>
-                          ) : ''}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Legend */}
-                <div className="mt-6 pt-6 border-t border-zinc-800 flex flex-wrap gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-zinc-950 border border-emerald-500"></div>
-                    <span className="text-zinc-400">Hari Ini</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-zinc-800 relative">
-                      <div className="absolute top-0 right-0 w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                    </div>
-                    <span className="text-zinc-400">Ada Jadwal Mengajar</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-emerald-600"></div>
-                    <span className="text-zinc-400">Tanggal Terpilih</span>
-                  </div>
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={handlePrevMonth}
+                    aria-label="Bulan sebelumnya"
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-950 text-zinc-300 transition-colors hover:border-[#5269b5] hover:bg-[#1b2a54] hover:text-white"
+                  >
+                    <span className="text-xl leading-none" aria-hidden="true">&#8592;</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNextMonth}
+                    aria-label="Bulan berikutnya"
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-950 text-zinc-300 transition-colors hover:border-[#5269b5] hover:bg-[#1b2a54] hover:text-white"
+                  >
+                    <span className="text-xl leading-none" aria-hidden="true">&#8594;</span>
+                  </button>
                 </div>
               </div>
-            </div>
 
-            {/* Schedule Details Section */}
-            <div className="lg:col-span-1">
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 sticky top-24">
-                <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-zinc-50">
-                  Detail Jadwal
-                </h3>
-                
-                {selectedDate ? (
-                  <div className="space-y-4">
-                    <div className="p-4 bg-primary-500/10 border border-primary-500/20 rounded-xl">
-                      <p className="text-sm text-zinc-400 mb-1">Tanggal Terpilih</p>
-                      <p className="text-base font-medium text-zinc-50">
-                        {selectedDate.toLocaleDateString('id-ID', { 
-                          weekday: 'long', 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
-                        })}
-                      </p>
+              <div className="mt-6">
+                <div className="mb-3 grid grid-cols-7 gap-2">
+                  {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((day) => (
+                    <div key={day} className="py-2 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
+                      {day}
                     </div>
+                  ))}
+                </div>
 
-                    {selectedSchedules.length > 0 ? (
-                      <div className="space-y-3">
-                        <p className="text-sm font-medium text-zinc-400">
-                          {selectedSchedules.length} Jadwal Mengajar
+                <div className="grid grid-cols-7 gap-2 sm:gap-3">
+                  {days.map((day, index) => {
+                    const hasClass = hasSchedule(day);
+                    const today = isToday(day);
+                    const isSelected = selectedDate && day && selectedDate.toDateString() === day.toDateString();
+
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleDateClick(day)}
+                        disabled={!day}
+                        aria-label={day ? `${day.getDate()} ${monthNames[day.getMonth()]} ${day.getFullYear()}${hasClass ? ', ada jadwal mengajar' : ''}` : undefined}
+                        className={`relative aspect-square min-h-10 rounded-2xl border text-sm font-semibold transition-all duration-200 sm:min-h-14 sm:text-base
+                          ${!day ? 'invisible' : 'border-transparent'}
+                          ${!hasClass && day ? 'cursor-default bg-zinc-950/70 text-zinc-600' : ''}
+                          ${hasClass ? 'cursor-pointer border-[#30457f]/70 bg-[#1b2a54] text-[#edf1ff] hover:-translate-y-0.5 hover:border-[#6f83d0] hover:bg-[#26396f]' : ''}
+                          ${today && !isSelected ? 'ring-2 ring-emerald-500/80 ring-offset-2 ring-offset-zinc-900' : ''}
+                          ${isSelected ? 'border-[#f0cb69] bg-[#e5ba4b] text-[#172654] shadow-[0_8px_22px_rgba(229,186,75,0.2)]' : ''}
+                        `}
+                      >
+                        {day ? (
+                          <>
+                            <span className="relative z-10">{day.getDate()}</span>
+                            {hasClass && (
+                              <span className={`absolute bottom-2 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full ${isSelected ? 'bg-[#172654]' : 'bg-[#e5ba4b]'}`} aria-hidden="true" />
+                            )}
+                          </>
+                        ) : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 border-t border-zinc-800/80 pt-5 text-xs text-zinc-400">
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full border-2 border-emerald-500" aria-hidden="true" />
+                  <span>Hari ini</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full bg-[#e5ba4b]" aria-hidden="true" />
+                  <span>Ada jadwal</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full bg-[#29438f] ring-1 ring-[#9eafff]" aria-hidden="true" />
+                  <span>Tanggal terpilih</span>
+                </div>
+              </div>
+            </section>
+
+            <aside className="lg:sticky lg:top-8 lg:self-start">
+              <div className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)]">
+                <div className="border-b border-white/10 bg-[#111b3c] p-6 sm:p-7">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Panel sesi</p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Detail Jadwal</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#c5cfe0]">Pilih tanggal pada kalender untuk meninjau kelas yang perlu ditangani.</p>
+                </div>
+
+                <div className="p-5 sm:p-6">
+                  {selectedDate ? (
+                    <div className="space-y-5">
+                      <div className="rounded-2xl border border-[#5269b5]/40 bg-[#eaf0ff] p-4 text-[#172654] dark:bg-[#1b2a54] dark:text-[#edf1ff]">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] opacity-70">Tanggal terpilih</p>
+                        <p className="mt-2 text-sm font-semibold leading-6">
+                          {selectedDate.toLocaleDateString('id-ID', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
                         </p>
-                        {selectedSchedules.map((schedule, idx) => (
-                          <div 
-                            key={idx}
-                            className="p-4 bg-zinc-950 border border-zinc-800 rounded-xl space-y-3"
-                          >
-                            <div className="flex items-start justify-between">
-                              <h4 className="font-medium text-zinc-50">
-                                {schedule.mataPelajaran}
-                              </h4>
-                              <span className="text-xs px-2 py-1 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-800">
-                                {schedule.kelas}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm text-zinc-400">
-                              <span>{schedule.jamMulai} - {schedule.jamSelesai}</span>
-                            </div>
-                            <Button 
-                              size="sm" 
-                              onClick={() => handleViewDetail(schedule)}
-                              className="w-full"
-                            >
-                              Lihat Detail
-                            </Button>
+                      </div>
+
+                      {selectedSchedules.length > 0 ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="text-sm font-semibold text-zinc-50">Sesi mengajar</p>
+                            <span className="rounded-full bg-[#e5ba4b]/15 px-2.5 py-1 text-xs font-semibold text-[#e5ba4b]">{selectedSchedules.length} sesi</span>
                           </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-8 text-zinc-500">
-                        <p>Tidak ada jadwal pada tanggal ini</p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-12 text-zinc-500">
-                    <p className="text-sm">Pilih tanggal untuk melihat detail jadwal</p>
-                  </div>
-                )}
+                          {selectedSchedules.map((schedule, idx) => (
+                            <div key={idx} className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4 transition-colors hover:border-zinc-700">
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9eafff]">Mata pelajaran</p>
+                                  <h4 className="mt-2 font-display text-xl font-semibold tracking-[-0.03em] text-zinc-50">{schedule.mataPelajaran}</h4>
+                                </div>
+                                <span className="shrink-0 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1.5 text-xs font-semibold text-zinc-300">{schedule.kelas}</span>
+                              </div>
+                              <div className="mt-4 flex items-center gap-2 border-t border-zinc-800 pt-3 text-sm text-zinc-400">
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#e5ba4b]" aria-hidden="true" />
+                                <span>{schedule.jamMulai} - {schedule.jamSelesai}</span>
+                              </div>
+                              <Button
+                                size="sm"
+                                onClick={() => handleViewDetail(schedule)}
+                                className="mt-4 w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]"
+                              >
+                                Lihat Detail <span aria-hidden="true">&#8594;</span>
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="rounded-2xl border border-dashed border-zinc-800 px-5 py-10 text-center">
+                          <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-bold text-zinc-500" aria-hidden="true">J</span>
+                          <p className="mt-4 text-sm font-medium text-zinc-300">Tidak ada jadwal pada tanggal ini</p>
+                          <p className="mt-2 text-xs leading-5 text-zinc-500">Pilih tanggal lain yang memiliki penanda sesi.</p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="px-4 py-10 text-center">
+                      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf0ff] text-sm font-bold text-[#29438f] dark:bg-[#1b2a54] dark:text-[#aebcff]" aria-hidden="true">01</span>
+                      <p className="mt-5 font-semibold text-zinc-200">Belum ada tanggal dipilih</p>
+                      <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-zinc-500">Gunakan kalender di sebelah kiri untuk membuka sesi mengajar.</p>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </main>
-      <Footer />
+
+      <Footer containerClassName="mx-auto max-w-7xl px-5 sm:px-7 lg:px-10" />
     </div>
   );
 };
