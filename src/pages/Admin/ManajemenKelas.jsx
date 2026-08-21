@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Footer from '../../components/common/Footer';
 import ClassCard from '../../components/admin/class/ClassCard';
+import VisualIcon from '../../components/common/VisualIcon';
 import { dataKelas, dataSiswa } from '../../data/mockData';
 
 const gradeGroups = [
@@ -44,8 +45,8 @@ const ManajemenKelas = () => {
               </p>
             </div>
             <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-[#c8d4f4] bg-[#eaf0ff] px-4 py-3 text-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#aebcff]">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#29438f] text-xs font-bold text-white dark:bg-[#9eafff] dark:text-[#172654]" aria-hidden="true">
-                K
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#29438f] text-white dark:bg-[#9eafff] dark:text-[#172654]" aria-hidden="true">
+                <VisualIcon name="class" className="h-4 w-4" />
               </span>
               <div>
                 <p className="text-sm font-semibold">Data kelas aktif</p>
@@ -98,8 +99,8 @@ const ManajemenKelas = () => {
               return (
                 <section key={group.label}>
                   <div className="mb-5 flex items-center gap-3">
-                    <span className={`flex h-9 w-9 items-center justify-center rounded-xl text-xs font-bold ${group.accent}`} aria-hidden="true">
-                      {group.prefix.replace('-', '')}
+                    <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${group.accent}`} aria-hidden="true">
+                      <VisualIcon name="class" className="h-4 w-4" />
                     </span>
                     <div>
                       <h3 className="font-display text-2xl font-semibold tracking-[-0.04em] text-zinc-50">{group.label}</h3>

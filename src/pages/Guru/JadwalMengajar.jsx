@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
+import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
 
@@ -164,7 +165,9 @@ const JadwalMengajar = () => {
                   </p>
                   <p className="mt-1 text-sm text-[#c5cfe0]">Tahun {currentMonth.getFullYear()}</p>
                 </div>
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-sm font-bold text-[#172654]" aria-hidden="true">J</span>
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
+                  <VisualIcon name="calendar" className="h-4 w-4" />
+                </span>
               </div>
               <div className="mt-10 grid grid-cols-2 gap-3 border-t border-white/10 pt-5">
                 <div>
@@ -322,7 +325,9 @@ const JadwalMengajar = () => {
                         </div>
                       ) : (
                         <div className="rounded-2xl border border-dashed border-zinc-800 px-5 py-10 text-center">
-                          <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-bold text-zinc-500" aria-hidden="true">J</span>
+                          <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-500" aria-hidden="true">
+                            <VisualIcon name="calendar" className="h-4 w-4" />
+                          </span>
                           <p className="mt-4 text-sm font-medium text-zinc-300">Tidak ada jadwal pada tanggal ini</p>
                           <p className="mt-2 text-xs leading-5 text-zinc-500">Pilih tanggal lain yang memiliki penanda sesi.</p>
                         </div>
@@ -330,7 +335,9 @@ const JadwalMengajar = () => {
                     </div>
                   ) : (
                     <div className="px-4 py-10 text-center">
-                      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf0ff] text-sm font-bold text-[#29438f] dark:bg-[#1b2a54] dark:text-[#aebcff]" aria-hidden="true">01</span>
+                      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf0ff] text-[#29438f] dark:bg-[#1b2a54] dark:text-[#aebcff]" aria-hidden="true">
+                        <VisualIcon name="calendar" className="h-5 w-5" />
+                      </span>
                       <p className="mt-5 font-semibold text-zinc-200">Belum ada tanggal dipilih</p>
                       <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-zinc-500">Gunakan kalender di sebelah kiri untuk membuka sesi mengajar.</p>
                     </div>

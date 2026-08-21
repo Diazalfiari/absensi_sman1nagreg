@@ -4,6 +4,7 @@ import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import Notification from '../../components/common/Notification';
+import VisualIcon from '../../components/common/VisualIcon';
 import { dataSiswa } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
 
@@ -133,7 +134,9 @@ const DetailSesi = () => {
     return (
       <div className="flex min-h-[100dvh] items-center justify-center bg-zinc-950 px-5 text-zinc-50">
         <div className="w-full max-w-md rounded-3xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-[0_20px_60px_rgba(15,23,42,0.16)]">
-          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf0ff] text-sm font-bold text-[#29438f] dark:bg-[#1b2a54] dark:text-[#aebcff]" aria-hidden="true">S</span>
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf0ff] text-[#29438f] dark:bg-[#1b2a54] dark:text-[#aebcff]" aria-hidden="true">
+            <VisualIcon name="calendar" className="h-5 w-5" />
+          </span>
           <h1 className="mt-5 font-display text-2xl font-semibold tracking-[-0.04em]">Data sesi tidak ditemukan</h1>
           <p className="mt-2 text-sm leading-6 text-zinc-500">Buka detail sesi melalui kalender jadwal mengajar.</p>
           <Button onClick={() => navigate('/guru/Jadwal-mengajar')} className="mt-6 w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]">
@@ -194,8 +197,8 @@ const DetailSesi = () => {
                     {sessionStarted ? 'Sedang berlangsung' : 'Belum dimulai'}
                   </p>
                 </div>
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold ${sessionStarted ? 'bg-emerald-400 text-[#172654]' : 'bg-[#e5ba4b] text-[#172654]'}`} aria-hidden="true">
-                  {sessionStarted ? 'ON' : 'S'}
+                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${sessionStarted ? 'bg-emerald-400 text-[#172654]' : 'bg-[#e5ba4b] text-[#172654]'}`} aria-hidden="true">
+                  <VisualIcon name={sessionStarted ? 'play' : 'calendar'} className="h-4 w-4" />
                 </span>
               </div>
               {sessionStarted ? (
@@ -245,7 +248,9 @@ const DetailSesi = () => {
 
               {!sessionStarted && (
                 <div className="mx-5 mt-5 flex items-start gap-3 rounded-2xl border border-[#5269b5]/40 bg-[#1b2a54] p-4 text-sm text-[#d8deff] sm:mx-7">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#9eafff]/15 text-xs font-bold text-[#aebcff]" aria-hidden="true">i</span>
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#9eafff]/15 text-[#aebcff]" aria-hidden="true">
+                    <VisualIcon name="info" className="h-3.5 w-3.5" />
+                  </span>
                   <p>Mulai sesi terlebih dahulu untuk mengubah status kehadiran siswa.</p>
                 </div>
               )}
@@ -354,7 +359,9 @@ const DetailSesi = () => {
                       accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
                     />
                     <label htmlFor="fileUpload" className="block cursor-pointer">
-                      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-[#1b2a54] text-sm font-bold text-[#aebcff]" aria-hidden="true">+</span>
+                      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-[#1b2a54] text-[#aebcff]" aria-hidden="true">
+                        <VisualIcon name="upload" className="h-4 w-4" />
+                      </span>
                       <p className="mt-4 text-sm font-medium text-zinc-50">{selectedFile ? selectedFile.name : 'Pilih file materi'}</p>
                       <p className="mt-2 text-xs leading-5 text-zinc-500">PDF, DOC, PPT, atau gambar. Maksimal 10MB.</p>
                     </label>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
+import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser } from '../../utils/helpers';
 import { jadwalPelajaranSiswa } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
@@ -126,7 +127,9 @@ const JadwalPelajaran = () => {
                   <p className="mt-3 font-display text-3xl font-semibold tracking-[-0.05em] text-white">{monthNames[currentMonth.getMonth()]}</p>
                   <p className="mt-2 text-sm text-[#c5cfe0]">Tahun {currentMonth.getFullYear()}</p>
                 </div>
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-sm font-bold text-[#172654]" aria-hidden="true">J</span>
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
+                  <VisualIcon name="calendar" className="h-4 w-4" />
+                </span>
               </div>
               <div className="mt-10 border-t border-white/10 pt-5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Tanggal dipilih</p>
@@ -282,7 +285,9 @@ const JadwalPelajaran = () => {
                     ))
                   ) : (
                     <div className="rounded-2xl border border-dashed border-zinc-800 px-5 py-10 text-center">
-                      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-bold text-zinc-500" aria-hidden="true">-</span>
+                      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-500" aria-hidden="true">
+                        <VisualIcon name="calendar" className="h-4 w-4" />
+                      </span>
                       <p className="mt-4 font-medium text-zinc-300">Tidak ada jadwal untuk tanggal ini</p>
                       <p className="mt-2 text-sm leading-6 text-zinc-500">Pilih tanggal lain yang memiliki penanda jadwal.</p>
                     </div>

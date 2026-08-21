@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
 import Pagination from '../../components/common/Pagination';
+import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser, formatDate, getDayName, getTodayDate } from '../../utils/helpers';
 import { riwayatAbsensiSiswa, jadwalPelajaranSiswa } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
@@ -68,7 +69,9 @@ const SiswaDashboard = () => {
                   <p className="mt-3 font-display text-3xl font-semibold tracking-[-0.05em] text-white">{getDayName(new Date())}</p>
                   <p className="mt-2 text-sm text-[#c5cfe0]">{formatDate(new Date())}</p>
                 </div>
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-sm font-bold text-[#172654]" aria-hidden="true">S</span>
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
+                  <VisualIcon name="calendar" className="h-4 w-4" />
+                </span>
               </div>
               <div className="mt-10 flex items-center gap-3 border-t border-white/10 pt-5">
                 <span className={`h-2 w-2 rounded-full ${todayAbsensi ? 'bg-emerald-400' : 'bg-[#e5ba4b]'}`} aria-hidden="true" />
@@ -93,8 +96,8 @@ const SiswaDashboard = () => {
                     {todaysSubjects.map((subject, index) => (
                       <div key={index} className="flex flex-col gap-3 rounded-2xl px-3 py-4 transition-colors hover:bg-[#1b2a54]/40 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-3">
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#30457f] bg-[#1b2a54] text-xs font-bold text-[#aebcff]" aria-hidden="true">
-                            {String(index + 1).padStart(2, '0')}
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#30457f] bg-[#1b2a54] text-[#aebcff]" aria-hidden="true">
+                            <VisualIcon name="book" className="h-4 w-4" />
                           </span>
                           <div>
                             <p className="font-medium text-zinc-50">{subject.mataPelajaran}</p>
@@ -109,7 +112,9 @@ const SiswaDashboard = () => {
                   </div>
                 ) : (
                   <div className="rounded-2xl border border-dashed border-zinc-800 px-5 py-10 text-center">
-                    <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-bold text-zinc-500" aria-hidden="true">-</span>
+                    <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-500" aria-hidden="true">
+                      <VisualIcon name="calendar" className="h-4 w-4" />
+                    </span>
                     <p className="mt-4 font-medium text-zinc-300">Tidak ada jadwal hari ini</p>
                     <p className="mt-2 text-sm leading-6 text-zinc-500">Nikmati waktu luang atau tinjau jadwal berikutnya.</p>
                   </div>
@@ -123,7 +128,9 @@ const SiswaDashboard = () => {
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#52628e] dark:text-[#aebcff]">Aksi berikutnya</p>
                   <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em]">{todayAbsensi ? 'Presensi sudah tercatat' : 'Siap masuk kelas?'}</h2>
                 </div>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#29438f] text-xs font-bold text-white dark:bg-[#9eafff] dark:text-[#172654]" aria-hidden="true">J</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#29438f] text-white dark:bg-[#9eafff] dark:text-[#172654]" aria-hidden="true">
+                  <VisualIcon name="calendar" className="h-4 w-4" />
+                </span>
               </div>
               <p className="mt-4 text-sm leading-6 text-[#52628e] dark:text-[#b4bfdf]">
                 {todayAbsensi ? 'Anda dapat meninjau kembali agenda dan riwayat presensi kapan saja.' : 'Buka jadwal untuk memastikan kelas dan waktu belajar Anda hari ini.'}
@@ -194,7 +201,9 @@ const SiswaDashboard = () => {
                 onClick={() => navigate('/siswa/jadwal')}
                 className="group rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-[#5269b5] hover:bg-[#1b2a54]/40"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#eaf0ff] text-xs font-bold text-[#29438f] dark:bg-[#1b2a54] dark:text-[#aebcff]" aria-hidden="true">J</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#eaf0ff] text-[#29438f] dark:bg-[#1b2a54] dark:text-[#aebcff]" aria-hidden="true">
+                  <VisualIcon name="calendar" className="h-4 w-4" />
+                </span>
                 <h3 className="mt-6 font-display text-xl font-semibold tracking-[-0.03em] text-zinc-50">Jadwal Pelajaran</h3>
                 <p className="mt-2 text-sm leading-6 text-zinc-500">Lihat agenda kelas berdasarkan kalender dan buka detail pelajaran.</p>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#aebcff]">Buka Jadwal <span aria-hidden="true">&#8594;</span></span>
@@ -204,7 +213,9 @@ const SiswaDashboard = () => {
                 onClick={() => navigate('/siswa/riwayat')}
                 className="group rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-[#5269b5] hover:bg-[#1b2a54]/40"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-xs font-bold text-zinc-400" aria-hidden="true">R</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-zinc-400" aria-hidden="true">
+                  <VisualIcon name="history" className="h-4 w-4" />
+                </span>
                 <h3 className="mt-6 font-display text-xl font-semibold tracking-[-0.03em] text-zinc-50">Riwayat Absensi</h3>
                 <p className="mt-2 text-sm leading-6 text-zinc-500">Tinjau catatan kehadiran yang sudah tersimpan secara lengkap.</p>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-zinc-300">Lihat Riwayat <span aria-hidden="true">&#8594;</span></span>

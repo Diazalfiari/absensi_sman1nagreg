@@ -4,28 +4,29 @@ import Sidebar from '../../components/common/Sidebar';
 import { rekapitulasiKelas } from '../../data/mockData';
 import { getCurrentUser, calculatePercentage } from '../../utils/helpers';
 import Button from '../../components/common/Button';
+import VisualIcon from '../../components/common/VisualIcon';
 import Footer from '../../components/common/Footer';
 
 const metricAccent = {
   blue: {
     bar: 'bg-[#29438f] dark:bg-[#9eafff]',
-    mark: 'bg-[#eaf0ff] text-[#29438f] dark:bg-[#1c2c5e] dark:text-[#aebcff]',
+    icon: 'bg-[#eaf0ff] text-[#29438f] dark:bg-[#1c2c5e] dark:text-[#aebcff]',
   },
   green: {
     bar: 'bg-emerald-600 dark:bg-emerald-400',
-    mark: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+    icon: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
   },
   amber: {
     bar: 'bg-amber-600 dark:bg-amber-400',
-    mark: 'bg-amber-500/10 text-amber-700 dark:text-amber-300',
+    icon: 'bg-amber-500/10 text-amber-700 dark:text-amber-300',
   },
   rose: {
     bar: 'bg-rose-600 dark:bg-rose-400',
-    mark: 'bg-rose-500/10 text-rose-700 dark:text-rose-300',
+    icon: 'bg-rose-500/10 text-rose-700 dark:text-rose-300',
   },
 };
 
-const MetricCard = ({ title, value, note, mark, accent }) => (
+const MetricCard = ({ title, value, note, icon, accent }) => (
   <article className="rounded-2xl border border-zinc-800/80 bg-zinc-900 p-5 transition duration-200 hover:-translate-y-0.5 hover:border-zinc-700 dark:bg-zinc-900">
     <div className="flex items-start justify-between gap-4">
       <div>
@@ -33,8 +34,8 @@ const MetricCard = ({ title, value, note, mark, accent }) => (
         <p className="mt-3 font-display text-3xl font-semibold tracking-[-0.04em] text-zinc-50">{value}</p>
         <p className="mt-2 text-xs leading-5 text-zinc-500">{note}</p>
       </div>
-      <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold ${metricAccent[accent].mark}`} aria-hidden="true">
-        {mark}
+      <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${metricAccent[accent].icon}`} aria-hidden="true">
+        <VisualIcon name={icon} className="h-4 w-4" />
       </span>
     </div>
     <div className={`mt-5 h-1 w-12 rounded-full ${metricAccent[accent].bar}`} aria-hidden="true" />
@@ -99,11 +100,11 @@ const AdminDashboard = () => {
   });
 
   const metrics = [
-    { title: 'Total kehadiran', value: totalStats.total, note: 'Seluruh catatan kelas', mark: 'ALL', accent: 'blue' },
-    { title: 'Hadir', value: totalStats.hadir, note: 'Status kehadiran hadir', mark: 'H', accent: 'green' },
-    { title: 'Izin', value: totalStats.izin, note: 'Catatan izin', mark: 'I', accent: 'blue' },
-    { title: 'Sakit', value: totalStats.sakit, note: 'Catatan sakit', mark: 'S', accent: 'amber' },
-    { title: 'Alpa', value: totalStats.alpa, note: 'Perlu ditinjau', mark: 'A', accent: 'rose' },
+    { title: 'Total kehadiran', value: totalStats.total, note: 'Seluruh catatan kelas', icon: 'report', accent: 'blue' },
+    { title: 'Hadir', value: totalStats.hadir, note: 'Status kehadiran hadir', icon: 'task', accent: 'green' },
+    { title: 'Izin', value: totalStats.izin, note: 'Catatan izin', icon: 'message', accent: 'blue' },
+    { title: 'Sakit', value: totalStats.sakit, note: 'Catatan sakit', icon: 'info', accent: 'amber' },
+    { title: 'Alpa', value: totalStats.alpa, note: 'Perlu ditinjau', icon: 'question', accent: 'rose' },
   ];
 
   return (

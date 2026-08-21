@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
+import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser } from '../../utils/helpers';
 import { dataMapel } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
@@ -192,11 +193,11 @@ const LaporanBulanan = () => {
                 <p className="text-sm font-semibold text-zinc-50">Keterangan status</p>
                 <p className="mt-1 text-xs leading-5 text-zinc-500">Gunakan kode berikut saat membaca tabel laporan.</p>
               </div>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs text-zinc-500 sm:grid-cols-4">
-                <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/20 bg-emerald-500/10 font-semibold text-emerald-700 dark:text-emerald-300">H</span><span>Hadir</span></div>
-                <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 font-semibold text-amber-700 dark:text-amber-300">S</span><span>Sakit</span></div>
-                <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-blue-500/20 bg-blue-500/10 font-semibold text-blue-700 dark:text-blue-300">I</span><span>Izin</span></div>
-                <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/20 bg-rose-500/10 font-semibold text-rose-700 dark:text-rose-300">A</span><span>Alpa</span></div>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs text-zinc-500 sm:grid-cols-4">
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"><VisualIcon name="task" className="h-4 w-4" /></span><span>Hadir</span></div>
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300"><VisualIcon name="info" className="h-4 w-4" /></span><span>Sakit</span></div>
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300"><VisualIcon name="message" className="h-4 w-4" /></span><span>Izin</span></div>
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300"><VisualIcon name="question" className="h-4 w-4" /></span><span>Alpa</span></div>
               </div>
             </div>
           </section>

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
+import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser, formatDate, getDayName } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
 
@@ -42,7 +43,9 @@ const GuruDashboard = () => {
             <div className="flex flex-col justify-between border-t border-white/10 p-6 sm:p-8 lg:border-l lg:border-t-0">
               <div className="flex items-center justify-between gap-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Hari ini</p>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e5ba4b] text-sm font-bold text-[#172654]" aria-hidden="true">H</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
+                  <VisualIcon name="calendar" className="h-4 w-4" />
+                </span>
               </div>
               <div className="mt-12 lg:mt-0">
                 <p className="font-display text-3xl font-semibold tracking-[-0.05em] text-white">{getDayName(today)}</p>
@@ -64,7 +67,9 @@ const GuruDashboard = () => {
               <article className="group flex min-h-[250px] flex-col justify-between rounded-3xl border border-[#c8d4f4] bg-[#eaf0ff] p-6 text-[#172654] shadow-[0_16px_45px_rgba(41,67,143,0.08)] transition-all duration-200 hover:-translate-y-1 hover:border-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#eef2ff]">
                 <div>
                   <div className="flex items-start justify-between gap-4">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#29438f] text-xs font-bold text-white dark:bg-[#9eafff] dark:text-[#172654]" aria-hidden="true">J</span>
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#29438f] text-white dark:bg-[#9eafff] dark:text-[#172654]" aria-hidden="true">
+                      <VisualIcon name="calendar" className="h-4 w-4" />
+                    </span>
                     <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#52628e] dark:text-[#b4bfdf]">Prioritas</span>
                   </div>
                   <h3 className="mt-8 font-display text-2xl font-semibold tracking-[-0.04em]">Jadwal Mengajar</h3>
@@ -84,7 +89,9 @@ const GuruDashboard = () => {
               <article className="group flex min-h-[250px] flex-col justify-between rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-6 shadow-[0_16px_45px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-1 hover:border-zinc-700">
                 <div>
                   <div className="flex items-start justify-between gap-4">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-xs font-bold text-zinc-500" aria-hidden="true">R</span>
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-500" aria-hidden="true">
+                      <VisualIcon name="history" className="h-4 w-4" />
+                    </span>
                     <span className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Arsip</span>
                   </div>
                   <h3 className="mt-8 font-display text-2xl font-semibold tracking-[-0.04em] text-zinc-50">Riwayat Absensi</h3>

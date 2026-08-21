@@ -3,26 +3,27 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../utils/helpers';
 import ConfirmDialog from './ConfirmDialog';
 import Loading from './Loading';
+import VisualIcon from './VisualIcon';
 import logoSmansan from '../../assets/images/logosmansan.png';
 
 const menuItems = {
   admin: [
-    { path: '/admin', label: 'Dashboard', mark: 'D' },
-    { path: '/admin/rekapitulasi', label: 'Rekapitulasi', mark: 'R' },
-    { path: '/admin/laporan-bulanan', label: 'Laporan Bulanan', mark: 'L' },
-    { path: '/admin/tambah-jadwal', label: 'Tambah Jadwal', mark: 'J' },
-    { path: '/admin/manajemen-pengguna', label: 'Manajemen Pengguna', mark: 'P' },
-    { path: '/admin/manajemen-kelas', label: 'Manajemen Kelas', mark: 'K' },
+    { path: '/admin', label: 'Dashboard', icon: 'dashboard' },
+    { path: '/admin/rekapitulasi', label: 'Rekapitulasi', icon: 'report' },
+    { path: '/admin/laporan-bulanan', label: 'Laporan Bulanan', icon: 'report' },
+    { path: '/admin/tambah-jadwal', label: 'Tambah Jadwal', icon: 'calendar' },
+    { path: '/admin/manajemen-pengguna', label: 'Manajemen Pengguna', icon: 'users' },
+    { path: '/admin/manajemen-kelas', label: 'Manajemen Kelas', icon: 'class' },
   ],
   guru: [
-    { path: '/guru', label: 'Dashboard', mark: 'D' },
-    { path: '/guru/Jadwal-mengajar', label: 'Jadwal Mengajar', mark: 'J' },
-    { path: '/guru/riwayat', label: 'Riwayat', mark: 'R' },
+    { path: '/guru', label: 'Dashboard', icon: 'dashboard' },
+    { path: '/guru/Jadwal-mengajar', label: 'Jadwal Mengajar', icon: 'calendar' },
+    { path: '/guru/riwayat', label: 'Riwayat', icon: 'history' },
   ],
   siswa: [
-    { path: '/siswa', label: 'Dashboard', mark: 'D' },
-    { path: '/siswa/jadwal', label: 'Jadwal Pelajaran', mark: 'J' },
-    { path: '/siswa/riwayat', label: 'Riwayat', mark: 'R' },
+    { path: '/siswa', label: 'Dashboard', icon: 'dashboard' },
+    { path: '/siswa/jadwal', label: 'Jadwal Pelajaran', icon: 'calendar' },
+    { path: '/siswa/riwayat', label: 'Riwayat', icon: 'history' },
   ],
 };
 
@@ -78,7 +79,7 @@ const Sidebar = ({ role }) => {
                   }`}
                   aria-hidden="true"
                 >
-                  {item.mark}
+                  <VisualIcon name={item.icon} className={mobile ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
                 </span>
                 <span className="font-medium">{item.label}</span>
               </Link>
@@ -111,7 +112,9 @@ const Sidebar = ({ role }) => {
             onClick={handleLogout}
             className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-zinc-400 transition-colors hover:bg-rose-500/10 hover:text-rose-400"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-xs font-bold text-zinc-500" aria-hidden="true">K</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-zinc-500" aria-hidden="true">
+              <VisualIcon name="logout" className="h-4 w-4" />
+            </span>
             <span className="font-medium">Keluar</span>
           </button>
         </div>
