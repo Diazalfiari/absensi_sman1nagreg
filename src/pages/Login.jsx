@@ -35,15 +35,16 @@ const Login = () => {
       );
 
       if (user) {
-        saveToLocalStorage('currentUser', user);
-        setTimeout(() => {
-          switch (user.role) {
-            case 'admin': navigate('/admin'); break;
-            case 'guru': navigate('/guru'); break;
-            case 'siswa': navigate('/siswa'); break;
-            default: navigate('/');
-          }
-        }, 500);
+        const sessionUser = { ...user };
+        delete sessionUser.password;
+        saveToLocalStorage('currentUser', sessionUser);
+        setLoading(false);
+        switch (user.role) {
+          case 'admin': navigate('/admin'); break;
+          case 'guru': navigate('/guru'); break;
+          case 'siswa': navigate('/siswa'); break;
+          default: navigate('/');
+        }
       } else {
         setError('Username atau password salah');
         setLoading(false);

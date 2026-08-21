@@ -668,13 +668,6 @@ export const presensiHarian = [
   { tanggal: '2025-12-09', kelas: 'XII-3', hadir: 29, izin: 0, sakit: 0, alpa: 0 },
 ];
 
-// Koordinat lokasi sekolah (untuk validasi GPS)
-export const lokasiSekolah = {
-  lat: -7.010568, 
-  lng: 107.830889,
-  radius: 150, // dalam meter (diperbesar untuk akurasi GPS ~20m)
-};
-
 // Statistik untuk dashboard siswa
 export const statistikSiswa = {
   totalHadir: 45,

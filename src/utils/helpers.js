@@ -1,27 +1,4 @@
-// Utility functions untuk aplikasi presensi
-
-// Fungsi untuk menghitung jarak antara dua koordinat GPS (Haversine formula)
-export const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371e3; // Radius bumi dalam meter
-  const φ1 = (lat1 * Math.PI) / 180;
-  const φ2 = (lat2 * Math.PI) / 180;
-  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
-  const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  const distance = R * c;
-  return distance; // dalam meter
-};
-
-// Fungsi untuk validasi apakah lokasi dalam area sekolah
-export const isInSchoolArea = (userLat, userLng, schoolLat, schoolLng, radius) => {
-  const distance = calculateDistance(userLat, userLng, schoolLat, schoolLng);
-  return distance <= radius;
-};
+const CURRENT_USER_KEY = 'currentUser';
 
 // Fungsi untuk format tanggal
 export const formatDate = (date) => {
@@ -54,11 +31,12 @@ export const getDayName = (date) => {
 
 // Fungsi untuk menghitung persentase kehadiran
 export const calculatePercentage = (hadir, total) => {
-  if (total === 0) return 0;
-  return ((hadir / total) * 100).toFixed(2);
+  const present = Number(hadir);
+  const count = Number(total);
+  if (!Number.isFinite(present) || !Number.isFinite(count) || count <= 0) return 0;
+  return Number(((present / count) * 100).toFixed(2));
 };
 
-// Fungsi untuk menyimpan data ke localStorage
 export const saveToLocalStorage = (key, data) => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
@@ -88,28 +66,22 @@ export const removeFromLocalStorage = (key) => {
 };
 
 // Fungsi untuk validasi apakah user sudah login
-export const isAuthenticated = () => {
-  const user = getFromLocalStorage('currentUser');
-  return user !== null;
-};
+export const isAuthenticated = () => getFromLocalStorage(CURRENT_USER_KEY) !== null;
 
-// Fungsi untuk mendapatkan user yang sedang login
-export const getCurrentUser = () => {
-  return getFromLocalStorage('currentUser');
-};
+export const getCurrentUser = () => getFromLocalStorage(CURRENT_USER_KEY);
 
-// Fungsi untuk logout
-export const logout = () => {
-  removeFromLocalStorage('currentUser');
-};
+export const logout = () => removeFromLocalStorage(CURRENT_USER_KEY);
 
 // Fungsi untuk filter data berdasarkan kelas dan tanggal
 export const filterData = (data, kelas, startDate, endDate) => {
+  const start = startDate ? new Date(`${startDate}T00:00:00`) : null;
+  const end = endDate ? new Date(`${endDate}T23:59:59.999`) : null;
+
   return data.filter((item) => {
+    const itemDate = new Date(item.tanggal);
     const kelasMatch = !kelas || kelas === 'all' || item.kelas === kelas;
     const dateMatch =
-      (!startDate || new Date(item.tanggal) >= new Date(startDate)) &&
-      (!endDate || new Date(item.tanggal) <= new Date(endDate));
+      (!start || itemDate >= start) && (!end || itemDate <= end);
     return kelasMatch && dateMatch;
   });
 };
