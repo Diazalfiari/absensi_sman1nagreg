@@ -157,16 +157,14 @@ export const riwayatAbsensiSiswa = [
     tanggal: '2024-12-11',
     status: 'Hadir',
     waktu: '07:15',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 11,
     tanggal: '2024-12-01',
     status: 'Izin',
     waktu: '-',
-    verified: true,
+
     keterangan: 'Urusan keluarga',
   },
   {
@@ -174,25 +172,21 @@ export const riwayatAbsensiSiswa = [
     tanggal: '2024-11-30',
     status: 'Hadir',
     waktu: '07:11',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 13,
     tanggal: '2024-11-29',
     status: 'Hadir',
     waktu: '07:09',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 14,
     tanggal: '2024-11-28',
     status: 'Sakit',
     waktu: '-',
-    verified: true,
+
     keterangan: 'Demam',
   },
   {
@@ -200,34 +194,28 @@ export const riwayatAbsensiSiswa = [
     tanggal: '2024-11-27',
     status: 'Hadir',
     waktu: '07:16',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 2,
     tanggal: '2024-12-10',
     status: 'Hadir',
     waktu: '07:10',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 3,
     tanggal: '2024-12-09',
     status: 'Hadir',
     waktu: '07:20',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 4,
     tanggal: '2024-12-08',
     status: 'Izin',
     waktu: '-',
-    verified: true,
+
     keterangan: 'Sakit demam',
   },
   {
@@ -235,34 +223,28 @@ export const riwayatAbsensiSiswa = [
     tanggal: '2024-12-07',
     status: 'Hadir',
     waktu: '07:12',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 6,
     tanggal: '2024-12-06',
     status: 'Hadir',
     waktu: '07:18',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 7,
     tanggal: '2024-12-05',
     status: 'Hadir',
     waktu: '07:08',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 8,
     tanggal: '2024-12-04',
     status: 'Sakit',
     waktu: '-',
-    verified: true,
+
     keterangan: 'Flu dan batuk',
   },
   {
@@ -270,43 +252,35 @@ export const riwayatAbsensiSiswa = [
     tanggal: '2024-12-03',
     status: 'Hadir',
     waktu: '07:25',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 10,
     tanggal: '2024-12-02',
     status: 'Hadir',
     waktu: '07:14',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 11,
     tanggal: '2024-12-01',
     status: 'Hadir',
     waktu: '07:22',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 12,
     tanggal: '2024-11-30',
     status: 'Hadir',
     waktu: '07:11',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 13,
     tanggal: '2024-11-29',
     status: 'Izin',
     waktu: '-',
-    verified: true,
+
     keterangan: 'Acara keluarga',
   },
   {
@@ -314,18 +288,14 @@ export const riwayatAbsensiSiswa = [
     tanggal: '2024-11-28',
     status: 'Hadir',
     waktu: '07:16',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
   {
     id: 15,
     tanggal: '2024-11-27',
     status: 'Hadir',
     waktu: '07:19',
-    verified: true,
-    foto: null,
-    lokasi: { lat: -7.010388, lng: 107.830649, inArea: true },
+
   },
 ];
 

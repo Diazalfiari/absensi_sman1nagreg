@@ -4,7 +4,7 @@ Website presensi siswa berbasis React.js untuk SMAN 1 Nagreg dengan fitur:
 
 - Dashboard Admin dengan rekapitulasi dan filter data
 - Dashboard Guru dengan input presensi manual
-- Dashboard Siswa dengan presensi mandiri (foto selfie & GPS)
+- Dashboard Siswa dengan riwayat kehadiran dan jadwal pelajaran
 - Mock data untuk simulasi sistem (front-end only)
 
 ## Cara Menjalankan
@@ -45,4 +45,4 @@ npm start
 - React.js 18
 - Tailwind CSS 3
 - React Router 6
-- Web API (Camera & Geolocation)
+- Express.js + MySQL backend (planned)

@@ -131,12 +131,6 @@ Cek:
 - File `vercel.json` sudah dikonfigurasi untuk handle client-side routing React Router
 - Semua route akan diarahkan ke `index.html`
 
-### Geolocation Tidak Bekerja
-
-- Vercel secara otomatis menyediakan HTTPS
-- Geolocation memerlukan HTTPS atau localhost
-- Setelah deploy, fitur lokasi akan bekerja normal di domain Vercel
-
 ---
 
 ## Status Deployment

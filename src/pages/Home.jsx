@@ -7,7 +7,7 @@ import heroImage from '../assets/images/smansan2.jpg';
 const accessPoints = [
   {
     role: 'Siswa',
-    description: 'Lakukan presensi mandiri dengan verifikasi foto dan lokasi.',
+    description: 'Lihat informasi kehadiran dan jadwal sekolah.',
     tone: 'bg-[#eaf0ff] dark:bg-[#152143]',
   },
   {
