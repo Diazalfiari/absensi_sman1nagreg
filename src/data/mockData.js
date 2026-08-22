@@ -806,3 +806,231 @@ export const mockJadwal = {
   'Kamis': ['Bahasa Indonesia', 'Kimia', 'Sejarah'],
   'Jumat': ['Bahasa Inggris', 'Biologi', 'Geografi', 'PJOK']
 };
+
+// Data simulasi log aktivitas sistem
+export const mockActivityLogs = [
+  {
+    id: 1,
+    timestamp: '2026-08-22 15:45:10',
+    tanggal: '2026-08-22',
+    waktu: '15:45:10',
+    user: 'Budi Santoso, S.Pd',
+    role: 'guru',
+    kategori: 'Presensi',
+    aksi: 'Input Presensi Sesi',
+    deskripsi: 'Menyimpan data presensi kelas X-1 mata pelajaran Matematika (30 Siswa).',
+    status: 'success',
+    ipAddress: '192.168.1.45',
+    device: 'Chrome / Windows',
+    detail: {
+      kelas: 'X-1',
+      mapel: 'Matematika',
+      totalSiswa: 30,
+      hadir: 28,
+      sakit: 1,
+      izin: 1,
+      alpa: 0
+    }
+  },
+  {
+    id: 2,
+    timestamp: '2026-08-22 15:30:22',
+    tanggal: '2026-08-22',
+    waktu: '15:30:22',
+    user: 'Administrator',
+    role: 'admin',
+    kategori: 'Laporan',
+    aksi: 'Ekspor Laporan Excel',
+    deskripsi: 'Mengunduh rekapitulasi laporan presensi bulanan kelas X-1 periode Agustus 2026.',
+    status: 'success',
+    ipAddress: '192.168.1.10',
+    device: 'Edge / Windows',
+    detail: {
+      file: 'Laporan_Presensi_X-1_Agustus_2026.xlsx',
+      kelas: 'X-1',
+      bulan: 'Agustus 2026'
+    }
+  },
+  {
+    id: 3,
+    timestamp: '2026-08-22 14:15:05',
+    tanggal: '2026-08-22',
+    waktu: '14:15:05',
+    user: 'Administrator',
+    role: 'admin',
+    kategori: 'Manajemen Pengguna',
+    aksi: 'Import Pengguna Massal',
+    deskripsi: 'Berhasil mengimpor 12 akun pengguna baru (Siswa) via file spreadsheet Excel.',
+    status: 'success',
+    ipAddress: '192.168.1.10',
+    device: 'Edge / Windows',
+    detail: {
+      totalImport: 12,
+      role: 'siswa',
+      sourceFile: 'data_siswa_baru_2026.xlsx'
+    }
+  },
+  {
+    id: 4,
+    timestamp: '2026-08-22 13:50:41',
+    tanggal: '2026-08-22',
+    waktu: '13:50:41',
+    user: 'Administrator',
+    role: 'admin',
+    kategori: 'Manajemen Kelas',
+    aksi: 'Update Wali Kelas',
+    deskripsi: 'Mengubah wali kelas untuk Kelas X-2 menjadi Guru X-2, S.Pd.',
+    status: 'info',
+    ipAddress: '192.168.1.10',
+    device: 'Edge / Windows',
+    detail: {
+      kelas: 'X-2',
+      waliKelasBaru: 'Guru X-2, S.Pd.'
+    }
+  },
+  {
+    id: 5,
+    timestamp: '2026-08-22 11:20:18',
+    tanggal: '2026-08-22',
+    waktu: '11:20:18',
+    user: 'Ahmad Rizki',
+    role: 'siswa',
+    kategori: 'Autentikasi',
+    aksi: 'Login Siswa',
+    deskripsi: 'Login berhasil ke dashboard siswa dari perangkat mobile.',
+    status: 'success',
+    ipAddress: '192.168.1.112',
+    device: 'Mobile Safari / iOS',
+    detail: {
+      nis: '2021001',
+      kelas: 'X-1'
+    }
+  },
+  {
+    id: 6,
+    timestamp: '2026-08-22 10:05:33',
+    tanggal: '2026-08-22',
+    waktu: '10:05:33',
+    user: 'Administrator',
+    role: 'admin',
+    kategori: 'Jadwal',
+    aksi: 'Tambah Jadwal Mengajar',
+    deskripsi: 'Menambahkan jadwal baru mata pelajaran Matematika untuk kelas XII-1 (Kamis 07:30).',
+    status: 'success',
+    ipAddress: '192.168.1.10',
+    device: 'Edge / Windows',
+    detail: {
+      mapel: 'Matematika',
+      kelas: 'XII-1',
+      hari: 'Kamis',
+      waktu: '07:30 - 09:00'
+    }
+  },
+  {
+    id: 7,
+    timestamp: '2026-08-22 08:30:12',
+    tanggal: '2026-08-22',
+    waktu: '08:30:12',
+    user: 'Budi Santoso, S.Pd',
+    role: 'guru',
+    kategori: 'Autentikasi',
+    aksi: 'Login Guru',
+    deskripsi: 'Login berhasil ke sistem presensi SMAN 1 Nagreg.',
+    status: 'success',
+    ipAddress: '192.168.1.45',
+    device: 'Chrome / Windows',
+    detail: {
+      nip: '198505152010011003'
+    }
+  },
+  {
+    id: 8,
+    timestamp: '2026-08-22 07:45:00',
+    tanggal: '2026-08-22',
+    waktu: '07:45:00',
+    user: 'Administrator',
+    role: 'admin',
+    kategori: 'Autentikasi',
+    aksi: 'Login Administrator',
+    deskripsi: 'Login sesi admin berhasil dibuka.',
+    status: 'success',
+    ipAddress: '192.168.1.10',
+    device: 'Edge / Windows',
+    detail: {
+      session: 'Active Admin Session'
+    }
+  },
+  {
+    id: 9,
+    timestamp: '2026-08-21 16:10:44',
+    tanggal: '2026-08-21',
+    waktu: '16:10:44',
+    user: 'Administrator',
+    role: 'admin',
+    kategori: 'Manajemen Pengguna',
+    aksi: 'Hapus Pengguna',
+    deskripsi: 'Menghapus akun guru tidak aktif (NIP: 197801022005011002).',
+    status: 'warning',
+    ipAddress: '192.168.1.10',
+    device: 'Edge / Windows',
+    detail: {
+      deletedUser: 'Guru Fisika (Pensiun)',
+      role: 'guru'
+    }
+  },
+  {
+    id: 10,
+    timestamp: '2026-08-21 14:02:19',
+    tanggal: '2026-08-21',
+    waktu: '14:02:19',
+    user: 'Budi Santoso, S.Pd',
+    role: 'guru',
+    kategori: 'Presensi',
+    aksi: 'Simpan Materi & Tugas',
+    deskripsi: 'Memperbarui materi Turunan Trigonometri dan penugasan latihan bab 3 kelas X-1.',
+    status: 'success',
+    ipAddress: '192.168.1.45',
+    device: 'Chrome / Windows',
+    detail: {
+      topik: 'Turunan Trigonometri',
+      kelas: 'X-1'
+    }
+  },
+  {
+    id: 11,
+    timestamp: '2026-08-21 11:30:55',
+    tanggal: '2026-08-21',
+    waktu: '11:30:55',
+    user: 'Ahmad Rizki',
+    role: 'siswa',
+    kategori: 'Akademik',
+    aksi: 'Lihat Detail Pelajaran',
+    deskripsi: 'Membuka rincian materi dan tugas mata pelajaran Matematika.',
+    status: 'info',
+    ipAddress: '192.168.1.112',
+    device: 'Mobile Safari / iOS',
+    detail: {
+      mapel: 'Matematika',
+      kelas: 'X-1'
+    }
+  },
+  {
+    id: 12,
+    timestamp: '2026-08-21 09:15:20',
+    tanggal: '2026-08-21',
+    waktu: '09:15:20',
+    user: 'Administrator',
+    role: 'admin',
+    kategori: 'Laporan',
+    aksi: 'Filter Rekapitulasi Presensi',
+    deskripsi: 'Meninjau rekap kehadiran seluruh kelas tingkat X semester ganjil.',
+    status: 'info',
+    ipAddress: '192.168.1.10',
+    device: 'Edge / Windows',
+    detail: {
+      tingkat: 'X',
+      filter: 'All Date'
+    }
+  }
+];
+

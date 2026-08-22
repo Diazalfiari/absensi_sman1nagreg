@@ -14,6 +14,7 @@ import TambahJadwal from './pages/Admin/TambahJadwal';
 import ManajemenPengguna from './pages/Admin/ManajemenPengguna';
 import ManajemenKelas from './pages/Admin/ManajemenKelas';
 import DetailKelas from './pages/Admin/DetailKelas';
+import LogAktivitas from './pages/Admin/LogAktivitas';
 import GuruDashboard from './pages/Guru/GuruDashboard';
 import JadwalMengajar from './pages/Guru/JadwalMengajar';
 import DetailSesi from './pages/Guru/DetailSesi';
@@ -103,6 +104,14 @@ function App() {
             element={
               <ProtectedRoute allowedRole="admin">
                 <DetailKelas />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/log-aktivitas"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <LogAktivitas />
               </ProtectedRoute>
             }
           />

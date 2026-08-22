@@ -38,6 +38,7 @@ Aplikasi web presensi digital modern berbasis **React.js** dan **Tailwind CSS** 
   - Pengaturan Wali Kelas.
   - Pengelolaan daftar siswa dan mutasi siswa per kelas.
 - **Manajemen Jadwal**: Pembuatan dan pengaturan jadwal mata pelajaran, alokasi jam mengajar, dan penugasan guru.
+- **Log Aktivitas Sistem**: Audit trail riwayat operasional presensi, modifikasi kelas, manajemen pengguna, dan autentikasi dengan pencarian, filter, modal detail, dan fitur Ekspor Excel (.xlsx).
 
 ### 3. 👨‍🏫 Fitur Guru
 - **Dashboard Guru**: Ringkasan jadwal mengajar hari ini dan status sesi kelas yang diampu.
@@ -88,6 +89,7 @@ Aplikasi saat ini berjalan menggunakan data simulasi (*Mock Data* / *Front-end O
 | `/admin/manajemen-pengguna` | Admin | `ManajemenPengguna.jsx` | Kelola akun & Import pengguna via Excel |
 | `/admin/manajemen-kelas` | Admin | `ManajemenKelas.jsx` | Daftar kelas & pengaturan wali kelas |
 | `/admin/manajemen-kelas/:kelasId` | Admin | `DetailKelas.jsx` | Daftar siswa & kelola siswa per kelas |
+| `/admin/log-aktivitas` | Admin | `LogAktivitas.jsx` | Audit trail riwayat aktivitas & ekspor log Excel |
 | `/guru` | Guru | `GuruDashboard.jsx` | Dashboard pengajar & jadwal aktif hari ini |
 | `/guru/Jadwal-mengajar` | Guru | `JadwalMengajar.jsx` | Kalender/tabel jadwal mengajar guru |
 | `/guru/detail-sesi` | Guru | `DetailSesi.jsx` | Form input presensi siswa per sesi pelajaran |

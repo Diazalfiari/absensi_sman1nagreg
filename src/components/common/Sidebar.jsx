@@ -14,6 +14,7 @@ const menuItems = {
     { path: '/admin/tambah-jadwal', label: 'Tambah Jadwal', icon: 'calendar' },
     { path: '/admin/manajemen-pengguna', label: 'Manajemen Pengguna', icon: 'users' },
     { path: '/admin/manajemen-kelas', label: 'Manajemen Kelas', icon: 'class' },
+    { path: '/admin/log-aktivitas', label: 'Log Aktivitas', icon: 'history' },
   ],
   guru: [
     { path: '/guru', label: 'Dashboard', icon: 'dashboard' },
@@ -50,7 +51,7 @@ const Sidebar = ({ role }) => {
   };
 
   const renderMenu = (mobile = false) => (
-    <nav className={mobile ? 'flex gap-2 overflow-x-auto px-4 pb-3 no-scrollbar' : 'flex-1 p-5'}>
+    <nav className={mobile ? 'flex gap-2 overflow-x-auto px-4 pb-3 no-scrollbar' : 'flex-1 p-5 overflow-y-auto no-scrollbar'}>
       <ul className={mobile ? 'flex gap-2' : 'space-y-2'}>
         {items.map((item) => {
           const isActive = location.pathname === item.path;
@@ -92,7 +93,8 @@ const Sidebar = ({ role }) => {
 
   return (
     <>
-      <aside className="fixed left-0 top-0 hidden min-h-[100dvh] w-72 flex-col border-r border-zinc-800 bg-zinc-950 text-zinc-50 lg:flex">
+      {/* 1. DESKTOP SIDEBAR (>= lg) */}
+      <aside className="fixed left-0 top-0 hidden min-h-[100dvh] w-72 flex-col border-r border-zinc-800 bg-zinc-950 text-zinc-50 lg:flex z-40">
         <div className="border-b border-zinc-800 px-6 py-7">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 p-1.5">
@@ -120,6 +122,7 @@ const Sidebar = ({ role }) => {
         </div>
       </aside>
 
+      {/* 2. MOBILE TOP STICKY BAR (< lg) - KEMBALI SEPERTI SEMULA */}
       <div className="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl lg:hidden">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">

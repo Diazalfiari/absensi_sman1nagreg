@@ -215,8 +215,8 @@ const AdminDashboard = () => {
             </div>
           </section>
 
-          <section className="grid gap-4 lg:grid-cols-3">
-            <div className="rounded-2xl border border-[#30457f] bg-[#152143] p-6 text-[#eef2ff] lg:col-span-3">
+          <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-2xl border border-[#30457f] bg-[#152143] p-6 text-[#eef2ff] sm:col-span-2 lg:col-span-4">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Rekap terperinci</p>
@@ -258,6 +258,16 @@ const AdminDashboard = () => {
               </div>
               <Button size="sm" variant="secondary" onClick={() => navigate('/admin/manajemen-pengguna')} className="w-full !border-zinc-700 !bg-zinc-800 !text-zinc-50 hover:!bg-zinc-700">
                 Kelola pengguna
+              </Button>
+            </div>
+
+            <div className="flex flex-col items-start justify-between gap-5 rounded-2xl border border-zinc-800/80 bg-zinc-900 p-6 transition duration-200 hover:-translate-y-0.5 hover:border-zinc-700">
+              <div>
+                <h3 className="text-lg font-semibold text-zinc-50">Log Aktivitas</h3>
+                <p className="mt-2 text-sm leading-6 text-zinc-500">Audit riwayat aktivitas presensi dan operasional sistem.</p>
+              </div>
+              <Button size="sm" variant="secondary" onClick={() => navigate('/admin/log-aktivitas')} className="w-full !border-zinc-700 !bg-zinc-800 !text-zinc-50 hover:!bg-zinc-700">
+                Lihat log
               </Button>
             </div>
           </section>
