@@ -70,12 +70,19 @@ const DetailSesi = () => {
     }))
   );
 
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadError, setUploadError] = useState('');
+  // State untuk materi pembelajaran & tugas kuis
+  const [materi, setMateri] = useState({
+    topik: schedule?.mataPelajaran ? `Materi ${schedule.mataPelajaran} - Bab ${schedule.kelas}` : '',
+    deskripsi: '',
+  });
+
+  const [tugasKuis, setTugasKuis] = useState({
+    tugas: '',
+    kuis: '',
+  });
+
   const [sessionStarted, setSessionStarted] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [notification, setNotification] = useState({ isOpen: false, type: 'success', title: '', message: '' });
 
@@ -85,45 +92,6 @@ const DetailSesi = () => {
         siswa.id === siswaId ? { ...siswa, status: newStatus } : siswa
       )
     );
-  };
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const maxSize = 10 * 1024 * 1024; // 10 MB
-    if (file.size > maxSize) {
-      setUploadError('Ukuran file melebihi 10MB. Pilih file yang lebih kecil.');
-      setSelectedFile(null);
-      e.target.value = '';
-      return;
-    }
-
-    setUploadError('');
-    setSelectedFile(file);
-  };
-
-  const handleUploadClick = () => {
-    if (selectedFile) {
-      if (uploadedFiles.length >= 2) {
-        setUploadError('Maksimal 2 materi per sesi. Hapus salah satu untuk mengunggah lagi.');
-        return;
-      }
-      setShowUploadConfirm(true);
-    }
-  };
-
-  const handleConfirmUpload = () => {
-    setUploadedFiles((prev) => [...prev, selectedFile]);
-    setShowUploadConfirm(false);
-    setUploadError('');
-    setNotification({
-      isOpen: true,
-      type: 'success',
-      title: 'Upload Berhasil!',
-      message: `File "${selectedFile.name}" berhasil diunggah.`
-    });
-    setSelectedFile(null);
   };
 
   const handleStartSession = () => {
@@ -137,12 +105,22 @@ const DetailSesi = () => {
       isOpen: true,
       type: 'success',
       title: 'Sesi Dimulai!',
-      message: 'Sesi mengajar telah dimulai. Anda dapat mengisi presensi dan upload materi.'
+      message: 'Sesi mengajar telah dimulai. Anda dapat mengisi presensi, materi, dan tugas.'
     });
   };
 
   const handleSaveAttendance = () => {
     setShowSaveConfirm(true);
+  };
+
+  const handleSaveMateriTugas = (e) => {
+    if (e) e.preventDefault();
+    setNotification({
+      isOpen: true,
+      type: 'success',
+      title: 'Materi & Tugas Tersimpan!',
+      message: 'Materi pembelajaran, tugas, dan kuis berhasil diperbarui untuk sesi ini.'
+    });
   };
 
   const handleConfirmSave = () => {
@@ -153,16 +131,18 @@ const DetailSesi = () => {
         id: s.id,
         nama: s.nama,
         status: s.status
-      }))
+      })),
+      materi,
+      tugasKuis,
     };
 
-    console.log('Data Kehadiran Tersimpan:', attendanceData);
+    console.log('Data Kehadiran & Sesi Tersimpan:', attendanceData);
     setShowSaveConfirm(false);
     setNotification({
       isOpen: true,
       type: 'success',
       title: 'Data Tersimpan!',
-      message: 'Data kehadiran siswa berhasil disimpan.'
+      message: 'Data kehadiran siswa, materi, dan tugas/kuis berhasil disimpan.'
     });
   };
 
@@ -289,7 +269,8 @@ const DetailSesi = () => {
             </div>
           </section>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
+            {/* Daftar Kehadiran Siswa */}
             <section className={`rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)] ${!sessionStarted ? 'opacity-60' : ''}`}>
               <div className="flex flex-col gap-4 border-b border-zinc-800/80 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-7">
                 <div>
@@ -447,91 +428,97 @@ const DetailSesi = () => {
               )}
             </section>
 
+            {/* Sidebar: Form Input Materi Pembelajaran, Tugas, & Kuis */}
             <aside className="lg:sticky lg:top-8 lg:self-start">
               <section className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)]">
                 <div className="border-b border-white/10 bg-[#111b3c] p-5 sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Pendukung sesi</p>
-                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Materi Pembelajaran</h2>
-                  <p className="mt-2 text-sm leading-6 text-[#c5cfe0]">Tambahkan maksimal dua materi untuk mendampingi sesi ini.</p>
+                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Materi & Tugas</h2>
+                  <p className="mt-2 text-sm leading-6 text-[#c5cfe0]">
+                    Isi topik materi pembelajaran, rangkuman, serta penugasan dan kuis untuk siswa.
+                  </p>
                 </div>
 
-                <div className="space-y-5 p-5 sm:p-6">
-                  {uploadError && (
-                    <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-4" role="alert">
-                      <p className="text-sm leading-5 text-rose-300">{uploadError}</p>
-                    </div>
-                  )}
-
-                  <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-950/60 p-5 text-center transition-colors hover:border-[#6f83d0]">
-                    <input
-                      type="file"
-                      id="fileUpload"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                      accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
-                    />
-                    <label htmlFor="fileUpload" className="block cursor-pointer">
-                      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-[#1b2a54] text-[#aebcff]" aria-hidden="true">
-                        <VisualIcon name="upload" className="h-4 w-4" />
+                <form onSubmit={handleSaveMateriTugas} className="space-y-6 p-5 sm:p-6">
+                  {/* 1. Materi Pembelajaran */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 border-b border-zinc-800 pb-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1b2a54] text-[#9eafff]">
+                        <VisualIcon name="book" className="h-3.5 w-3.5" />
                       </span>
-                      <p className="mt-4 text-sm font-medium text-zinc-50">{selectedFile ? selectedFile.name : 'Pilih file materi'}</p>
-                      <p className="mt-2 text-xs leading-5 text-zinc-500">PDF, DOC, PPT, atau gambar. Maksimal 10MB.</p>
-                    </label>
+                      <h3 className="text-sm font-semibold text-zinc-200">Materi Pembelajaran</h3>
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+                        Topik / Judul Materi
+                      </label>
+                      <input
+                        type="text"
+                        value={materi.topik}
+                        onChange={(e) => setMateri({ ...materi, topik: e.target.value })}
+                        placeholder="Contoh: Turunan Fungsi Trigonometri"
+                        className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-3.5 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#9eafff] focus:outline-none focus:ring-2 focus:ring-[#9eafff]/20 transition-all"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+                        Rangkuman / Catatan Materi
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={materi.deskripsi}
+                        onChange={(e) => setMateri({ ...materi, deskripsi: e.target.value })}
+                        placeholder="Tuliskan poin-poin materi atau referensi buku yang diajarkan pada sesi ini..."
+                        className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-3.5 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#9eafff] focus:outline-none focus:ring-2 focus:ring-[#9eafff]/20 transition-all resize-none"
+                      />
+                    </div>
                   </div>
 
-                  {selectedFile && uploadedFiles.length < 2 && (
-                    <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-medium text-zinc-50">{selectedFile.name}</p>
-                          <p className="mt-1 text-xs text-zinc-500">{(selectedFile.size / 1024).toFixed(2)} KB</p>
-                        </div>
-                        <button
-                          type="button"
-                          aria-label="Hapus file terpilih"
-                          onClick={() => setSelectedFile(null)}
-                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-50"
-                        >
-                          <span aria-hidden="true">&#10005;</span>
-                        </button>
-                      </div>
-                      <Button className="mt-4 w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]" onClick={handleUploadClick}>
-                        Upload Materi <span aria-hidden="true">&#8594;</span>
-                      </Button>
+                  {/* 2. Tugas & Kuis */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 border-b border-zinc-800 pb-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1b2a54] text-[#9eafff]">
+                        <VisualIcon name="task" className="h-3.5 w-3.5" />
+                      </span>
+                      <h3 className="text-sm font-semibold text-zinc-200">Tugas & Kuis</h3>
                     </div>
-                  )}
 
-                  {uploadedFiles.length > 0 && (
-                    <div className="space-y-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Materi tersimpan</p>
-                      {uploadedFiles.map((file, idx) => (
-                        <div key={file.name + idx} className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
-                              <p className="text-xs font-semibold text-emerald-400">Materi {idx + 1}</p>
-                              <p className="mt-1 truncate text-sm font-medium text-zinc-50">{file.name}</p>
-                              <p className="mt-1 text-xs text-zinc-500">{(file.size / 1024).toFixed(2)} KB</p>
-                            </div>
-                            <button
-                              type="button"
-                              aria-label={`Hapus ${file.name}`}
-                              onClick={() => {
-                                setUploadedFiles((prev) => prev.filter((_, i) => i !== idx));
-                                setUploadError('');
-                              }}
-                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-50"
-                            >
-                              <span aria-hidden="true">&#10005;</span>
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                      {uploadedFiles.length < 2 && (
-                        <p className="text-xs leading-5 text-zinc-500">Anda dapat mengunggah 1 materi lagi.</p>
-                      )}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+                        Tugas / Latihan Siswa
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={tugasKuis.tugas}
+                        onChange={(e) => setTugasKuis({ ...tugasKuis, tugas: e.target.value })}
+                        placeholder="Contoh: Kerjakan soal latihan bab 3 halaman 45 nomor 1 s.d 5..."
+                        className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-3.5 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#9eafff] focus:outline-none focus:ring-2 focus:ring-[#9eafff]/20 transition-all resize-none"
+                      />
                     </div>
-                  )}
-                </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+                        Kuis / Evaluasi Harian
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={tugasKuis.kuis}
+                        onChange={(e) => setTugasKuis({ ...tugasKuis, kuis: e.target.value })}
+                        placeholder="Contoh: Kuis 3 butir soal pemahaman konsep di akhir sesi..."
+                        className="w-full rounded-xl border border-zinc-700 bg-zinc-950/80 px-3.5 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#9eafff] focus:outline-none focus:ring-2 focus:ring-[#9eafff]/20 transition-all resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]"
+                  >
+                    Simpan Materi & Tugas <span aria-hidden="true">&#8594;</span>
+                  </Button>
+                </form>
               </section>
             </aside>
           </div>
@@ -556,17 +543,6 @@ const DetailSesi = () => {
         title="Mulai Sesi Mengajar"
         message={`Apakah Anda yakin ingin memulai sesi ${schedule?.mataPelajaran} untuk kelas ${schedule?.kelas}?`}
         confirmText="Ya, Mulai Sesi"
-        cancelText="Batal"
-        type="info"
-      />
-
-      <ConfirmDialog
-        isOpen={showUploadConfirm}
-        onClose={() => setShowUploadConfirm(false)}
-        onConfirm={handleConfirmUpload}
-        title="Upload Materi Pembelajaran"
-        message={`Apakah Anda yakin ingin mengupload file "${selectedFile?.name}"?`}
-        confirmText="Ya, Upload"
         cancelText="Batal"
         type="info"
       />

@@ -42,7 +42,7 @@ Aplikasi web presensi digital modern berbasis **React.js** dan **Tailwind CSS** 
 ### 3. 👨‍🏫 Fitur Guru
 - **Dashboard Guru**: Ringkasan jadwal mengajar hari ini dan status sesi kelas yang diampu.
 - **Jadwal Mengajar**: Informasi lengkap jadwal mengajar harian dan mingguan.
-- **Input Presensi Sesi**: Form pencatatan kehadiran siswa per sesi pelajaran secara *real-time* (Hadir, Sakit, Izin, Alpa, dan catatan guru).
+- **Input Presensi & Sesi Pembelajaran**: Form pencatatan kehadiran siswa per sesi pelajaran secara *real-time* (Hadir, Sakit, Izin, Alpa), input materi pembelajaran yang diajarkan, serta pencatatan tugas dan kuis siswa.
 - **Riwayat Mengajar**: Log riwayat sesi presensi yang telah dicatat sebelumnya.
 
 ### 4. 👨‍🎓 Fitur Siswa

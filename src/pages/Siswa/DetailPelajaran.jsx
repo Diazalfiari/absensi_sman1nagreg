@@ -22,10 +22,16 @@ const DetailPelajaran = () => {
 
   if (!jadwal) return null;
 
-  // Mock data untuk detail pelajaran
+  // Data output materi dan tugas/kuis yang sinkron dengan detail sesi guru
   const detailPelajaran = {
-    materi: "Hari ini kita akan membahas tentang Pengenalan React JS, mulai dari struktur dasar, komponen, state, dan props. Pastikan kalian memahami konsep Virtual DOM karena itu yang membuat React sangat cepat. Jangan lupa untuk membaca dokumentasi resmi jika ada yang belum jelas.",
-    tugas: "Buatlah sebuah komponen React sederhana yang merender sebuah tombol. Ketika tombol diklik, warnanya harus berubah. Silakan kumpulkan link repositori GitHub kalian paling lambat tanggal 15 Desember 2025."
+    materi: {
+      topik: jadwal.sesi || (jadwal.mataPelajaran ? `${jadwal.mataPelajaran} - Bab ${jadwal.kelas}` : "Konsep Dasar & Penerapan Materi"),
+      deskripsi: "Pembahasan mendalam materi pada sesi ini meliputi konsep dasar, formula/teori inti, contoh analisis soal, dan implementasi aplikatif. Siswa diharapkan mempelajari seluruh ringkasan ini untuk menunjang pengerjaan latihan dan kuis di kelas."
+    },
+    tugasKuis: {
+      tugas: "Kerjakan latihan soal bab 3 halaman 45 nomor 1 s.d. 5 di buku tugas matematika. Foto dan kumpulkan hasil pengerjaan atau serahkan pada pertemuan kelas berikutnya.",
+      kuis: "Kuis evaluasi harian sebanyak 3 butir soal pemahaman konsep di akhir sesi pelajaran untuk mengukur tingkat pemahaman materi."
+    }
   };
 
   const tanggal = location.state?.tanggal || 'Senin, 1 Desember 2025';
@@ -72,12 +78,13 @@ const DetailPelajaran = () => {
               </div>
               <div className="mt-9 border-t border-white/10 pt-5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Topik sesi</p>
-                <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{jadwal.sesi}</p>
+                <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{detailPelajaran.materi.topik}</p>
               </div>
             </div>
           </section>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
+            {/* Bagian Materi Pembelajaran (Topik & Rangkuman) */}
             <section className="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-[0_16px_45px_rgba(15,23,42,0.06)] sm:p-7">
               <div className="flex items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
                 <div>
@@ -88,17 +95,34 @@ const DetailPelajaran = () => {
                   <VisualIcon name="book" className="h-4 w-4" />
                 </span>
               </div>
-              <article className="mt-6 rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5 sm:p-6">
-                <p className="text-base leading-8 text-zinc-300">{detailPelajaran.materi}</p>
-              </article>
+
+              <div className="mt-6 space-y-4">
+                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5 sm:p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#9eafff]">Topik / Judul Materi</p>
+                  <h3 className="mt-2 font-display text-lg font-bold text-zinc-50 sm:text-xl">
+                    {detailPelajaran.materi.topik}
+                  </h3>
+                  
+                  <div className="mt-4 border-t border-zinc-800/80 pt-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-400">Rangkuman / Catatan Guru</p>
+                    <p className="mt-2 text-sm leading-7 text-zinc-300 sm:text-base sm:leading-8">
+                      {detailPelajaran.materi.deskripsi}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <div className="mt-5 flex items-start gap-3 rounded-2xl border border-[#5269b5]/30 bg-[#1b2a54]/60 p-4">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#9eafff]/15 text-[#aebcff]" aria-hidden="true">
                   <VisualIcon name="info" className="h-3.5 w-3.5" />
                 </span>
-                <p className="text-sm leading-6 text-[#c5cfe0]">Baca materi ini sebelum sesi dimulai agar diskusi di kelas lebih mudah diikuti.</p>
+                <p className="text-sm leading-6 text-[#c5cfe0]">
+                  Baca materi ini dengan seksama untuk memperkuat pemahaman sebelum mengerjakan tugas dan kuis.
+                </p>
               </div>
             </section>
 
+            {/* Bagian Tugas & Kuis Siswa */}
             <section className="rounded-3xl border border-[#30457f] bg-[#eaf0ff] p-5 text-[#172654] shadow-[0_16px_45px_rgba(41,67,143,0.08)] dark:bg-[#152143] dark:text-[#eef2ff] sm:p-7">
               <div className="flex items-end justify-between gap-4 border-b border-[#c8d4f4] pb-5 dark:border-[#30457f]">
                 <div>
@@ -109,12 +133,37 @@ const DetailPelajaran = () => {
                   <VisualIcon name="task" className="h-4 w-4" />
                 </span>
               </div>
-              <article className="mt-6 rounded-2xl border border-[#c8d4f4] bg-white/60 p-5 dark:border-[#30457f] dark:bg-[#111b3c]/70 sm:p-6">
-                <p className="text-base leading-8 text-[#52628e] dark:text-[#d8deff]">{detailPelajaran.tugas}</p>
-              </article>
-              <div className="mt-5 rounded-2xl border border-[#c8d4f4] bg-white/40 p-4 dark:border-[#30457f] dark:bg-[#1b2a54]/60">
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#52628e] dark:text-[#aebcff]">Catatan pengumpulan</p>
-                <p className="mt-2 text-sm leading-6 text-[#52628e] dark:text-[#c5cfe0]">Periksa kembali instruksi dan tenggat sebelum mengumpulkan tugas.</p>
+
+              <div className="mt-6 space-y-4">
+                {/* Kartu Tugas Siswa */}
+                <article className="rounded-2xl border border-[#c8d4f4] bg-white/80 p-5 shadow-sm dark:border-[#30457f] dark:bg-[#111b3c]/80 sm:p-6">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#29438f]/15 text-[#29438f] dark:bg-[#9eafff]/20 dark:text-[#aebcff]">
+                      <VisualIcon name="task" className="h-3.5 w-3.5" />
+                    </span>
+                    <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[#29438f] dark:text-[#9eafff]">
+                      Tugas / Latihan Siswa
+                    </h3>
+                  </div>
+                  <p className="mt-3 text-sm leading-7 text-[#2e3e68] dark:text-[#d8deff] sm:text-base">
+                    {detailPelajaran.tugasKuis.tugas}
+                  </p>
+                </article>
+
+                {/* Kartu Kuis / Evaluasi Harian */}
+                <article className="rounded-2xl border border-[#c8d4f4] bg-white/80 p-5 shadow-sm dark:border-[#30457f] dark:bg-[#111b3c]/80 sm:p-6">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#e5ba4b]/20 text-[#8c6d17] dark:bg-[#e5ba4b]/20 dark:text-[#f0cb69]">
+                      <VisualIcon name="question" className="h-3.5 w-3.5" />
+                    </span>
+                    <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[#8c6d17] dark:text-[#f0cb69]">
+                      Kuis / Evaluasi Harian
+                    </h3>
+                  </div>
+                  <p className="mt-3 text-sm leading-7 text-[#2e3e68] dark:text-[#d8deff] sm:text-base">
+                    {detailPelajaran.tugasKuis.kuis}
+                  </p>
+                </article>
               </div>
             </section>
           </div>
@@ -152,7 +201,7 @@ const DetailPelajaran = () => {
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
                   <VisualIcon name="task" className="h-4 w-4" />
                 </span>
-                <p className="mt-5 font-semibold text-zinc-50">Kerjakan tugas</p>
+                <p className="mt-5 font-semibold text-zinc-50">Kerjakan tugas & kuis</p>
                 <p className="mt-2 text-sm leading-6 text-zinc-500">Ikuti instruksi tugas dan perhatikan tenggat pengumpulan.</p>
               </div>
             </div>
