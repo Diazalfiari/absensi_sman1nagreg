@@ -234,3 +234,19 @@ textarea:-webkit-autofill:focus {
 .animate-slideDown {
   animation: slideDown 0.3s ease-out;
 }
+
+/* Sidebar Collapse Responsive Transition Rules */
+@media (min-width: 1024px) {
+  main.lg\:ml-72,
+  main[class*="lg:ml-72"],
+  .lg\:ml-72 {
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  html.sidebar-collapsed main.lg\:ml-72,
+  html.sidebar-collapsed main[class*="lg:ml-72"],
+  html.sidebar-collapsed .lg\:ml-72 {
+    margin-left: 5rem !important; /* 80px */
+  }
+}
+

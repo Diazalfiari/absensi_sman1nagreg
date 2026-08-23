@@ -13,13 +13,20 @@ export const formatTime = (date) => {
   return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 };
 
+// Fungsi untuk format tanggal YYYY-MM-DD lokal
+export const formatDateLocal = (date) => {
+  if (!date) return '';
+  const d = date instanceof Date ? date : new Date(date);
+  if (isNaN(d.getTime())) return '';
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 // Fungsi untuk mendapatkan tanggal hari ini
 export const getTodayDate = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return formatDateLocal(new Date());
 };
 
 // Fungsi untuk mendapatkan nama hari
@@ -70,7 +77,10 @@ export const isAuthenticated = () => getFromLocalStorage(CURRENT_USER_KEY) !== n
 
 export const getCurrentUser = () => getFromLocalStorage(CURRENT_USER_KEY);
 
-export const logout = () => removeFromLocalStorage(CURRENT_USER_KEY);
+export const logout = () => {
+  removeFromLocalStorage(CURRENT_USER_KEY);
+  removeFromLocalStorage('authToken');
+};
 
 // Fungsi untuk filter data berdasarkan kelas dan tanggal
 export const filterData = (data, kelas, startDate, endDate) => {

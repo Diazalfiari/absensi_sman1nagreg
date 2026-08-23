@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
-import { rekapitulasiKelas } from '../../data/mockData';
-import { getCurrentUser, calculatePercentage } from '../../utils/helpers';
+import { dashboardService } from '../../services/dashboardService';
+import { getCurrentUser } from '../../utils/helpers';
 import Button from '../../components/common/Button';
 import VisualIcon from '../../components/common/VisualIcon';
 import Footer from '../../components/common/Footer';
@@ -42,56 +42,74 @@ const MetricCard = ({ title, value, note, icon, accent }) => (
   </article>
 );
 
-const ClassRow = ({ item, attention = false }) => (
-  <div className="flex items-center justify-between gap-4 border-b border-zinc-800/70 py-4 last:border-b-0">
-    <div className="min-w-0">
-      <p className="truncate text-sm font-semibold text-zinc-50">Kelas {item.kelas}</p>
-      <p className="mt-1 text-xs text-zinc-500">{item.hadir} hadir dari {item.total} catatan</p>
-    </div>
-    <div className="flex shrink-0 items-center gap-3">
-      <div className="hidden h-1.5 w-20 overflow-hidden rounded-full bg-zinc-800 sm:block" aria-hidden="true">
-        <div
-          className={`h-full rounded-full ${attention ? 'bg-amber-500' : 'bg-[#29438f] dark:bg-[#9eafff]'}`}
-          style={{ width: `${item.percentage}%` }}
-        />
+const ClassRow = ({ item, attention = false }) => {
+  const hasData = item.total > 0;
+  return (
+    <div className="flex items-center justify-between gap-4 border-b border-zinc-800/70 py-4 last:border-b-0">
+      <div className="min-w-0">
+        <p className="truncate text-sm font-semibold text-zinc-50">Kelas {item.kelas}</p>
+        <p className="mt-1 text-xs text-zinc-500">
+          {hasData ? `${item.hadir} hadir dari ${item.total} catatan presensi` : 'Belum ada catatan presensi'}
+        </p>
       </div>
-      <span className={`min-w-[3.5rem] text-right text-sm font-semibold ${attention ? 'text-amber-600 dark:text-amber-300' : 'text-[#29438f] dark:text-[#aebcff]'}`}>
-        {item.percentage}%
-      </span>
+      <div className="flex shrink-0 items-center gap-3">
+        {hasData ? (
+          <>
+            <div className="hidden h-1.5 w-20 overflow-hidden rounded-full bg-zinc-800 sm:block" aria-hidden="true">
+              <div
+                className={`h-full rounded-full ${attention ? 'bg-amber-500' : 'bg-[#29438f] dark:bg-[#9eafff]'}`}
+                style={{ width: `${item.percentage}%` }}
+              />
+            </div>
+            <span className={`min-w-[3.5rem] text-right text-sm font-semibold ${attention ? 'text-amber-600 dark:text-amber-300' : 'text-[#29438f] dark:text-[#aebcff]'}`}>
+              {item.percentage}%
+            </span>
+          </>
+        ) : (
+          <span className="rounded-full border border-zinc-800 bg-zinc-950 px-2.5 py-0.5 text-xs text-zinc-500">
+            0% (Belum ada data)
+          </span>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const currentUser = getCurrentUser();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!currentUser || currentUser.role !== 'admin') {
+    const user = getCurrentUser();
+    if (!user || user.role !== 'admin') {
       navigate('/login');
+      return;
     }
-  }, [currentUser, navigate]);
+    setCurrentUser(user);
 
-  const totalStats = rekapitulasiKelas.reduce(
-    (acc, item) => ({
-      total: acc.total + item.total,
-      hadir: acc.hadir + item.hadir,
-      izin: acc.izin + item.izin,
-      sakit: acc.sakit + item.sakit,
-      alpa: acc.alpa + item.alpa,
-    }),
-    { total: 0, hadir: 0, izin: 0, sakit: 0, alpa: 0 }
-  );
+    const fetchDashboard = async () => {
+      try {
+        setLoading(true);
+        const data = await dashboardService.getAdminDashboard();
+        setDashboardData(data);
+      } catch (err) {
+        console.error('Gagal mengambil data dashboard admin:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const persentaseKehadiran = calculatePercentage(totalStats.hadir, totalStats.total);
-  const classPerformance = rekapitulasiKelas
-    .map((item) => ({
-      ...item,
-      percentage: Number(calculatePercentage(item.hadir, item.total)),
-    }))
-    .sort((a, b) => b.percentage - a.percentage);
-  const leadingClasses = classPerformance.slice(0, 4);
-  const attentionClasses = [...classPerformance].sort((a, b) => a.percentage - b.percentage).slice(0, 4);
+    fetchDashboard();
+  }, [navigate]);
+
+  const totalStats = dashboardData?.stats || { total: 0, hadir: 0, izin: 0, sakit: 0, alpa: 0 };
+  const persentaseKehadiran = dashboardData?.persentaseKehadiran ?? 100;
+  const totalKelas = dashboardData?.totalKelas ?? 36;
+  const leadingClasses = dashboardData?.leadingClasses || [];
+  const attentionClasses = dashboardData?.attentionClasses || [];
+
   const today = new Date().toLocaleDateString('id-ID', {
     weekday: 'long',
     day: 'numeric',
@@ -139,7 +157,7 @@ const AdminDashboard = () => {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-[#c8d4f4] bg-white/60 p-4 dark:border-[#30457f] dark:bg-[#101a35]/60">
-                  <p className="text-2xl font-semibold tracking-tight">{rekapitulasiKelas.length}</p>
+                  <p className="text-2xl font-semibold tracking-tight">{totalKelas}</p>
                   <p className="mt-1 text-xs leading-5 text-[#52628e] dark:text-[#b4bfdf]">Kelas terpantau</p>
                 </div>
                 <div className="rounded-2xl border border-[#c8d4f4] bg-white/60 p-4 dark:border-[#30457f] dark:bg-[#101a35]/60">
@@ -194,10 +212,16 @@ const AdminDashboard = () => {
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#29438f] dark:text-[#9eafff]">Performa kelas</p>
                   <h2 className="mt-3 text-xl font-semibold text-zinc-50">Kehadiran tertinggi</h2>
                 </div>
-                <span className="text-xs text-zinc-500">4 kelas</span>
+                <span className="text-xs text-zinc-500">{leadingClasses.length} kelas terdata</span>
               </div>
               <div className="mt-3">
-                {leadingClasses.map((item) => <ClassRow key={item.id} item={item} />)}
+                {loading ? (
+                  <p className="py-6 text-center text-xs text-zinc-500">Memuat performa kelas...</p>
+                ) : leadingClasses.length > 0 ? (
+                  leadingClasses.map((item) => <ClassRow key={item.id} item={item} />)
+                ) : (
+                  <p className="py-6 text-center text-xs text-zinc-500">Belum ada kelas dengan catatan presensi tersimpan.</p>
+                )}
               </div>
             </div>
 
@@ -205,12 +229,18 @@ const AdminDashboard = () => {
               <div className="flex items-start justify-between gap-6">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-600 dark:text-amber-300">Perlu perhatian</p>
-                  <h2 className="mt-3 text-xl font-semibold text-zinc-50">Kehadiran terendah</h2>
+                  <h2 className="mt-3 text-xl font-semibold text-zinc-50">Tingkat kehadiran rendah</h2>
                 </div>
-                <span className="text-xs text-zinc-500">4 kelas</span>
+                <span className="text-xs text-zinc-500">{attentionClasses.length} kelas</span>
               </div>
               <div className="mt-3">
-                {attentionClasses.map((item) => <ClassRow key={item.id} item={item} attention />)}
+                {loading ? (
+                  <p className="py-6 text-center text-xs text-zinc-500">Memuat data perhatian...</p>
+                ) : attentionClasses.length > 0 ? (
+                  attentionClasses.map((item) => <ClassRow key={item.id} item={item} attention />)
+                ) : (
+                  <p className="py-6 text-center text-xs text-zinc-500">Semua rombel aktif berjalan optimal (tidak ada kelas yang memerlukan perhatian khusus).</p>
+                )}
               </div>
             </div>
           </section>

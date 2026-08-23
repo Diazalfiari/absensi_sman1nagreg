@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { users } from '../data/mockData';
-import { saveToLocalStorage } from '../utils/helpers';
+import { authService } from '../services/authService';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
 import logoSmansan from '../assets/images/logosmansan.png';
@@ -18,38 +17,39 @@ const Login = () => {
     setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
-    if (!formData.username || !formData.password) {
+    if (!formData.username.trim() || !formData.password) {
       setError('Username dan password tidak boleh kosong');
-      setLoading(false);
       return;
     }
 
-    setTimeout(() => {
-      const user = users.find(
-        (u) => u.username === formData.username && u.password === formData.password
-      );
+    setLoading(true);
 
-      if (user) {
-        const sessionUser = { ...user };
-        delete sessionUser.password;
-        saveToLocalStorage('currentUser', sessionUser);
-        setLoading(false);
-        switch (user.role) {
-          case 'admin': navigate('/admin'); break;
-          case 'guru': navigate('/guru'); break;
-          case 'siswa': navigate('/siswa'); break;
-          default: navigate('/');
-        }
-      } else {
-        setError('Username atau password salah');
-        setLoading(false);
+    try {
+      const data = await authService.login(formData.username.trim(), formData.password);
+      const user = data.user;
+
+      switch (user.role) {
+        case 'admin':
+          navigate('/admin');
+          break;
+        case 'guru':
+          navigate('/guru');
+          break;
+        case 'siswa':
+          navigate('/siswa');
+          break;
+        default:
+          navigate('/');
       }
-    }, 1000);
+    } catch (err) {
+      setError(err.message || 'Gagal masuk. Periksa username dan password Anda.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

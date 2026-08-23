@@ -1,21 +1,35 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
 import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser, formatDate, getDayName } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
+import { dashboardService } from '../../services/dashboardService';
 
 const GuruDashboard = () => {
   const navigate = useNavigate();
-  const currentUser = getCurrentUser();
+  const [currentUser, setCurrentUser] = useState(null);
   const today = new Date();
 
   useEffect(() => {
-    if (!currentUser || currentUser.role !== 'guru') {
+    const user = getCurrentUser();
+    if (!user || user.role !== 'guru') {
       navigate('/login');
+      return;
     }
-  }, [currentUser, navigate]);
+    setCurrentUser(user);
+
+    const fetchDashboard = async () => {
+      try {
+        await dashboardService.getGuruDashboard();
+      } catch (err) {
+        console.error('Gagal mengambil data dashboard guru:', err);
+      }
+    };
+
+    fetchDashboard();
+  }, [navigate]);
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-zinc-950 text-zinc-50 selection:bg-[#29438f]/30">

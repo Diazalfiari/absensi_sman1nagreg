@@ -2,36 +2,36 @@ import React, { useState, useMemo } from 'react';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 
-const EditWaliKelasModal = ({ isOpen, onClose, onSave, allTeachers, currentWaliKelas }) => {
+const EditWaliKelasModal = ({ isOpen, onClose, onSave, allTeachers, currentWaliKelasId, currentWaliKelasName }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTeacherName, setSelectedTeacherName] = useState(currentWaliKelas || '');
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
 
   // Filter teachers based on search query
   const filteredTeachers = useMemo(() => {
     if (!allTeachers) return [];
     
     // Sort all teachers by name
-    let sorted = [...allTeachers].sort((a, b) => a.nama.localeCompare(b.nama));
+    let sorted = [...allTeachers].sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
     
     if (!searchQuery.trim()) return sorted;
     
     const query = searchQuery.toLowerCase();
     return sorted.filter(t => 
-      t.nama.toLowerCase().includes(query) || 
+      (t.nama && t.nama.toLowerCase().includes(query)) || 
       (t.nip && t.nip.toLowerCase().includes(query))
     );
   }, [allTeachers, searchQuery]);
 
   const handleSave = () => {
-    if (selectedTeacherName !== currentWaliKelas) {
-      onSave(selectedTeacherName);
+    if (selectedTeacher) {
+      onSave(selectedTeacher);
     }
     onClose();
   };
 
   const handleClose = () => {
     setSearchQuery('');
-    setSelectedTeacherName(currentWaliKelas || '');
+    setSelectedTeacher(null);
     onClose();
   };
 
@@ -58,12 +58,12 @@ const EditWaliKelasModal = ({ isOpen, onClose, onSave, allTeachers, currentWaliK
           <div className="bg-zinc-950 border border-zinc-800 rounded-lg max-h-60 overflow-y-auto p-2 space-y-1 custom-scrollbar">
             {filteredTeachers.length > 0 ? (
               filteredTeachers.map(teacher => {
-                const isSelected = selectedTeacherName === teacher.nama;
+                const isSelected = selectedTeacher?.id === teacher.id || (!selectedTeacher && (teacher.id === currentWaliKelasId || teacher.nama === currentWaliKelasName));
                 
                 return (
                   <div 
                     key={teacher.id}
-                    onClick={() => setSelectedTeacherName(teacher.nama)}
+                    onClick={() => setSelectedTeacher(teacher)}
                     className={`flex items-center justify-between p-3 rounded-md transition-colors cursor-pointer border ${
                       isSelected 
                         ? 'bg-primary-500/10 border-primary-500/30' 
@@ -72,7 +72,7 @@ const EditWaliKelasModal = ({ isOpen, onClose, onSave, allTeachers, currentWaliK
                   >
                     <div>
                       <div className="font-medium text-zinc-200 text-sm">{teacher.nama}</div>
-                      <div className="text-xs text-zinc-500 mt-0.5">{teacher.nip || '-'}</div>
+                      <div className="text-xs text-zinc-500 mt-0.5">{teacher.nip ? `NIP: ${teacher.nip}` : 'Guru Pengampu'}</div>
                     </div>
                     <div className="text-xs">
                       {isSelected && (
@@ -98,7 +98,7 @@ const EditWaliKelasModal = ({ isOpen, onClose, onSave, allTeachers, currentWaliK
             type="button" 
             variant="primary" 
             onClick={handleSave}
-            disabled={!selectedTeacherName || selectedTeacherName === currentWaliKelas}
+            disabled={!selectedTeacher || selectedTeacher.id === currentWaliKelasId || selectedTeacher.nama === currentWaliKelasName}
           >
             Simpan Wali Kelas
           </Button>

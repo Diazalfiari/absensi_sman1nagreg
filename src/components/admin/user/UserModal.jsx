@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../../common/Modal';
 import UserForm from './UserForm';
 import UserImport from './UserImport';
+import { kelasService } from '../../../services/kelasService';
 
 const ADD_METHODS = [
   { id: 'manual', label: '✏️ Manual' },
@@ -12,39 +13,55 @@ const ADD_METHODS = [
 /**
  * UserModal
  * Modal tambah pengguna baru dengan 3 metode:
- *   - Manual (form)
- *   - Import CSV / Excel
- *   - Copy-Paste dari Excel
- *
- * Props:
- *   isOpen       - boolean
- *   role         - 'siswa' | 'guru'
- *   onClose      - () => void
- *   onSaveManual - (user: object) => void
- *   onSaveBulk   - (users: object[]) => void
+ *   - Manual (form dengan dropdown kelas real dari database)
+ *   - Import file Spreadsheet Excel / CSV
+ *   - Copy-Paste dari baris Excel
  */
 const UserModal = ({ isOpen, role, onClose, onSaveManual, onSaveBulk }) => {
   const [addMethod, setAddMethod] = useState('manual');
   const [newUser, setNewUser] = useState({});
+  const [classList, setClassList] = useState([]);
 
   const labelForRole = role === 'siswa' ? 'Siswa' : 'Guru';
 
+  // Fetch daftar kelas dari database untuk dropdown
+  useEffect(() => {
+    if (isOpen && role === 'siswa') {
+      const loadClasses = async () => {
+        try {
+          const classes = await kelasService.getAllClasses();
+          setClassList(classes);
+        } catch (err) {
+          console.error('Gagal memuat daftar kelas untuk dropdown:', err);
+        }
+      };
+      loadClasses();
+    }
+  }, [isOpen, role]);
+
   const handleMethodChange = (id) => {
     setAddMethod(id);
-    setNewUser({});
   };
 
   const handleManualChange = (e) =>
     setNewUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSaveManual = (e) => {
+  const handleSaveManual = async (e) => {
     e.preventDefault();
-    onSaveManual({ ...newUser, role });
-    setNewUser({});
+    try {
+      await onSaveManual({ ...newUser, role });
+      setNewUser({}); // Reset input HANYA saat request berhasil!
+    } catch (err) {
+      // Biarkan newUser tetap utuh saat gagal agar inputan pengguna tidak hilang
+    }
   };
 
-  const handleSaveBulk = (users) => {
-    onSaveBulk(users);
+  const handleSaveBulk = async (users) => {
+    try {
+      await onSaveBulk(users);
+    } catch (err) {
+      // Biarkan data tetap utuh saat gagal
+    }
   };
 
   // Reset state saat modal ditutup
@@ -66,7 +83,7 @@ const UserModal = ({ isOpen, role, onClose, onSaveManual, onSaveBulk }) => {
               onClick={() => handleMethodChange(m.id)}
               className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
                 addMethod === m.id
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-primary-600 text-white shadow'
                   : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800'
               }`}
             >
@@ -81,6 +98,7 @@ const UserModal = ({ isOpen, role, onClose, onSaveManual, onSaveBulk }) => {
         <UserForm
           role={role}
           user={newUser}
+          classList={classList}
           onChange={handleManualChange}
           onSubmit={handleSaveManual}
           onCancel={handleClose}

@@ -1,6 +1,8 @@
 import React from 'react';
 
 const ClassCard = ({ kelas, jumlahSiswa, waliKelas, onClick }) => {
+  const isGrade12 = (kelas || '').startsWith('XII-');
+
   return (
     <button
       type="button"
@@ -9,13 +11,31 @@ const ClassCard = ({ kelas, jumlahSiswa, waliKelas, onClick }) => {
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Ruang kelas</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Ruang kelas</p>
+            {isGrade12 ? (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+                🏆 Calon Alumni
+              </span>
+            ) : (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary-500/10 text-primary-400 border border-primary-500/20 font-semibold">
+                🎓 Kenaikan Kelas
+              </span>
+            )}
+          </div>
           <h3 className="mt-2 font-display text-3xl font-semibold tracking-[-0.05em] text-zinc-50 transition-colors group-hover:text-[#29438f] dark:group-hover:text-[#aebcff]">
             {kelas}
           </h3>
         </div>
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#c8d4f4] bg-[#eaf0ff] text-xs font-bold text-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#aebcff]" aria-hidden="true">
-          K
+        <span
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border text-xs font-bold ${
+            isGrade12
+              ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+              : 'border-[#c8d4f4] bg-[#eaf0ff] text-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#aebcff]'
+          }`}
+          aria-hidden="true"
+        >
+          {isGrade12 ? 'XII' : 'K'}
         </span>
       </div>
 
@@ -33,7 +53,9 @@ const ClassCard = ({ kelas, jumlahSiswa, waliKelas, onClick }) => {
       </div>
 
       <div className="mt-auto flex items-center justify-between border-t border-zinc-800/80 pt-4">
-        <span className="text-xs font-medium text-zinc-500">Buka pengelolaan kelas</span>
+        <span className="text-xs font-medium text-zinc-500">
+          {isGrade12 ? 'Kelola kelulusan & siswa' : 'Kelola kenaikan & siswa'}
+        </span>
         <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#29438f] transition-transform group-hover:translate-x-1 dark:text-[#aebcff]">
           Detail <span aria-hidden="true">&#8594;</span>
         </span>

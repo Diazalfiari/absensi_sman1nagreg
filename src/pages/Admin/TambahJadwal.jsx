@@ -1,24 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import Notification from '../../components/common/Notification';
 import Footer from '../../components/common/Footer';
+import { kelasService } from '../../services/kelasService';
+import { userService } from '../../services/userService';
+import { jadwalService } from '../../services/jadwalService';
+
+const DAY_NAMES_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
 const TambahJadwal = () => {
   const [formData, setFormData] = useState({
-    mataPelajaran: '',
-    kelas: '',
-    jamMulai: '',
-    jamSelesai: '',
-    guru: '',
+    mapelId: '',
+    kelasId: '',
+    teacherId: '',
+    jamMulai: '07:30',
+    jamSelesai: '09:00',
+    ruang: '',
   });
 
   const [selectedDates, setSelectedDates] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [errors, setErrors] = useState({});
   const [showConfirm, setShowConfirm] = useState(false);
+  const [loadingSave, setLoadingSave] = useState(false);
   const [notification, setNotification] = useState({ isOpen: false, type: 'success', title: '', message: '' });
+
+  // Auxiliary data from MySQL
+  const [classesList, setClassesList] = useState([]);
+  const [subjectsList, setSubjectsList] = useState([]);
+  const [teachersList, setTeachersList] = useState([]);
+
+  const loadData = useCallback(async () => {
+    try {
+      const [clsData, subData, tchData] = await Promise.all([
+        kelasService.getAllClasses(),
+        jadwalService.getAllSubjects(),
+        userService.getUsers({ role: 'guru', limit: 200 }),
+      ]);
+      setClassesList(clsData || []);
+      setSubjectsList(subData || []);
+      setTeachersList(tchData.data || []);
+    } catch (err) {
+      console.error('Gagal memuat data pendukung jadwal:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   // Generate calendar days
   const getDaysInMonth = (date) => {
@@ -30,17 +61,12 @@ const TambahJadwal = () => {
     const startingDayOfWeek = firstDay.getDay();
 
     const days = [];
-    
-    // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
-    
-    // Add actual days
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
-    
     return days;
   };
 
@@ -59,7 +85,6 @@ const TambahJadwal = () => {
 
   const toggleDate = (date) => {
     if (!date) return;
-    
     if (isDateSelected(date)) {
       setSelectedDates(selectedDates.filter(
         (selectedDate) => selectedDate.toDateString() !== date.toDateString()
@@ -80,8 +105,6 @@ const TambahJadwal = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
-    // Clear error for this field when user types
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
     }
@@ -90,12 +113,16 @@ const TambahJadwal = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.mataPelajaran.trim()) {
-      newErrors.mataPelajaran = 'Nama mata pelajaran harus diisi';
+    if (!formData.mapelId) {
+      newErrors.mapelId = 'Mata pelajaran wajib dipilih';
     }
 
-    if (!formData.kelas) {
-      newErrors.kelas = 'Kelas harus dipilih';
+    if (!formData.kelasId) {
+      newErrors.kelasId = 'Kelas wajib dipilih';
+    }
+
+    if (!formData.teacherId) {
+      newErrors.teacherId = 'Guru pengampu wajib dipilih';
     }
 
     if (!formData.jamMulai) {
@@ -110,12 +137,8 @@ const TambahJadwal = () => {
       newErrors.jamSelesai = 'Jam selesai harus lebih besar dari jam mulai';
     }
 
-    if (!formData.guru.trim()) {
-      newErrors.guru = 'Nama guru harus diisi';
-    }
-
     if (selectedDates.length === 0) {
-      newErrors.dates = 'Pilih minimal satu tanggal';
+      newErrors.dates = 'Pilih minimal satu hari / tanggal pertemuan pada kalender';
     }
 
     return newErrors;
@@ -123,49 +146,82 @@ const TambahJadwal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
-    // Show confirmation dialog
     setShowConfirm(true);
   };
 
-  const handleConfirmSave = () => {
-    // Sort dates for better display
-    const sortedDates = [...selectedDates].sort((a, b) => a - b);
-    
-    // Format data untuk submit
-    const jadwalData = {
-      ...formData,
-      tanggal: sortedDates.map(date => date.toISOString().split('T')[0]),
-    };
+  const handleConfirmSave = async () => {
+    try {
+      setLoadingSave(true);
 
-    console.log('Data Jadwal:', jadwalData);
-    console.log('Tanggal yang dipilih:', sortedDates.map(d => d.toLocaleDateString('id-ID')));
-    
-    // Close dialog and reset form
-    setShowConfirm(false);
-    handleReset();
-    
-    setNotification({
-      isOpen: true,
-      type: 'success',
-      title: 'Jadwal Berhasil Ditambahkan!',
-      message: `${sortedDates.length} jadwal pelajaran telah berhasil disimpan.`
-    });
+      const formatDateLocal = (date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      };
+
+      // Kelompokkan tanggal-tanggal terpilih berdasarkan hari
+      const dayGroups = {};
+      for (const date of selectedDates) {
+        const dayName = DAY_NAMES_ID[date.getDay()];
+        if (!dayGroups[dayName]) {
+          dayGroups[dayName] = [];
+        }
+        dayGroups[dayName].push(formatDateLocal(date));
+      }
+
+      const targetClassObj = classesList.find((c) => c.id.toString() === formData.kelasId.toString());
+      const defaultRuang = formData.ruang || (targetClassObj ? `Kelas ${targetClassObj.nama_kelas}` : 'Kelas');
+
+      for (const [hari, dates] of Object.entries(dayGroups)) {
+        await jadwalService.createSchedule({
+          mapelId: formData.mapelId,
+          kelasId: formData.kelasId,
+          teacherId: formData.teacherId,
+          hari,
+          jamMulai: formData.jamMulai,
+          jamSelesai: formData.jamSelesai,
+          ruang: defaultRuang,
+          status: 'Offline',
+          selectedDates: dates,
+          tanggalSpesifik: dates,
+        });
+      }
+
+      setShowConfirm(false);
+      handleReset();
+
+      setNotification({
+        isOpen: true,
+        type: 'success',
+        title: 'Jadwal Berhasil Disimpan!',
+        message: `Jadwal pelajaran telah berhasil disimpan ke database untuk ${selectedDates.length} tanggal pertemuan.`,
+      });
+    } catch (err) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Gagal Menyimpan Jadwal',
+        message: err.message || 'Terjadi kesalahan saat menyimpan jadwal.',
+      });
+    } finally {
+      setLoadingSave(false);
+    }
   };
 
   const handleReset = () => {
     setFormData({
-      mataPelajaran: '',
-      kelas: '',
-      jamMulai: '',
-      jamSelesai: '',
-      guru: '',
+      mapelId: '',
+      kelasId: '',
+      teacherId: '',
+      jamMulai: '07:30',
+      jamSelesai: '09:00',
+      ruang: '',
     });
     setSelectedDates([]);
     setErrors({});
@@ -173,12 +229,10 @@ const TambahJadwal = () => {
 
   const formatSelectedDates = () => {
     if (selectedDates.length === 0) return 'Belum ada tanggal dipilih';
-    
     const sorted = [...selectedDates].sort((a, b) => a - b);
     if (sorted.length <= 3) {
-      return sorted.map(d => d.toLocaleDateString('id-ID')).join(', ');
+      return sorted.map((d) => d.toLocaleDateString('id-ID')).join(', ');
     }
-    
     return `${sorted.length} tanggal dipilih: ${sorted[0].toLocaleDateString('id-ID')} - ${sorted[sorted.length - 1].toLocaleDateString('id-ID')}`;
   };
 
@@ -187,10 +241,10 @@ const TambahJadwal = () => {
       <Sidebar role="admin" />
 
       <main className="px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-12 pb-12 lg:ml-72">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div>
             <h1 className="text-3xl md:text-4xl font-display tracking-tight">Tambah Jadwal Pelajaran</h1>
-            <p className="text-zinc-400 mt-1">Buat jadwal baru dengan seleksi tanggal yang fleksibel</p>
+            <p className="text-zinc-400 mt-1">Buat jadwal baru dengan seleksi tanggal dan hari yang fleksibel langsung ke database MySQL</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -206,18 +260,23 @@ const TambahJadwal = () => {
                       <label className="block text-sm font-medium mb-2 text-zinc-300">
                         Mata Pelajaran <span className="text-red-400">*</span>
                       </label>
-                      <input
-                        type="text"
-                        name="mataPelajaran"
-                        value={formData.mataPelajaran}
+                      <select
+                        name="mapelId"
+                        value={formData.mapelId}
                         onChange={handleChange}
-                        placeholder="Contoh: Matematika"
                         className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                          errors.mataPelajaran ? 'border-red-500' : 'border-zinc-800'
-                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 placeholder-zinc-500`}
-                      />
-                      {errors.mataPelajaran && (
-                        <p className="text-red-400 text-sm mt-1">{errors.mataPelajaran}</p>
+                          errors.mapelId ? 'border-red-500' : 'border-zinc-800'
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 font-medium`}
+                      >
+                        <option value="">Pilih Mata Pelajaran</option>
+                        {subjectsList.map((sub) => (
+                          <option key={sub.id} value={sub.id}>
+                            {sub.nama_mapel} ({sub.kode_mapel})
+                          </option>
+                        ))}
+                      </select>
+                      {errors.mapelId && (
+                        <p className="text-red-400 text-sm mt-1">{errors.mapelId}</p>
                       )}
                     </div>
 
@@ -227,57 +286,51 @@ const TambahJadwal = () => {
                         Kelas <span className="text-red-400">*</span>
                       </label>
                       <select
-                        name="kelas"
-                        value={formData.kelas}
+                        name="kelasId"
+                        value={formData.kelasId}
                         onChange={handleChange}
                         className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                          errors.kelas ? 'border-red-500' : 'border-zinc-800'
-                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-zinc-50`}
+                          errors.kelasId ? 'border-red-500' : 'border-zinc-800'
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 font-medium`}
                       >
-                        <option value="">Pilih Kelas</option>
-                        <option value="X-1">X-1</option>
-                        <option value="X-2">X-2</option>
-                        <option value="X-3">X-3</option>
-                        <option value="X-4">X-4</option>
-                        <option value="X-5">X-5</option>
-                        <option value="X-6">X-6</option>
-                        <option value="X-7">X-7</option>
-                        <option value="X-8">X-8</option>
-                        <option value="X-9">X-9</option>
-                        <option value="X-10">X-10</option>
-                        <option value="X-11">X-11</option>
-                        <option value="X-12">X-12</option>
-                        <option value="XI-1">XI-1</option>
-                        <option value="XI-2">XI-2</option>
-                        <option value="XI-3">XI-3</option>
-                        <option value="XI-4">XI-4</option>
-                        <option value="XI-5">XI-5</option>
-                        <option value="XI-6">XI-6</option>
-                        <option value="XI-7">XI-7</option>
-                        <option value="XI-8">XI-8</option>
-                        <option value="XI-9">XI-9</option>
-                        <option value="XI-10">XI-10</option>
-                        <option value="XI-11">XI-11</option>
-                        <option value="XI-12">XI-12</option>
-                        <option value="XII-1">XII-1</option>
-                        <option value="XII-2">XII-2</option>
-                        <option value="XII-3">XII-3</option>
-                        <option value="XII-4">XII-4</option>
-                        <option value="XII-5">XII-5</option>
-                        <option value="XII-6">XII-6</option>
-                        <option value="XII-7">XII-7</option>
-                        <option value="XII-8">XII-8</option>
-                        <option value="XII-9">XII-9</option>
-                        <option value="XII-10">XII-10</option>
-                        <option value="XII-11">XII-11</option>
-                        <option value="XII-12">XII-12</option>
+                        <option value="">Pilih Kelas Rombel</option>
+                        {classesList.map((cls) => (
+                          <option key={cls.id} value={cls.id}>
+                            Kelas {cls.nama_kelas} (Tingkat {cls.tingkat})
+                          </option>
+                        ))}
                       </select>
-                      {errors.kelas && (
-                        <p className="text-red-400 text-sm mt-1">{errors.kelas}</p>
+                      {errors.kelasId && (
+                        <p className="text-red-400 text-sm mt-1">{errors.kelasId}</p>
                       )}
                     </div>
 
-                    {/* Jam Mulai & Selesai */}
+                    {/* Guru Pengampu */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-zinc-300">
+                        Guru Pengampu <span className="text-red-400">*</span>
+                      </label>
+                      <select
+                        name="teacherId"
+                        value={formData.teacherId}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
+                          errors.teacherId ? 'border-red-500' : 'border-zinc-800'
+                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 font-medium`}
+                      >
+                        <option value="">Pilih Guru Pengampu</option>
+                        {teachersList.map((t) => (
+                          <option key={t.teacher_id || t.id} value={t.teacher_id || t.id}>
+                            {t.nama} {t.nip ? `(NIP: ${t.nip})` : ''}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.teacherId && (
+                        <p className="text-red-400 text-sm mt-1">{errors.teacherId}</p>
+                      )}
+                    </div>
+
+                    {/* Jam Mulai & Jam Selesai */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2 text-zinc-300">
@@ -290,12 +343,13 @@ const TambahJadwal = () => {
                           onChange={handleChange}
                           className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
                             errors.jamMulai ? 'border-red-500' : 'border-zinc-800'
-                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-zinc-50`}
+                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50`}
                         />
                         {errors.jamMulai && (
                           <p className="text-red-400 text-sm mt-1">{errors.jamMulai}</p>
                         )}
                       </div>
+
                       <div>
                         <label className="block text-sm font-medium mb-2 text-zinc-300">
                           Jam Selesai <span className="text-red-400">*</span>
@@ -307,7 +361,7 @@ const TambahJadwal = () => {
                           onChange={handleChange}
                           className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
                             errors.jamSelesai ? 'border-red-500' : 'border-zinc-800'
-                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all dark-select text-zinc-50`}
+                          } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50`}
                         />
                         {errors.jamSelesai && (
                           <p className="text-red-400 text-sm mt-1">{errors.jamSelesai}</p>
@@ -315,147 +369,129 @@ const TambahJadwal = () => {
                       </div>
                     </div>
 
-                    {/* Guru */}
+                    {/* Ruang Kelas / Lab */}
                     <div>
                       <label className="block text-sm font-medium mb-2 text-zinc-300">
-                        Nama Guru <span className="text-red-400">*</span>
+                        Ruang Pembelajaran (Opsional)
                       </label>
                       <input
                         type="text"
-                        name="guru"
-                        value={formData.guru}
+                        name="ruang"
+                        value={formData.ruang}
                         onChange={handleChange}
-                        placeholder="Contoh: Budi Santoso, S.Pd"
-                        className={`w-full px-4 py-3 rounded-xl bg-zinc-950 border ${
-                          errors.guru ? 'border-red-500' : 'border-zinc-800'
-                        } focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 placeholder-zinc-500`}
+                        placeholder="Contoh: Lab Fisika / Ruang Kelas"
+                        className="w-full px-4 py-3 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all text-zinc-50 placeholder-zinc-500"
                       />
-                      {errors.guru && (
-                        <p className="text-red-400 text-sm mt-1">{errors.guru}</p>
-                      )}
                     </div>
                   </div>
                 </div>
-
-                {/* Selected Dates Summary */}
-                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
-                  <h3 className="text-sm font-medium text-zinc-50 mb-2">
-                    Tanggal Terpilih
-                  </h3>
-                  <p className="text-zinc-400 text-sm">
-                    {formatSelectedDates()}
-                  </p>
-                  {errors.dates && (
-                    <p className="text-red-400 text-sm mt-2">{errors.dates}</p>
-                  )}
-                </div>
               </div>
 
-              {/* Right Column - Calendar */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-medium text-zinc-50">Pilih Tanggal</h2>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={handlePrevMonth}
-                      className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 flex items-center justify-center transition-colors text-zinc-50"
-                    >
-                      ‹
-                    </button>
-                    <span className="text-sm font-medium min-w-[140px] text-center text-zinc-50">
-                      {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleNextMonth}
-                      className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 flex items-center justify-center transition-colors text-zinc-50"
-                    >
-                      ›
-                    </button>
+              {/* Right Column - Calendar Selection */}
+              <div className="space-y-6">
+                <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-xl font-medium text-zinc-50">Pilih Tanggal &amp; Hari Pertemuan</h2>
+                      <p className="text-xs text-zinc-400 mt-1">Klik pada kalender untuk menandai hari jadwal</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrevMonth}
+                        className="p-2 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-50 transition-colors border border-zinc-800"
+                      >
+                        ←
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleNextMonth}
+                        className="p-2 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-50 transition-colors border border-zinc-800"
+                      >
+                        →
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                {/* Calendar Grid */}
-                <div className="mb-4">
-                  <div className="grid grid-cols-7 gap-2 mb-2">
+                  <div className="text-center font-semibold mb-4 text-base text-zinc-200">
+                    {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+                  </div>
+
+                  {/* Calendar Grid */}
+                  <div className="grid grid-cols-7 gap-2 mb-4">
                     {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((day) => (
-                      <div key={day} className="text-center text-xs font-medium text-zinc-500 py-2">
+                      <div key={day} className="text-center text-xs font-semibold text-zinc-500 py-2">
                         {day}
                       </div>
                     ))}
-                  </div>
-                  <div className="grid grid-cols-7 gap-2">
-                    {days.map((day, index) => {
-                      const isSelected = isDateSelected(day);
-                      const isPast = day && day < new Date().setHours(0, 0, 0, 0);
-                      
+                    {days.map((date, index) => {
+                      if (!date) {
+                        return <div key={`empty-${index}`} className="aspect-square" />;
+                      }
+
+                      const selected = isDateSelected(date);
+                      const isPast = date < new Date().setHours(0, 0, 0, 0);
+
                       return (
                         <button
-                          key={index}
+                          key={date.toISOString()}
                           type="button"
-                          onClick={() => toggleDate(day)}
-                          disabled={!day || isPast}
-                          className={`
-                            aspect-square rounded-lg text-sm font-medium transition-colors
-                            ${!day ? 'invisible' : ''}
-                            ${isPast ? 'opacity-30 cursor-not-allowed text-zinc-500' : 'cursor-pointer'}
-                            ${
-                              isSelected
-                                ? 'bg-primary-500 text-zinc-50'
-                                : day && !isPast
-                                ? 'bg-zinc-950 hover:bg-zinc-800 text-zinc-300'
-                                : day && isPast
-                                ? 'bg-zinc-950'
-                                : ''
-                            }
-                          `}
+                          onClick={() => toggleDate(date)}
+                          className={`aspect-square rounded-xl flex items-center justify-center text-sm font-semibold transition-all ${
+                            selected
+                              ? 'bg-[#e5ba4b] text-[#172654] font-bold shadow-md shadow-[#e5ba4b]/20 scale-105'
+                              : isPast
+                              ? 'text-zinc-600 hover:bg-zinc-800/40'
+                              : 'text-zinc-300 hover:bg-zinc-800 hover:text-zinc-50'
+                          }`}
                         >
-                          {day ? day.getDate() : ''}
+                          {date.getDate()}
                         </button>
                       );
                     })}
                   </div>
-                </div>
 
-                <div className="border-t border-zinc-800 pt-4 space-y-2 text-xs text-zinc-500">
-                  <p>• Klik tanggal untuk memilih/membatalkan</p>
-                  <p>• Anda bisa memilih beberapa tanggal sekaligus</p>
-                  <p>• Tanggal yang sudah lewat tidak bisa dipilih</p>
+                  {errors.dates && (
+                    <p className="text-red-400 text-sm mb-4">{errors.dates}</p>
+                  )}
+
+                  {/* Selected Dates Summary */}
+                  <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
+                    <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1">
+                      Hari Terpilih
+                    </p>
+                    <p className="text-sm font-medium text-zinc-200">{formatSelectedDates()}</p>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-end border-t border-zinc-800 pt-6">
-              <Button type="button" variant="secondary" onClick={handleReset}>
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 border-t border-zinc-800">
+              <Button type="button" variant="outline" onClick={handleReset} disabled={loadingSave}>
                 Reset Form
               </Button>
-              <Button type="submit">
-                Simpan Jadwal
+              <Button type="submit" variant="primary" disabled={loadingSave} className="!bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]">
+                {loadingSave ? 'Menyimpan...' : 'Simpan Jadwal Pelajaran'}
               </Button>
             </div>
           </form>
-
-          {/* Info Card */}
-          <div className="bg-primary-500/10 border border-primary-500/20 rounded-2xl p-6 mt-6">
-            <h3 className="text-sm font-medium text-zinc-50 mb-3">
-              Panduan Pengisian
-            </h3>
-            <ul className="text-sm text-zinc-400 space-y-2">
-              <li>• <strong className="text-zinc-200">Mata Pelajaran:</strong> Nama mata pelajaran (wajib diisi)</li>
-              <li>• <strong className="text-zinc-200">Kelas:</strong> Pilih kelas yang akan mengikuti pelajaran</li>
-              <li>• <strong className="text-zinc-200">Jam:</strong> Waktu mulai harus lebih awal dari waktu selesai</li>
-              <li>• <strong className="text-zinc-200">Guru:</strong> Nama lengkap guru pengampu</li>
-              <li>• <strong className="text-zinc-200">Tanggal:</strong> Pilih satu atau beberapa tanggal dari kalender</li>
-            </ul>
-          </div>
         </div>
       </main>
 
       <Footer />
 
-      {/* Notification */}
+      <ConfirmDialog
+        isOpen={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={handleConfirmSave}
+        title="Konfirmasi Tambah Jadwal"
+        message={`Apakah Anda yakin ingin menyimpan jadwal pelajaran ini ke database?`}
+        confirmText="Ya, Simpan Jadwal"
+        cancelText="Batal"
+        type="info"
+      />
+
       <Notification
         isOpen={notification.isOpen}
         type={notification.type}
@@ -463,18 +499,6 @@ const TambahJadwal = () => {
         message={notification.message}
         onClose={() => setNotification({ ...notification, isOpen: false })}
         duration={3000}
-      />
-
-      {/* Confirmation Dialog */}
-      <ConfirmDialog
-        isOpen={showConfirm}
-        onClose={() => setShowConfirm(false)}
-        onConfirm={handleConfirmSave}
-        title="Konfirmasi Simpan Jadwal"
-        message={`Apakah Anda yakin ingin menyimpan jadwal mata pelajaran "${formData.mataPelajaran}" untuk kelas ${formData.kelas}?`}
-        confirmText="Ya, Simpan"
-        cancelText="Batal"
-        type="info"
       />
     </div>
   );

@@ -1,22 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser } from '../../utils/helpers';
-import { jadwalPelajaranSiswa } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
+import { jadwalService } from '../../services/jadwalService';
+
+const DAY_NAMES_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
 const JadwalPelajaran = () => {
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [schedulesList, setSchedulesList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'siswa') {
       navigate('/login');
     }
   }, [currentUser, navigate]);
+
+  const fetchStudentSchedules = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await jadwalService.getStudentSchedules();
+      setSchedulesList(data || []);
+    } catch (err) {
+      console.error('Gagal memuat jadwal siswa:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStudentSchedules();
+  }, [fetchStudentSchedules]);
 
   const monthNames = [
     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -46,10 +66,50 @@ const JadwalPelajaran = () => {
     return days;
   };
 
+  const formatDateLocal = (date) => {
+    if (!date) return '';
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
+
   const hasSchedule = (date) => {
-    if (!date) return false;
-    const dateStr = date.toISOString().split('T')[0];
-    return jadwalPelajaranSiswa[dateStr] !== undefined;
+    if (!date || schedulesList.length === 0) return false;
+    const dateStr = formatDateLocal(date);
+    const dayName = DAY_NAMES_ID[date.getDay()];
+
+    return schedulesList.some((s) => {
+      // 1. Jika jadwal memiliki daftar tanggal spesifik
+      if (s.tanggal_spesifik && Array.isArray(s.tanggal_spesifik) && s.tanggal_spesifik.length > 0) {
+        return s.tanggal_spesifik.includes(dateStr);
+      }
+      // 2. Jika jadwal memiliki rentang tanggal mulai & selesai
+      if (s.tanggal_mulai && s.tanggal_selesai) {
+        const mul = typeof s.tanggal_mulai === 'string' ? s.tanggal_mulai.substring(0, 10) : '';
+        const sel = typeof s.tanggal_selesai === 'string' ? s.tanggal_selesai.substring(0, 10) : '';
+        return dateStr >= mul && dateStr <= sel && s.hari === dayName;
+      }
+      return false;
+    });
+  };
+
+  const getScheduleForDate = (date) => {
+    if (!date || schedulesList.length === 0) return [];
+    const dateStr = formatDateLocal(date);
+    const dayName = DAY_NAMES_ID[date.getDay()];
+
+    return schedulesList.filter((s) => {
+      if (s.tanggal_spesifik && Array.isArray(s.tanggal_spesifik) && s.tanggal_spesifik.length > 0) {
+        return s.tanggal_spesifik.includes(dateStr);
+      }
+      if (s.tanggal_mulai && s.tanggal_selesai) {
+        const mul = typeof s.tanggal_mulai === 'string' ? s.tanggal_mulai.substring(0, 10) : '';
+        const sel = typeof s.tanggal_selesai === 'string' ? s.tanggal_selesai.substring(0, 10) : '';
+        return dateStr >= mul && dateStr <= sel && s.hari === dayName;
+      }
+      return false;
+    });
   };
 
   const isToday = (date) => {
@@ -78,13 +138,12 @@ const JadwalPelajaran = () => {
   };
 
   const days = getDaysInMonth(currentMonth);
-  const dateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
-  const selectedSchedule = jadwalPelajaranSiswa[dateStr] || [];
-  const currentMonthKey = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}`;
-  const monthScheduleCount = Object.keys(jadwalPelajaranSiswa).filter((date) => date.startsWith(currentMonthKey)).length;
+  const selectedSchedule = selectedDate ? getScheduleForDate(selectedDate) : [];
   const selectedDateLabel = selectedDate
     ? selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
     : '';
+
+  const daysWithSchedulesCount = days.filter((d) => d && hasSchedule(d)).length;
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-zinc-950 text-zinc-50 selection:bg-[#29438f]/30">
@@ -111,11 +170,11 @@ const JadwalPelajaran = () => {
               <div className="relative mt-8 grid max-w-md grid-cols-2 gap-3 border-t border-white/10 pt-5">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Kelas</p>
-                  <p className="mt-2 text-sm font-medium text-[#edf1ff]">{currentUser?.kelas || '-'}</p>
+                  <p className="mt-2 text-sm font-medium text-[#edf1ff]">{currentUser?.nama_kelas || currentUser?.kelas || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Sesi bulan ini</p>
-                  <p className="mt-2 text-sm font-medium text-[#edf1ff]">{monthScheduleCount} pelajaran</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Hari terjadwal</p>
+                  <p className="mt-2 text-sm font-medium text-[#edf1ff]">{loading ? '...' : `${daysWithSchedulesCount} hari aktif`}</p>
                 </div>
               </div>
             </div>
@@ -178,8 +237,8 @@ const JadwalPelajaran = () => {
 
                 <div className="grid grid-cols-7 gap-2 sm:gap-3">
                   {days.map((day, index) => {
-                    const hasJadwal = hasSchedule(day);
-                    const today = isToday(day);
+                    const hasClass = hasSchedule(day);
+                    const todayDate = isToday(day);
                     const selected = isSelected(day);
 
                     return (
@@ -188,19 +247,19 @@ const JadwalPelajaran = () => {
                         type="button"
                         onClick={() => handleDateClick(day)}
                         disabled={!day}
-                        aria-label={day ? `${day.getDate()} ${monthNames[day.getMonth()]} ${day.getFullYear()}${hasJadwal ? ', ada jadwal pelajaran' : ''}` : undefined}
+                        aria-label={day ? `${day.getDate()} ${monthNames[day.getMonth()]} ${day.getFullYear()}${hasClass ? ', ada jadwal pelajaran' : ''}` : undefined}
                         className={`relative aspect-square min-h-10 rounded-2xl border text-sm font-semibold transition-all duration-200 sm:min-h-14 sm:text-base
                           ${!day ? 'invisible' : 'border-transparent'}
-                          ${day && !selected ? 'cursor-pointer bg-zinc-950/70 text-zinc-500 hover:border-[#5269b5] hover:bg-[#1b2a54] hover:text-zinc-50' : ''}
-                          ${hasJadwal && !selected ? 'border-[#30457f]/70 bg-[#1b2a54] text-[#edf1ff]' : ''}
-                          ${today && !selected ? 'ring-2 ring-emerald-500/80 ring-offset-2 ring-offset-zinc-900' : ''}
+                          ${!hasClass && day ? 'cursor-pointer bg-zinc-950/40 text-zinc-500 hover:bg-zinc-900/60' : ''}
+                          ${hasClass ? 'cursor-pointer border-[#30457f]/70 bg-[#1b2a54] text-[#edf1ff] hover:-translate-y-0.5 hover:border-[#6f83d0] hover:bg-[#26396f]' : ''}
+                          ${todayDate && !selected ? 'ring-2 ring-emerald-500/80 ring-offset-2 ring-offset-zinc-900' : ''}
                           ${selected ? 'border-[#f0cb69] bg-[#e5ba4b] text-[#172654] shadow-[0_8px_22px_rgba(229,186,75,0.2)]' : ''}
                         `}
                       >
                         {day ? (
                           <>
                             <span className="relative z-10">{day.getDate()}</span>
-                            {hasJadwal && (
+                            {hasClass && (
                               <span className={`absolute bottom-2 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full ${selected ? 'bg-[#172654]' : 'bg-[#e5ba4b]'}`} aria-hidden="true" />
                             )}
                           </>
@@ -218,82 +277,97 @@ const JadwalPelajaran = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full bg-[#e5ba4b]" aria-hidden="true" />
-                  <span>Ada jadwal</span>
+                  <span>Ada pelajaran</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-[#e5ba4b] ring-1 ring-[#f0cb69]" aria-hidden="true" />
-                  <span>Tanggal dipilih</span>
+                  <span className="h-3 w-3 rounded-full bg-[#29438f] ring-1 ring-[#9eafff]" aria-hidden="true" />
+                  <span>Tanggal terpilih</span>
                 </div>
               </div>
             </section>
 
             <aside className="lg:sticky lg:top-8 lg:self-start">
-              <section className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)]">
-                <div className="border-b border-white/10 bg-[#111b3c] p-5 sm:p-6">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Agenda terpilih</p>
-                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Jadwal Kelas</h2>
-                  <p className="mt-2 text-sm leading-6 text-[#c5cfe0]">{selectedDateLabel}</p>
+              <div className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)]">
+                <div className="border-b border-white/10 bg-[#111b3c] p-6 sm:p-7">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Panel jadwal</p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Daftar Pelajaran</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#c5cfe0]">Berikut mata pelajaran yang terjadwal untuk tanggal ini.</p>
                 </div>
 
-                <div className="space-y-4 p-5 sm:p-6">
-                  {selectedSchedule.length > 0 ? (
-                    selectedSchedule.map((jadwal) => (
-                      <article key={jadwal.id} className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4 transition-colors hover:border-zinc-700">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9eafff]">Mata pelajaran</p>
-                            <h3 className="mt-2 font-display text-xl font-semibold tracking-[-0.03em] text-zinc-50">{jadwal.mataPelajaran}</h3>
-                          </div>
-                          <span className={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold ${jadwal.status === 'Online' ? 'border-[#5269b5]/40 bg-[#1b2a54] text-[#b9c5ff]' : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'}`}>
-                            {jadwal.status}
-                          </span>
-                        </div>
-
-                        <div className="mt-5 grid grid-cols-2 gap-3 border-t border-zinc-800 pt-4">
-                          <div>
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-500">Kelas</p>
-                            <p className="mt-1 text-sm font-medium text-zinc-200">{jadwal.kelas}</p>
-                          </div>
-                          <div>
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-500">Waktu</p>
-                            <p className="mt-1 text-sm font-medium text-zinc-200">{jadwal.waktu}</p>
-                          </div>
-                          <div className="col-span-2">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-500">Ruangan</p>
-                            <p className="mt-1 text-sm font-medium text-zinc-200">{jadwal.ruang}</p>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-900/70 p-3">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-500">Topik sesi</p>
-                          <p className="mt-1 text-sm leading-5 text-zinc-300">{jadwal.sesi}</p>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={() => navigate('/siswa/detail-pelajaran', {
-                            state: {
-                              jadwal,
-                              tanggal: selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-                            }
-                          })}
-                          className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#e5ba4b] px-4 py-3 text-sm font-semibold text-[#172654] transition-all duration-200 hover:bg-[#f0cb69] active:translate-y-[1px]"
+                <div className="p-5 sm:p-6">
+                  {selectedSchedule && selectedSchedule.length > 0 ? (
+                    <div className="space-y-4">
+                      {selectedSchedule.map((item) => (
+                        <article
+                          key={item.id}
+                          className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-4 transition-colors hover:border-zinc-700"
                         >
-                          Lihat Detail <span aria-hidden="true">&#8594;</span>
-                        </button>
-                      </article>
-                    ))
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9eafff]">Mata pelajaran</p>
+                              <h4 className="mt-2 font-display text-xl font-semibold tracking-[-0.03em] text-zinc-50">{item.nama_mapel}</h4>
+                            </div>
+                            <span
+                              className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold ${
+                                item.status === 'Online'
+                                  ? 'border border-[#5269b5]/40 bg-[#1b2a54] text-[#b9c5ff]'
+                                  : 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                              }`}
+                            >
+                              {item.status || 'Offline'}
+                            </span>
+                          </div>
+
+                          <div className="mt-4 grid grid-cols-2 gap-3 border-t border-zinc-800 pt-3 text-xs text-zinc-400">
+                            <div>
+                              <p className="text-zinc-500">Guru pengampu</p>
+                              <p className="mt-1 font-medium text-zinc-200">{item.nama_guru || '-'}</p>
+                            </div>
+                            <div>
+                              <p className="text-zinc-500">Waktu &amp; Ruang</p>
+                              <p className="mt-1 font-medium text-zinc-200">
+                                {item.jam_mulai ? item.jam_mulai.substring(0, 5) : '07:30'} - {item.jam_selesai ? item.jam_selesai.substring(0, 5) : '09:00'}
+                              </p>
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              navigate('/siswa/detail-pelajaran', {
+                                state: {
+                                  jadwal: {
+                                    id: item.id,
+                                    mataPelajaran: item.nama_mapel,
+                                    kelas: item.nama_kelas,
+                                    guru: item.nama_guru,
+                                    jam: `${item.jam_mulai ? item.jam_mulai.substring(0, 5) : '07:30'} - ${item.jam_selesai ? item.jam_selesai.substring(0, 5) : '09:00'}`,
+                                    ruang: item.ruang || `Kelas ${item.nama_kelas}`,
+                                    status: item.status || 'Offline',
+                                  },
+                                  tanggal: selectedDateLabel || (selectedDate ? selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : ''),
+                                  dateStr: formatDateLocal(selectedDate || new Date()),
+                                },
+                              })
+                            }
+                            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#e5ba4b] px-4 py-2.5 text-sm font-semibold text-[#172654] transition-colors hover:bg-[#f0cb69]"
+                          >
+                            Lihat Materi &amp; Tugas <span aria-hidden="true">&#8594;</span>
+                          </button>
+                        </article>
+                      ))}
+                    </div>
                   ) : (
                     <div className="rounded-2xl border border-dashed border-zinc-800 px-5 py-10 text-center">
-                      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-500" aria-hidden="true">
+                      <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-500" aria-hidden="true">
                         <VisualIcon name="calendar" className="h-4 w-4" />
                       </span>
-                      <p className="mt-4 font-medium text-zinc-300">Tidak ada jadwal untuk tanggal ini</p>
-                      <p className="mt-2 text-sm leading-6 text-zinc-500">Pilih tanggal lain yang memiliki penanda jadwal.</p>
+                      <p className="mt-4 text-sm font-medium text-zinc-300">Tidak ada jadwal pada tanggal ini</p>
+                      <p className="mt-2 text-xs leading-5 text-zinc-500">Pilih tanggal lain untuk melihat jadwal pelajaran.</p>
                     </div>
                   )}
                 </div>
-              </section>
+              </div>
             </aside>
           </div>
         </div>

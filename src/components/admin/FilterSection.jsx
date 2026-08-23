@@ -1,7 +1,13 @@
 import React from 'react';
 import { dataKelas } from '../../data/mockData';
 
-const FilterSection = ({ filters, onFilterChange, onResetFilter }) => {
+const FilterSection = ({ filters, onFilterChange, onResetFilter, onReset, availableClasses }) => {
+  const classesToDisplay = availableClasses && availableClasses.length > 0
+    ? availableClasses
+    : dataKelas;
+
+  const handleReset = onResetFilter || onReset;
+
   return (
     <section className="mb-8 rounded-2xl border border-zinc-800/80 bg-zinc-900 p-6 sm:p-8">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
@@ -23,9 +29,9 @@ const FilterSection = ({ filters, onFilterChange, onResetFilter }) => {
             className="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 focus:border-[#29438f] focus:outline-none focus:ring-2 focus:ring-[#29438f]/40"
           >
             <option value="all">Semua Kelas</option>
-            {dataKelas.map((kelas) => (
-              <option key={kelas.id} value={kelas.nama}>
-                {kelas.nama}
+            {classesToDisplay.map((kelas) => (
+              <option key={kelas.id || kelas.nama_kelas || kelas.nama} value={kelas.id || kelas.nama_kelas || kelas.nama}>
+                Kelas {kelas.nama_kelas || kelas.nama}
               </option>
             ))}
           </select>
@@ -57,7 +63,7 @@ const FilterSection = ({ filters, onFilterChange, onResetFilter }) => {
 
         <div className="flex items-end">
           <button
-            onClick={onResetFilter}
+            onClick={handleReset}
             type="button"
             className="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 font-semibold text-zinc-200 transition-all hover:border-zinc-600 hover:bg-zinc-700"
           >

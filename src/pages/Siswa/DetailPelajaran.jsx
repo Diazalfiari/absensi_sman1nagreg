@@ -1,41 +1,96 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import VisualIcon from '../../components/common/VisualIcon';
-import { getCurrentUser } from '../../utils/helpers';
+import { getCurrentUser, formatDateLocal } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
+import { presensiService } from '../../services/presensiService';
 
 const DetailPelajaran = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentUser = getCurrentUser();
-  const jadwal = location.state?.jadwal;
+  const { jadwal, tanggal, dateStr, date } = location.state || {};
 
+  const [sessionData, setSessionData] = useState(null);
+  const [attendanceList, setAttendanceList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [studentUser, setStudentUser] = useState(null);
+  const jadwalId = jadwal?.id;
+  const finalDateStr = dateStr || (date ? formatDateLocal(date) : formatDateLocal(new Date()));
+
+  // ── 1. Auth Guard ──
   useEffect(() => {
-    if (!currentUser || currentUser.role !== 'siswa') {
+    const user = getCurrentUser();
+    if (!user || user.role !== 'siswa') {
       navigate('/login');
+    } else {
+      setStudentUser(user);
     }
-    if (!jadwal) {
+  }, [navigate]);
+
+  // ── 2. Fetch Session Data ──
+  useEffect(() => {
+    if (!jadwalId) {
       navigate('/siswa/jadwal');
+      return;
     }
-  }, [currentUser, navigate, jadwal]);
+
+    let isMounted = true;
+
+    const fetchSession = async () => {
+      try {
+        setLoading(true);
+        const data = await presensiService.getSession(jadwalId, finalDateStr);
+        if (isMounted) {
+          setSessionData(data?.session || null);
+          setAttendanceList(data?.attendance || []);
+        }
+      } catch (err) {
+        console.error('Gagal memuat detail sesi materi:', err);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [jadwalId, finalDateStr, navigate]);
 
   if (!jadwal) return null;
 
-  // Data output materi dan tugas/kuis yang sinkron dengan detail sesi guru
-  const detailPelajaran = {
-    materi: {
-      topik: jadwal.sesi || (jadwal.mataPelajaran ? `${jadwal.mataPelajaran} - Bab ${jadwal.kelas}` : "Konsep Dasar & Penerapan Materi"),
-      deskripsi: "Pembahasan mendalam materi pada sesi ini meliputi konsep dasar, formula/teori inti, contoh analisis soal, dan implementasi aplikatif. Siswa diharapkan mempelajari seluruh ringkasan ini untuk menunjang pengerjaan latihan dan kuis di kelas."
-    },
-    tugasKuis: {
-      tugas: "Kerjakan latihan soal bab 3 halaman 45 nomor 1 s.d. 5 di buku tugas matematika. Foto dan kumpulkan hasil pengerjaan atau serahkan pada pertemuan kelas berikutnya.",
-      kuis: "Kuis evaluasi harian sebanyak 3 butir soal pemahaman konsep di akhir sesi pelajaran untuk mengukur tingkat pemahaman materi."
-    }
-  };
-
-  const tanggal = location.state?.tanggal || 'Senin, 1 Desember 2025';
   const isOnline = jadwal.status === 'Online';
+
+  // ── Cari Status Kehadiran Siswa yang Sedang Login ──
+  const myAttendance = attendanceList.find(
+    (a) =>
+      (studentUser?.id && (a.userId === studentUser.id || a.id === studentUser.id)) ||
+      (studentUser?.nipd && a.nipd === studentUser.nipd) ||
+      (studentUser?.nisn && a.nisn === studentUser.nisn) ||
+      (studentUser?.nama && a.nama?.toLowerCase().trim() === studentUser.nama?.toLowerCase().trim())
+  );
+
+  const myStatus = myAttendance
+    ? myAttendance.status
+    : (sessionData?.statusSesi === 'Belum Dimulai' ? 'Belum Presensi' : 'Hadir');
+  const myCatatan = myAttendance?.catatan;
+
+  const topikMateri =
+    sessionData?.topikMateri ||
+    sessionData?.topik_materi ||
+    (jadwal.mataPelajaran ? `Materi ${jadwal.mataPelajaran} - Kelas ${jadwal.kelas}` : 'Topik Belum Diisi Guru');
+
+  const deskripsiMateri =
+    sessionData?.deskripsiMateri ||
+    sessionData?.deskripsi_materi ||
+    'Guru pengampu belum menambahkan rangkuman atau catatan khusus untuk sesi pembelajaran ini.';
+
+  const tugasSiswa = sessionData?.tugasSiswa || sessionData?.tugas_siswa || 'Tidak ada penugasan tertulis untuk sesi ini.';
+  const kuisEvaluasi = sessionData?.kuisEvaluasi || sessionData?.kuis_evaluasi || 'Tidak ada kuis evaluasi pada sesi ini.';
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-zinc-950 text-zinc-50 selection:bg-[#29438f]/30">
@@ -58,154 +113,165 @@ const DetailPelajaran = () => {
               <h1 className="relative mt-5 max-w-xl font-display text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">{jadwal.mataPelajaran}</h1>
               <p className="relative mt-3 text-lg font-medium text-[#d8deff]">Kelas {jadwal.kelas}</p>
               <div className="relative mt-7 flex flex-wrap items-center gap-3">
-                <span className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${isOnline ? 'border-[#5269b5]/50 bg-[#1b2a54] text-[#b9c5ff]' : 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300'}`}>
-                  {jadwal.status}
+                <span className="rounded-full border border-[#9eafff]/30 bg-[#9eafff]/10 px-3 py-1.5 text-xs font-semibold text-[#d8deff]">
+                  {jadwal.guru || 'Guru Pengampu'}
                 </span>
-                <span className="text-xs text-[#c5cfe0]">{jadwal.ruang}</span>
+                <span className="text-xs text-[#c5cfe0]">
+                  {jadwal.jam} • {jadwal.ruang || `Kelas ${jadwal.kelas}`}
+                </span>
               </div>
             </div>
 
-            <div className="border-t border-white/10 p-6 sm:p-8 lg:border-l lg:border-t-0">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Ringkasan sesi</p>
-                  <p className="mt-3 font-display text-2xl font-semibold tracking-[-0.05em] text-white">{jadwal.waktu}</p>
-                  <p className="mt-2 text-sm text-[#c5cfe0]">{tanggal}</p>
-                </div>
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
-                  <VisualIcon name="book" className="h-4 w-4" />
+            <div className="flex flex-col justify-between border-t border-white/10 p-6 sm:p-8 lg:border-l lg:border-t-0">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Status sesi</p>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                    isOnline
+                      ? 'border border-[#5269b5]/40 bg-[#1b2a54] text-[#b9c5ff]'
+                      : 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                  }`}
+                >
+                  {isOnline ? 'Online via Meet' : 'Tatap Muka di Kelas'}
                 </span>
               </div>
-              <div className="mt-9 border-t border-white/10 pt-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Topik sesi</p>
-                <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{detailPelajaran.materi.topik}</p>
+              <div className="mt-8 border-t border-white/10 pt-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Jadwal sesi</p>
+                <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{tanggal || 'Hari ini'}</p>
               </div>
             </div>
           </section>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-            {/* Bagian Materi Pembelajaran (Topik & Rangkuman) */}
-            <section className="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-[0_16px_45px_rgba(15,23,42,0.06)] sm:p-7">
-              <div className="flex items-end justify-between gap-4 border-b border-zinc-800/80 pb-5">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9eafff]">Bahan belajar</p>
-                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-zinc-50">Materi Pembelajaran</h2>
+          {/* ── Banner Status Kehadiran Siswa ── */}
+          <section className="relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/90 p-5 sm:p-6 backdrop-blur-xl shadow-lg">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-4">
+                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border text-xl ${
+                  myStatus === 'Hadir'
+                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                    : myStatus === 'Sakit'
+                    ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+                    : myStatus === 'Izin'
+                    ? 'border-blue-500/30 bg-blue-500/10 text-blue-400'
+                    : myStatus === 'Alpa'
+                    ? 'border-rose-500/30 bg-rose-500/10 text-rose-400'
+                    : 'border-zinc-700 bg-zinc-800 text-zinc-400'
+                }`}>
+                  {myStatus === 'Hadir' && '✅'}
+                  {myStatus === 'Sakit' && '🤒'}
+                  {myStatus === 'Izin' && '📩'}
+                  {myStatus === 'Alpa' && '❌'}
+                  {myStatus === 'Belum Presensi' && '⏳'}
                 </div>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1b2a54] text-[#aebcff]" aria-hidden="true">
-                  <VisualIcon name="book" className="h-4 w-4" />
-                </span>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-400">Status Kehadiran Anda</p>
+                  <div className="mt-1 flex flex-wrap items-center gap-2.5">
+                    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-semibold ${
+                      myStatus === 'Hadir'
+                        ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300'
+                        : myStatus === 'Sakit'
+                        ? 'border-amber-500/40 bg-amber-500/15 text-amber-300'
+                        : myStatus === 'Izin'
+                        ? 'border-blue-500/40 bg-blue-500/15 text-blue-300'
+                        : myStatus === 'Alpa'
+                        ? 'border-rose-500/40 bg-rose-500/15 text-rose-300'
+                        : 'border-zinc-700 bg-zinc-800 text-zinc-300'
+                    }`}>
+                      <span className="h-2 w-2 rounded-full bg-current" />
+                      {loading ? 'Memeriksa presensi...' : myStatus}
+                    </span>
+                    {studentUser?.nama && (
+                      <span className="text-xs text-zinc-400">
+                        {studentUser.nama} {studentUser.nipd ? `(${studentUser.nipd})` : ''}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              <div className="mt-6 space-y-4">
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5 sm:p-6">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#9eafff]">Topik / Judul Materi</p>
-                  <h3 className="mt-2 font-display text-lg font-bold text-zinc-50 sm:text-xl">
-                    {detailPelajaran.materi.topik}
+              {myCatatan && (
+                <div className="rounded-xl border border-zinc-800 bg-zinc-950/80 px-4 py-2.5 text-xs text-zinc-300 sm:max-w-xs">
+                  <span className="font-semibold text-amber-400">Catatan Guru: </span>
+                  {myCatatan}
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* ── Content Grid: Materi & Tugas ── */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Materi Pembelajaran */}
+            <article className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)]">
+              <div className="border-b border-zinc-800/80 bg-[#111b3c] p-6 sm:p-7">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1b2a54] text-[#9eafff]">
+                    <VisualIcon name="book" className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Bahan ajar</p>
+                    <h2 className="mt-1 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Materi Pembelajaran</h2>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6 p-6 sm:p-7">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-400">Topik / Bahasan</p>
+                  <h3 className="mt-2 font-display text-xl font-bold tracking-[-0.03em] text-zinc-50">
+                    {loading ? 'Memuat topik materi...' : topikMateri}
                   </h3>
-                  
-                  <div className="mt-4 border-t border-zinc-800/80 pt-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-400">Rangkuman / Catatan Guru</p>
-                    <p className="mt-2 text-sm leading-7 text-zinc-300 sm:text-base sm:leading-8">
-                      {detailPelajaran.materi.deskripsi}
-                    </p>
+                </div>
+
+                <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9eafff]">Catatan &amp; Rangkuman Guru</p>
+                  <p className="mt-3 text-sm leading-7 text-zinc-300 whitespace-pre-line">
+                    {loading ? 'Memuat rangkuman materi dari guru...' : deskripsiMateri}
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            {/* Tugas & Kuis */}
+            <article className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)]">
+              <div className="border-b border-zinc-800/80 bg-[#111b3c] p-6 sm:p-7">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1b2a54] text-[#9eafff]">
+                    <VisualIcon name="task" className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Evaluasi siswa</p>
+                    <h2 className="mt-1 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Tugas &amp; Kuis</h2>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-5 flex items-start gap-3 rounded-2xl border border-[#5269b5]/30 bg-[#1b2a54]/60 p-4">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#9eafff]/15 text-[#aebcff]" aria-hidden="true">
-                  <VisualIcon name="info" className="h-3.5 w-3.5" />
-                </span>
-                <p className="text-sm leading-6 text-[#c5cfe0]">
-                  Baca materi ini dengan seksama untuk memperkuat pemahaman sebelum mengerjakan tugas dan kuis.
-                </p>
-              </div>
-            </section>
-
-            {/* Bagian Tugas & Kuis Siswa */}
-            <section className="rounded-3xl border border-[#30457f] bg-[#eaf0ff] p-5 text-[#172654] shadow-[0_16px_45px_rgba(41,67,143,0.08)] dark:bg-[#152143] dark:text-[#eef2ff] sm:p-7">
-              <div className="flex items-end justify-between gap-4 border-b border-[#c8d4f4] pb-5 dark:border-[#30457f]">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#52628e] dark:text-[#aebcff]">Tindak lanjut</p>
-                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em]">Tugas & Kuis</h2>
+              <div className="space-y-5 p-6 sm:p-7">
+                <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-5">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-500/20 text-amber-300 text-xs font-bold">
+                      📝
+                    </span>
+                    <h3 className="text-sm font-semibold text-amber-300">Penugasan / Latihan</h3>
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-zinc-200 whitespace-pre-line">
+                    {loading ? 'Memuat tugas...' : tugasSiswa}
+                  </p>
                 </div>
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#29438f] text-white dark:bg-[#9eafff] dark:text-[#172654]" aria-hidden="true">
-                  <VisualIcon name="task" className="h-4 w-4" />
-                </span>
-              </div>
 
-              <div className="mt-6 space-y-4">
-                {/* Kartu Tugas Siswa */}
-                <article className="rounded-2xl border border-[#c8d4f4] bg-white/80 p-5 shadow-sm dark:border-[#30457f] dark:bg-[#111b3c]/80 sm:p-6">
+                <div className="rounded-2xl border border-[#5269b5]/40 bg-[#1b2a54]/60 p-5">
                   <div className="flex items-center gap-2">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#29438f]/15 text-[#29438f] dark:bg-[#9eafff]/20 dark:text-[#aebcff]">
-                      <VisualIcon name="task" className="h-3.5 w-3.5" />
+                    <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#9eafff]/20 text-[#aebcff] text-xs font-bold">
+                      ⏱️
                     </span>
-                    <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[#29438f] dark:text-[#9eafff]">
-                      Tugas / Latihan Siswa
-                    </h3>
+                    <h3 className="text-sm font-semibold text-[#aebcff]">Kuis Evaluasi Sesi</h3>
                   </div>
-                  <p className="mt-3 text-sm leading-7 text-[#2e3e68] dark:text-[#d8deff] sm:text-base">
-                    {detailPelajaran.tugasKuis.tugas}
+                  <p className="mt-3 text-sm leading-6 text-zinc-200 whitespace-pre-line">
+                    {loading ? 'Memuat kuis...' : kuisEvaluasi}
                   </p>
-                </article>
-
-                {/* Kartu Kuis / Evaluasi Harian */}
-                <article className="rounded-2xl border border-[#c8d4f4] bg-white/80 p-5 shadow-sm dark:border-[#30457f] dark:bg-[#111b3c]/80 sm:p-6">
-                  <div className="flex items-center gap-2">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#e5ba4b]/20 text-[#8c6d17] dark:bg-[#e5ba4b]/20 dark:text-[#f0cb69]">
-                      <VisualIcon name="question" className="h-3.5 w-3.5" />
-                    </span>
-                    <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-[#8c6d17] dark:text-[#f0cb69]">
-                      Kuis / Evaluasi Harian
-                    </h3>
-                  </div>
-                  <p className="mt-3 text-sm leading-7 text-[#2e3e68] dark:text-[#d8deff] sm:text-base">
-                    {detailPelajaran.tugasKuis.kuis}
-                  </p>
-                </article>
+                </div>
               </div>
-            </section>
+            </article>
           </div>
-
-          <section className="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 sm:p-7">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9eafff]">Konteks kelas</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-zinc-50">Siapkan sesi belajar Anda</h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => navigate('/siswa/jadwal')}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-zinc-400 transition-colors hover:text-zinc-50"
-              >
-                Lihat Kalender <span aria-hidden="true">&#8594;</span>
-              </button>
-            </div>
-            <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-              <div className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1b2a54] text-[#aebcff]" aria-hidden="true">
-                  <VisualIcon name="book" className="h-4 w-4" />
-                </span>
-                <p className="mt-5 font-semibold text-zinc-50">Baca materi</p>
-                <p className="mt-2 text-sm leading-6 text-zinc-500">Pahami konsep utama sebelum pelajaran berlangsung.</p>
-              </div>
-              <div className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1b2a54] text-[#aebcff]" aria-hidden="true">
-                  <VisualIcon name="message" className="h-4 w-4" />
-                </span>
-                <p className="mt-5 font-semibold text-zinc-50">Catat pertanyaan</p>
-                <p className="mt-2 text-sm leading-6 text-zinc-500">Tandai bagian yang ingin Anda diskusikan di kelas.</p>
-              </div>
-              <div className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
-                  <VisualIcon name="task" className="h-4 w-4" />
-                </span>
-                <p className="mt-5 font-semibold text-zinc-50">Kerjakan tugas & kuis</p>
-                <p className="mt-2 text-sm leading-6 text-zinc-500">Ikuti instruksi tugas dan perhatikan tenggat pengumpulan.</p>
-              </div>
-            </div>
-          </section>
         </div>
       </main>
 

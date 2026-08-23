@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import Notification from '../../components/common/Notification';
 import VisualIcon from '../../components/common/VisualIcon';
-import { dataSiswa } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
+import { presensiService } from '../../services/presensiService';
+import { formatDateLocal } from '../../utils/helpers';
 
 const STATUS_CONFIG = [
   {
@@ -60,19 +61,21 @@ const DetailSesi = () => {
   const location = useLocation();
   const { schedule, date } = location.state || {};
 
-  // Mock data siswa untuk kelas terpilih
-  const siswaList = dataSiswa[schedule?.kelas] || [];
+  const dateObj = date
+    ? (date instanceof Date ? date : new Date(date))
+    : new Date();
 
-  const [attendance, setAttendance] = useState(
-    siswaList.map((siswa) => ({
-      ...siswa,
-      status: 'Hadir', // Default status
-    }))
-  );
+  const dateString = date
+    ? (typeof date === 'string' && date.length === 10 ? date : formatDateLocal(dateObj))
+    : formatDateLocal(new Date());
+
+  const [loading, setLoading] = useState(true);
+  const [sessionStarted, setSessionStarted] = useState(false);
+  const [attendance, setAttendance] = useState([]);
 
   // State untuk materi pembelajaran & tugas kuis
   const [materi, setMateri] = useState({
-    topik: schedule?.mataPelajaran ? `Materi ${schedule.mataPelajaran} - Bab ${schedule.kelas}` : '',
+    topik: schedule?.mataPelajaran ? `Materi ${schedule.mataPelajaran} - Kelas ${schedule.kelas}` : '',
     deskripsi: '',
   });
 
@@ -81,14 +84,49 @@ const DetailSesi = () => {
     kuis: '',
   });
 
-  const [sessionStarted, setSessionStarted] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [notification, setNotification] = useState({ isOpen: false, type: 'success', title: '', message: '' });
 
+  // ── Load Session & Students from Backend ──
+  const loadSessionData = useCallback(async () => {
+    if (!schedule?.id) return;
+
+    try {
+      setLoading(true);
+      const data = await presensiService.getSession(schedule.id, dateString);
+
+      if (data?.session) {
+        if (data.session.statusSesi === 'Sedang Berlangsung' || data.session.statusSesi === 'Selesai') {
+          setSessionStarted(true);
+        }
+        setMateri({
+          topik: data.session.topikMateri || (schedule.mataPelajaran ? `Materi ${schedule.mataPelajaran} - Kelas ${schedule.kelas}` : ''),
+          deskripsi: data.session.deskripsiMateri || '',
+        });
+        setTugasKuis({
+          tugas: data.session.tugasSiswa || '',
+          kuis: data.session.kuisEvaluasi || '',
+        });
+      }
+
+      if (data?.attendance && data.attendance.length > 0) {
+        setAttendance(data.attendance);
+      }
+    } catch (err) {
+      console.error('Gagal memuat sesi presensi:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [schedule?.id, dateString, schedule?.mataPelajaran, schedule?.kelas]);
+
+  useEffect(() => {
+    loadSessionData();
+  }, [loadSessionData]);
+
   const handleStatusChange = (siswaId, newStatus) => {
-    setAttendance(
-      attendance.map((siswa) =>
+    setAttendance((prev) =>
+      prev.map((siswa) =>
         siswa.id === siswaId ? { ...siswa, status: newStatus } : siswa
       )
     );
@@ -98,52 +136,91 @@ const DetailSesi = () => {
     setShowConfirm(true);
   };
 
-  const handleConfirmStart = () => {
-    setSessionStarted(true);
-    setShowConfirm(false);
-    setNotification({
-      isOpen: true,
-      type: 'success',
-      title: 'Sesi Dimulai!',
-      message: 'Sesi mengajar telah dimulai. Anda dapat mengisi presensi, materi, dan tugas.'
-    });
+  const handleConfirmStart = async () => {
+    try {
+      await presensiService.startSession(schedule.id, dateString);
+      setSessionStarted(true);
+      setShowConfirm(false);
+      setNotification({
+        isOpen: true,
+        type: 'success',
+        title: 'Sesi Dimulai!',
+        message: 'Sesi mengajar telah dimulai. Anda dapat mengisi presensi, materi, dan tugas.',
+      });
+    } catch (err) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Gagal Memulai Sesi',
+        message: err.message || 'Terjadi kesalahan saat memulai sesi mengajar.',
+      });
+    }
   };
 
   const handleSaveAttendance = () => {
     setShowSaveConfirm(true);
   };
 
-  const handleSaveMateriTugas = (e) => {
+  const handleSaveMateriTugas = async (e) => {
     if (e) e.preventDefault();
-    setNotification({
-      isOpen: true,
-      type: 'success',
-      title: 'Materi & Tugas Tersimpan!',
-      message: 'Materi pembelajaran, tugas, dan kuis berhasil diperbarui untuk sesi ini.'
-    });
+    try {
+      const payload = {
+        tanggal: dateString,
+        attendance: attendance.map((s) => ({
+          studentId: s.id,
+          status: s.status || 'Hadir',
+          catatan: s.catatan || '',
+        })),
+        materi,
+        tugasKuis,
+      };
+
+      await presensiService.saveSession(schedule.id, payload);
+      setNotification({
+        isOpen: true,
+        type: 'success',
+        title: 'Materi & Tugas Tersimpan!',
+        message: 'Materi pembelajaran, tugas, dan kuis berhasil disimpan ke database.',
+      });
+    } catch (err) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Gagal Menyimpan Materi',
+        message: err.message || 'Terjadi kesalahan saat menyimpan materi dan tugas.',
+      });
+    }
   };
 
-  const handleConfirmSave = () => {
-    const attendanceData = {
-      schedule,
-      date: date?.toISOString().split('T')[0],
-      attendance: attendance.map(s => ({
-        id: s.id,
-        nama: s.nama,
-        status: s.status
-      })),
-      materi,
-      tugasKuis,
-    };
+  const handleConfirmSave = async () => {
+    try {
+      const payload = {
+        tanggal: dateString,
+        attendance: attendance.map((s) => ({
+          studentId: s.id,
+          status: s.status || 'Hadir',
+          catatan: s.catatan || '',
+        })),
+        materi,
+        tugasKuis,
+      };
 
-    console.log('Data Kehadiran & Sesi Tersimpan:', attendanceData);
-    setShowSaveConfirm(false);
-    setNotification({
-      isOpen: true,
-      type: 'success',
-      title: 'Data Tersimpan!',
-      message: 'Data kehadiran siswa, materi, dan tugas/kuis berhasil disimpan.'
-    });
+      await presensiService.saveSession(schedule.id, payload);
+      setShowSaveConfirm(false);
+      setNotification({
+        isOpen: true,
+        type: 'success',
+        title: 'Data Tersimpan!',
+        message: `Data kehadiran ${attendance.length} siswa, materi, dan tugas/kuis berhasil disimpan ke database.`,
+      });
+    } catch (err) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Gagal Menyimpan Data',
+        message: err.message || 'Terjadi kesalahan saat menyimpan data presensi ke server.',
+      });
+    }
   };
 
   const handleSetAllStatus = (newStatus) => {
@@ -154,16 +231,16 @@ const DetailSesi = () => {
 
   const getStatusCount = () => {
     return {
-      hadir: attendance.filter(s => (s.status || '').toLowerCase() === 'hadir').length,
-      sakit: attendance.filter(s => (s.status || '').toLowerCase() === 'sakit').length,
-      izin: attendance.filter(s => (s.status || '').toLowerCase() === 'izin').length,
-      alpa: attendance.filter(s => (s.status || '').toLowerCase() === 'alpa').length,
+      hadir: attendance.filter((s) => (s.status || '').toLowerCase() === 'hadir').length,
+      sakit: attendance.filter((s) => (s.status || '').toLowerCase() === 'sakit').length,
+      izin: attendance.filter((s) => (s.status || '').toLowerCase() === 'izin').length,
+      alpa: attendance.filter((s) => (s.status || '').toLowerCase() === 'alpa').length,
     };
   };
 
   const stats = getStatusCount();
 
-  if (!schedule || !date) {
+  if (!schedule) {
     return (
       <div className="flex min-h-[100dvh] items-center justify-center bg-zinc-950 px-5 text-zinc-50">
         <div className="w-full max-w-md rounded-3xl border border-zinc-800 bg-zinc-900/70 p-8 text-center shadow-[0_20px_60px_rgba(15,23,42,0.16)]">
@@ -180,11 +257,11 @@ const DetailSesi = () => {
     );
   }
 
-  const formattedDate = date.toLocaleDateString('id-ID', {
+  const formattedDate = dateObj.toLocaleDateString('id-ID', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
-    year: 'numeric'
+    year: 'numeric',
   });
 
   return (
@@ -216,8 +293,8 @@ const DetailSesi = () => {
                   <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{formattedDate}</p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Waktu</p>
-                  <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{schedule.jamMulai} - {schedule.jamSelesai}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Waktu &amp; Ruang</p>
+                  <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{schedule.jamMulai} - {schedule.jamSelesai} • {schedule.ruang || `Kelas ${schedule.kelas}`}</p>
                 </div>
               </div>
             </div>
@@ -227,7 +304,7 @@ const DetailSesi = () => {
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Status sesi</p>
                   <p className="mt-3 font-display text-2xl font-semibold tracking-[-0.05em] text-white">
-                    {sessionStarted ? 'Sedang berlangsung' : 'Belum dimulai'}
+                    {sessionStarted ? 'Sedang berlangsung / Aktif' : 'Belum dimulai'}
                   </p>
                 </div>
                 <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${sessionStarted ? 'bg-emerald-400 text-[#172654]' : 'bg-[#e5ba4b] text-[#172654]'}`} aria-hidden="true">
@@ -237,11 +314,11 @@ const DetailSesi = () => {
               {sessionStarted ? (
                 <div className="mt-10 flex items-center gap-3 border-t border-white/10 pt-5 text-sm text-[#d8deff]">
                   <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
-                  Presensi aktif dan siap diisi
+                  Presensi aktif dan siap disimpan ke database
                 </div>
               ) : (
                 <div className="mt-8 border-t border-white/10 pt-5">
-                  <p className="text-sm leading-6 text-[#c5cfe0]">Mulai sesi untuk mengaktifkan pengisian presensi siswa.</p>
+                  <p className="text-sm leading-6 text-[#c5cfe0]">Mulai sesi untuk mengaktifkan pengisian presensi siswa kelas ini.</p>
                   <Button size="md" onClick={handleStartSession} className="mt-5 w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]">
                     Mulai Sesi <span aria-hidden="true">&#8594;</span>
                   </Button>
@@ -250,6 +327,7 @@ const DetailSesi = () => {
             </div>
           </section>
 
+          {/* ── Ringkasan Kehadiran ── */}
           <section aria-label="Ringkasan kehadiran" className="grid grid-cols-2 overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-800/80 shadow-[0_16px_45px_rgba(15,23,42,0.06)] md:grid-cols-4">
             <div className="bg-zinc-900/90 p-5 sm:p-6">
               <p className="text-3xl font-semibold tracking-[-0.05em] text-emerald-400">{stats.hadir}</p>
@@ -270,7 +348,7 @@ const DetailSesi = () => {
           </section>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
-            {/* Daftar Kehadiran Siswa */}
+            {/* ── Daftar Kehadiran Siswa ── */}
             <section className={`rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)] ${!sessionStarted ? 'opacity-60' : ''}`}>
               <div className="flex flex-col gap-4 border-b border-zinc-800/80 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-7">
                 <div>
@@ -279,7 +357,7 @@ const DetailSesi = () => {
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full border border-zinc-700 bg-zinc-950 px-3 py-1.5 text-xs font-semibold text-zinc-400">
-                    {attendance.length} siswa
+                    {loading ? 'Memuat siswa...' : `${attendance.length} siswa`}
                   </span>
                   {sessionStarted && (
                     <button
@@ -298,47 +376,38 @@ const DetailSesi = () => {
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#9eafff]/15 text-[#aebcff]" aria-hidden="true">
                     <VisualIcon name="info" className="h-3.5 w-3.5" />
                   </span>
-                  <p>Mulai sesi terlebih dahulu untuk mengubah status kehadiran siswa.</p>
+                  <p>Mulai sesi terlebih dahulu untuk mengaktifkan perubahan status presensi siswa.</p>
                 </div>
               )}
 
-              {/* 1. TAMPILAN MOBILE / HP (< md): CARD LIST 2x2 GRID (TANPA PERLU DI-SLIDE) */}
+              {/* TAMPILAN MOBILE / HP */}
               <div className={`space-y-4 p-4 md:hidden ${!sessionStarted ? 'pointer-events-none' : ''}`}>
                 {attendance.map((siswa) => {
-                  const studentId = siswa.nipd || siswa.nis || siswa.id;
+                  const studentId = siswa.nipd || siswa.nisn || siswa.id;
                   const hasMarked = Boolean(siswa.status);
 
                   return (
                     <div
                       key={siswa.id}
-                      className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm transition-all dark:border-zinc-800 dark:bg-zinc-900/90"
+                      className="rounded-2xl border border-zinc-800 bg-zinc-900/90 p-4 shadow-sm transition-all"
                     >
-                      {/* Header Siswa: Nama + ID/NIS + Badge Status (Tanpa Foto) */}
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <h4 className="font-display text-base font-bold text-zinc-900 dark:text-zinc-50">
+                          <h4 className="font-display text-base font-bold text-zinc-50">
                             {siswa.nama}
                           </h4>
-                          <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                            ID: {studentId}
+                          <p className="text-xs font-medium text-zinc-400 font-mono">
+                            NIPD: {studentId}
                           </p>
                         </div>
 
                         {hasMarked && (
-                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                            <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                              <path
-                                fillRule="evenodd"
-                                d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Marked
+                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400">
+                            {siswa.status}
                           </span>
                         )}
                       </div>
 
-                      {/* 2x2 Grid Status Buttons */}
                       <div className="mt-3.5 grid grid-cols-2 gap-2.5">
                         {STATUS_CONFIG.map((opt) => {
                           const isSelected = (siswa.status || '').toLowerCase() === opt.key.toLowerCase();
@@ -351,10 +420,10 @@ const DetailSesi = () => {
                               className={`flex flex-col items-center justify-center gap-1.5 rounded-xl border py-3 px-2 text-center transition-all duration-150 active:scale-[0.98] ${
                                 isSelected
                                   ? opt.activeClass
-                                  : 'border-zinc-200 bg-zinc-50/70 text-zinc-600 hover:border-zinc-300 hover:bg-zinc-100 dark:border-zinc-700/70 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-800'
+                                  : 'border-zinc-700/70 bg-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:bg-zinc-800'
                               }`}
                             >
-                              <span className={isSelected ? opt.iconColor : 'text-zinc-400 dark:text-zinc-500'}>
+                              <span className={isSelected ? opt.iconColor : 'text-zinc-500'}>
                                 {opt.icon}
                               </span>
                               <span className="text-xs font-semibold sm:text-sm">
@@ -369,7 +438,7 @@ const DetailSesi = () => {
                 })}
               </div>
 
-              {/* 2. TAMPILAN DESKTOP & TABLET (>= md): TABEL PRESENSI */}
+              {/* TAMPILAN DESKTOP & TABLET */}
               <div className={`hidden overflow-x-auto p-5 sm:p-7 md:block ${!sessionStarted ? 'pointer-events-none' : ''}`}>
                 <table className="w-full text-left text-sm" aria-label="Daftar kehadiran siswa">
                   <thead className="border-b border-zinc-800 text-zinc-400">
@@ -388,7 +457,7 @@ const DetailSesi = () => {
                         <td className="px-4 py-4 text-zinc-500">{index + 1}</td>
                         <td className="px-4 py-4">
                           <p className="font-medium text-zinc-50">{siswa.nama}</p>
-                          <p className="mt-0.5 text-xs text-zinc-500">ID: {siswa.nipd || siswa.nis || siswa.id}</p>
+                          <p className="mt-0.5 text-xs text-zinc-500 font-mono">NIPD: {siswa.nipd || siswa.nisn || siswa.id}</p>
                         </td>
                         {STATUS_CONFIG.map((opt) => {
                           const isSelected = (siswa.status || '').toLowerCase() === opt.key.toLowerCase();
@@ -420,7 +489,7 @@ const DetailSesi = () => {
 
               {sessionStarted && (
                 <div className="flex flex-col gap-3 border-t border-zinc-800/80 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
-                  <p className="text-xs leading-5 text-zinc-500">Pastikan setiap siswa memiliki satu status sebelum menyimpan.</p>
+                  <p className="text-xs leading-5 text-zinc-500">Pastikan setiap siswa memiliki status sebelum menyimpan ke database.</p>
                   <Button size="md" onClick={handleSaveAttendance} className="w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69] sm:w-auto">
                     Simpan Kehadiran <span aria-hidden="true">&#8594;</span>
                   </Button>
@@ -428,12 +497,12 @@ const DetailSesi = () => {
               )}
             </section>
 
-            {/* Sidebar: Form Input Materi Pembelajaran, Tugas, & Kuis */}
+            {/* ── Sidebar: Form Input Materi Pembelajaran, Tugas, & Kuis ── */}
             <aside className="lg:sticky lg:top-8 lg:self-start">
               <section className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)]">
                 <div className="border-b border-white/10 bg-[#111b3c] p-5 sm:p-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Pendukung sesi</p>
-                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Materi & Tugas</h2>
+                  <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-white">Materi &amp; Tugas</h2>
                   <p className="mt-2 text-sm leading-6 text-[#c5cfe0]">
                     Isi topik materi pembelajaran, rangkuman, serta penugasan dan kuis untuk siswa.
                   </p>
@@ -482,7 +551,7 @@ const DetailSesi = () => {
                       <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1b2a54] text-[#9eafff]">
                         <VisualIcon name="task" className="h-3.5 w-3.5" />
                       </span>
-                      <h3 className="text-sm font-semibold text-zinc-200">Tugas & Kuis</h3>
+                      <h3 className="text-sm font-semibold text-zinc-200">Tugas &amp; Kuis</h3>
                     </div>
 
                     <div>
@@ -516,7 +585,7 @@ const DetailSesi = () => {
                     type="submit"
                     className="w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]"
                   >
-                    Simpan Materi & Tugas <span aria-hidden="true">&#8594;</span>
+                    Simpan Materi &amp; Tugas <span aria-hidden="true">&#8594;</span>
                   </Button>
                 </form>
               </section>
