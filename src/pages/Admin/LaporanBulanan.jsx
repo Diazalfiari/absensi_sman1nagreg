@@ -1,16 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser } from '../../utils/helpers';
-import { dataMapel } from '../../data/mockData';
 import Footer from '../../components/common/Footer';
 
 import ReportFilter from '../../components/admin/reports/ReportFilter';
 import MonthlyAttendanceTable from '../../components/admin/reports/MonthlyAttendanceTable';
 import { getDaysInMonth } from '../../utils/reportHelpers';
-import { generatePresensiData } from '../../utils/attendanceReport';
 import { exportMonthlyReport } from '../../utils/exportMonthlyReport';
+import { presensiService } from '../../services/presensiService';
+import { kelasService } from '../../services/kelasService';
+import { jadwalService } from '../../services/jadwalService';
+
+const STATUS_PRIORITY = {
+  Hadir: 1,
+  Izin: 2,
+  Sakit: 3,
+  Alpa: 4,
+};
+
+const STATUS_CODE = {
+  Hadir: 'H',
+  Izin: 'I',
+  Sakit: 'S',
+  Alpa: 'A',
+};
 
 const LaporanBulanan = () => {
   const navigate = useNavigate();
@@ -19,9 +34,14 @@ const LaporanBulanan = () => {
   const [filters, setFilters] = useState({
     bulan: new Date().getMonth() + 1,
     tahun: new Date().getFullYear(),
-    kelas: 'X-1',
+    kelas: '',
     mataPelajaran: 'Hasil Akhir',
   });
+  const [kelasList, setKelasList] = useState([]);
+  const [mapelList, setMapelList] = useState([]);
+  const [presensiData, setPresensiData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'admin') {
@@ -44,21 +64,150 @@ const LaporanBulanan = () => {
     { value: 12, label: 'Desember' },
   ];
 
-  const kelasOptions = [
-    'X-1', 'X-2', 'X-3', 'X-4', 'X-5', 'X-6', 'X-7', 'X-8', 'X-9', 'X-10', 'X-11', 'X-12',
-    'XI-1', 'XI-2', 'XI-3', 'XI-4', 'XI-5', 'XI-6', 'XI-7', 'XI-8', 'XI-9', 'XI-10', 'XI-11', 'XI-12',
-    'XII-1', 'XII-2', 'XII-3', 'XII-4', 'XII-5', 'XII-6', 'XII-7', 'XII-8', 'XII-9', 'XII-10', 'XII-11', 'XII-12'
-  ];
+  const kelasOptions = kelasList.map((kelas) => kelas.nama_kelas);
+
+  const classesByName = useMemo(() => {
+    return kelasList.reduce((acc, kelas) => {
+      acc[kelas.nama_kelas] = kelas;
+      return acc;
+    }, {});
+  }, [kelasList]);
+
+  const subjectsByName = useMemo(() => {
+    return mapelList.reduce((acc, mapel) => {
+      acc[mapel.nama_mapel] = mapel;
+      return acc;
+    }, {});
+  }, [mapelList]);
+
+  const transformMonthlyData = useCallback((students = [], records = [], daysInCurrentMonth = 30) => {
+    const recordMap = new Map();
+
+    records.forEach((record) => {
+      const key = `${record.student_id}-${record.tgl}`;
+      const current = recordMap.get(key);
+
+      if (!current || STATUS_PRIORITY[record.status] > STATUS_PRIORITY[current.status]) {
+        recordMap.set(key, { status: record.status });
+      }
+    });
+
+    return students.map((student) => {
+      const presensiPerHari = {};
+      let hadirCount = 0;
+      let sakitCount = 0;
+      let izinCount = 0;
+      let alpaCount = 0;
+
+      for (let day = 1; day <= daysInCurrentMonth; day += 1) {
+        const key = `${student.student_id}-${day}`;
+        const record = recordMap.get(key);
+        const code = record ? STATUS_CODE[record.status] || '-' : '-';
+        presensiPerHari[day] = { status: code };
+
+        if (code === 'H') hadirCount += 1;
+        if (code === 'S') sakitCount += 1;
+        if (code === 'I') izinCount += 1;
+        if (code === 'A') alpaCount += 1;
+      }
+
+      const totalCatatan = hadirCount + sakitCount + izinCount + alpaCount;
+      const persentase = totalCatatan > 0 ? Math.round((hadirCount / totalCatatan) * 100) : 0;
+
+      return {
+        id: student.student_id,
+        nipd: student.nipd,
+        nama: student.nama_siswa,
+        jenisKelamin: student.gender === 'P' ? 'Perempuan' : 'Laki-laki',
+        presensiPerHari,
+        hadir: hadirCount,
+        sakit: sakitCount,
+        izin: izinCount,
+        alpa: alpaCount,
+        persentase,
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    const loadReferenceData = async () => {
+      try {
+        const [classes, subjects] = await Promise.all([
+          kelasService.getAllClasses(),
+          jadwalService.getAllSubjects(),
+        ]);
+
+        setKelasList(classes || []);
+        setMapelList(subjects || []);
+
+        if ((classes || []).length > 0) {
+          setFilters((prev) => ({
+            ...prev,
+            kelas: prev.kelas || classes[0].nama_kelas,
+          }));
+        }
+      } catch (error) {
+        setErrorMessage(error.message || 'Gagal memuat data referensi kelas dan mata pelajaran.');
+      }
+    };
+
+    loadReferenceData();
+  }, []);
+
+  useEffect(() => {
+    const loadMonthlyReport = async () => {
+      if (!filters.kelas) {
+        setPresensiData([]);
+        setLoadingData(false);
+        return;
+      }
+
+      const kelasDipilih = classesByName[filters.kelas];
+      if (!kelasDipilih?.id) {
+        setPresensiData([]);
+        setLoadingData(false);
+        return;
+      }
+
+      setLoadingData(true);
+      setErrorMessage('');
+
+      try {
+        const selectedMapel = subjectsByName[filters.mataPelajaran];
+        const payload = {
+          kelasId: kelasDipilih.id,
+          bulan: filters.bulan,
+          tahun: filters.tahun,
+        };
+
+        if (filters.mataPelajaran !== 'Hasil Akhir' && selectedMapel?.id) {
+          payload.mapelId = selectedMapel.id;
+        }
+
+        const data = await presensiService.getBulanan(payload);
+        const daysInCurrentMonth = getDaysInMonth(filters.bulan, filters.tahun);
+        const transformed = transformMonthlyData(data?.students, data?.records, daysInCurrentMonth);
+
+        setPresensiData(transformed);
+      } catch (error) {
+        setErrorMessage(error.message || 'Gagal memuat laporan bulanan dari server.');
+        setPresensiData([]);
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    loadMonthlyReport();
+  }, [filters, classesByName, subjectsByName, transformMonthlyData]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
       ...prev,
-      [name]: name === 'bulan' || name === 'tahun' ? parseInt(value) : value,
+      [name]: name === 'bulan' || name === 'tahun' ? parseInt(value, 10) : value,
     }));
   };
 
-  const presensiData = generatePresensiData(filters.bulan, filters.tahun, filters.kelas, filters.mataPelajaran);
   const daysInMonth = getDaysInMonth(filters.bulan, filters.tahun);
   const bulanName = bulanOptions.find((b) => b.value === filters.bulan)?.label;
 
@@ -103,7 +252,7 @@ const LaporanBulanan = () => {
             <div className="rounded-2xl border border-[#c8d4f4] bg-[#eaf0ff] px-5 py-4 text-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#aebcff]">
               <p className="text-xs font-semibold uppercase tracking-[0.16em]">Periode aktif</p>
               <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em]">{bulanName} {filters.tahun}</p>
-              <p className="mt-1 text-xs opacity-75">Kelas {filters.kelas}</p>
+              <p className="mt-1 text-xs opacity-75">Kelas {filters.kelas || '-'}</p>
             </div>
           </header>
 
@@ -141,19 +290,19 @@ const LaporanBulanan = () => {
           <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-700 dark:text-emerald-300">Hadir</p>
-              <p className="mt-3 text-2xl font-semibold text-zinc-50">{reportSummary.hadir}</p>
+              <p className="mt-3 text-2xl font-semibold text-zinc-50">{loadingData ? '-' : reportSummary.hadir}</p>
             </div>
             <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-700 dark:text-amber-300">Sakit</p>
-              <p className="mt-3 text-2xl font-semibold text-zinc-50">{reportSummary.sakit}</p>
+              <p className="mt-3 text-2xl font-semibold text-zinc-50">{loadingData ? '-' : reportSummary.sakit}</p>
             </div>
             <div className="rounded-2xl border border-blue-500/20 bg-blue-500/10 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-700 dark:text-blue-300">Izin</p>
-              <p className="mt-3 text-2xl font-semibold text-zinc-50">{reportSummary.izin}</p>
+              <p className="mt-3 text-2xl font-semibold text-zinc-50">{loadingData ? '-' : reportSummary.izin}</p>
             </div>
             <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-700 dark:text-rose-300">Alpa</p>
-              <p className="mt-3 text-2xl font-semibold text-zinc-50">{reportSummary.alpa}</p>
+              <p className="mt-3 text-2xl font-semibold text-zinc-50">{loadingData ? '-' : reportSummary.alpa}</p>
             </div>
           </section>
 
@@ -161,10 +310,16 @@ const LaporanBulanan = () => {
             filters={filters}
             bulanOptions={bulanOptions}
             kelasOptions={kelasOptions}
-            dataMapel={dataMapel}
+            dataMapel={mapelList.map((mapel) => ({ id: mapel.id, nama: mapel.nama_mapel }))}
             onFilterChange={handleFilterChange}
             onExport={handleExportExcel}
           />
+
+          {errorMessage && (
+            <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+              {errorMessage}
+            </div>
+          )}
 
           <section className="overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60">
             <div className="flex flex-col gap-4 border-b border-zinc-800/80 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-6">
@@ -176,15 +331,19 @@ const LaporanBulanan = () => {
                 </p>
               </div>
               <div className="w-fit rounded-full border border-zinc-800 bg-zinc-950/60 px-3 py-1.5 text-xs font-medium text-zinc-500">
-                {presensiData.length} siswa · {daysInMonth} hari
+                {loadingData ? 'Memuat data...' : `${presensiData.length} siswa · ${daysInMonth} hari`}
               </div>
             </div>
-            <MonthlyAttendanceTable
-              presensiData={presensiData}
-              daysInMonth={daysInMonth}
-              bulan={filters.bulan}
-              tahun={filters.tahun}
-            />
+            {loadingData ? (
+              <div className="px-6 py-10 text-sm text-zinc-400">Memuat laporan bulanan dari database...</div>
+            ) : (
+              <MonthlyAttendanceTable
+                presensiData={presensiData}
+                daysInMonth={daysInMonth}
+                bulan={filters.bulan}
+                tahun={filters.tahun}
+              />
+            )}
           </section>
 
           <section className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-5 sm:p-6">
