@@ -34,7 +34,13 @@ export const presensiService = {
    * Mengambil rekapitulasi data kehadiran presensi
    */
   getRekapitulasi: async (params = {}) => {
-    const query = new URLSearchParams(params).toString();
+    const validParams = Object.entries(params).reduce((result, [key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        result[key] = value;
+      }
+      return result;
+    }, {});
+    const query = new URLSearchParams(validParams).toString();
     const response = await api.get(`/presensi/rekapitulasi${query ? `?${query}` : ''}`);
     return response.data;
   },
