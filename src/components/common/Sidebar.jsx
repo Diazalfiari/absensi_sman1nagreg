@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../utils/helpers';
+import { authService } from '../../services/authService';
 import ConfirmDialog from './ConfirmDialog';
 import Loading from './Loading';
 import VisualIcon from './VisualIcon';
@@ -41,15 +42,19 @@ const Sidebar = ({ role }) => {
     setShowLogoutConfirm(true);
   };
 
-  const handleConfirmLogout = () => {
+  const handleConfirmLogout = async () => {
     setShowLogoutConfirm(false);
     setIsLoggingOut(true);
 
     // Logout process
-    setTimeout(() => {
+    try {
+      await authService.logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout backend error:', error);
       logout();
       navigate('/login');
-    }, 1000);
+    }
   };
 
   const renderMenu = (mobile = false) => (

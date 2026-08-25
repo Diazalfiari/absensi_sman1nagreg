@@ -9,9 +9,19 @@ export const logService = {
    * Mengambil daftar log aktivitas dengan pagination, filter, dan search
    */
   getLogs: async (params = {}) => {
-    const query = new URLSearchParams(params).toString();
+    const validParams = Object.entries(params).reduce((result, [key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        result[key] = value;
+      }
+      return result;
+    }, {});
+    const query = new URLSearchParams(validParams).toString();
     const response = await api.get(`/logs${query ? `?${query}` : ''}`);
-    return response.data || { items: [], total: 0 };
+    return {
+      items: response.data || [],
+      total: response.meta?.totalItems || 0,
+      meta: response.meta,
+    };
   },
 
   /**

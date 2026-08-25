@@ -89,6 +89,7 @@ const LogAktivitas = () => {
         search: searchQuery.trim(),
         role: selectedRole !== 'Semua' ? selectedRole : undefined,
         kategori: selectedKategori !== 'Semua Kategori' ? selectedKategori : undefined,
+        dateFilter: selectedDateFilter !== 'Semua' ? selectedDateFilter : undefined,
       });
 
       const rawItems = res.items || [];
@@ -120,7 +121,7 @@ const LogAktivitas = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, itemsPerPage, searchQuery, selectedRole, selectedKategori]);
+  }, [currentPage, itemsPerPage, searchQuery, selectedRole, selectedKategori, selectedDateFilter]);
 
   useEffect(() => {
     fetchLogs();
@@ -154,6 +155,7 @@ const LogAktivitas = () => {
         search: searchQuery.trim(),
         role: selectedRole !== 'Semua' ? selectedRole : undefined,
         kategori: selectedKategori !== 'Semua Kategori' ? selectedKategori : undefined,
+        dateFilter: selectedDateFilter !== 'Semua' ? selectedDateFilter : undefined,
       });
 
       const exportItems = (allLogsRes.items || []).map((log) => {
