@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { calculatePercentage } from '../../utils/helpers';
 import Modal from '../common/Modal';
 import Pagination from '../common/Pagination';
-import { dataSiswa } from '../../data/mockData';
+import { kelasService } from '../../services/kelasService';
 
 const countStyles = {
   hadir: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
@@ -20,6 +20,8 @@ const percentageStyles = (percentage) => {
 const RekapTable = ({ data }) => {
   const [selectedKelas, setSelectedKelas] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [detailStudents, setDetailStudents] = useState([]);
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -32,14 +34,66 @@ const RekapTable = ({ data }) => {
     setCurrentPage(1);
   }, [data]);
 
-  const handleShowDetail = (kelas) => {
-    setSelectedKelas(kelas);
+  const handleShowDetail = async (kelasName) => {
+    setSelectedKelas(kelasName);
     setShowModal(true);
+    setIsLoadingDetail(true);
+    setDetailStudents([]);
+
+    try {
+      const classes = await kelasService.getAllClasses();
+      const targetClass = classes.find(k => k.nama_kelas === kelasName || k.nama === kelasName);
+      
+      if (targetClass) {
+        // Ambil data matriks presensi bulanan untuk menghitung total hadir/izin/sakit/alpa per siswa
+        const currentDate = new Date();
+        const bulan = currentDate.getMonth() + 1;
+        const tahun = currentDate.getFullYear();
+
+        try {
+          // Import presensiService di level atas secara dinamis (atau pastikan sudah terimport)
+          const { presensiService } = require('../../services/presensiService');
+          const data = await presensiService.getBulanan({
+            kelasId: targetClass.id,
+            bulan,
+            tahun,
+          });
+
+          if (data && data.students && data.records) {
+            const studentsWithStats = data.students.map(std => {
+              const stdRecords = data.records.filter(r => r.student_id === std.student_id);
+              return {
+                ...std,
+                id: std.student_id,
+                nama: std.nama_siswa || std.nama,
+                hadir: stdRecords.filter(r => r.status === 'Hadir').length,
+                izin: stdRecords.filter(r => r.status === 'Izin').length,
+                sakit: stdRecords.filter(r => r.status === 'Sakit').length,
+                alpa: stdRecords.filter(r => r.status === 'Alpa').length,
+              };
+            });
+            setDetailStudents(studentsWithStats);
+            return;
+          }
+        } catch (error) {
+          console.error('Gagal mengambil data bulanan:', error);
+        }
+
+        // Fallback jika API bulanan gagal: gunakan detail kelas
+        const detail = await kelasService.getClassDetail(targetClass.id);
+        setDetailStudents(detail.students || []);
+      }
+    } catch (err) {
+      console.error('Gagal mengambil detail kelas:', err);
+    } finally {
+      setIsLoadingDetail(false);
+    }
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedKelas(null);
+    setDetailStudents([]);
   };
 
   if (!data || data.length === 0) {
@@ -117,7 +171,9 @@ const RekapTable = ({ data }) => {
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Daftar siswa</p>
               </div>
               <div className="max-h-96 overflow-y-auto">
-                {dataSiswa[selectedKelas] && dataSiswa[selectedKelas].length > 0 ? (
+                {isLoadingDetail ? (
+                  <p className="px-4 py-6 text-center text-sm text-zinc-500">Memuat data siswa...</p>
+                ) : detailStudents && detailStudents.length > 0 ? (
                   <table className="w-full min-w-[640px] text-sm">
                     <thead className="sticky top-0 bg-zinc-700">
                       <tr>
@@ -131,15 +187,15 @@ const RekapTable = ({ data }) => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-700">
-                      {dataSiswa[selectedKelas].map((siswa, idx) => (
+                      {detailStudents.map((siswa, idx) => (
                         <tr key={siswa.id} className="hover:bg-zinc-700/50">
                           <td className="px-4 py-3 text-zinc-300">{idx + 1}</td>
-                          <td className="px-4 py-3 text-zinc-300">{siswa.nipd}</td>
+                          <td className="px-4 py-3 text-zinc-300">{siswa.nipd || siswa.nis || siswa.id}</td>
                           <td className="px-4 py-3 font-medium text-zinc-100">{siswa.nama}</td>
-                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.hadir}`}>{siswa.hadir}</span></td>
-                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.izin}`}>{siswa.izin}</span></td>
-                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.sakit}`}>{siswa.sakit}</span></td>
-                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.alpa}`}>{siswa.alpa}</span></td>
+                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.hadir}`}>{siswa.hadir || 0}</span></td>
+                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.izin}`}>{siswa.izin || 0}</span></td>
+                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.sakit}`}>{siswa.sakit || 0}</span></td>
+                          <td className="px-4 py-3 text-center"><span className={`rounded-md px-2 py-1 text-xs font-semibold ${countStyles.alpa}`}>{siswa.alpa || 0}</span></td>
                         </tr>
                       ))}
                     </tbody>

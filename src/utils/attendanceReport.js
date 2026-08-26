@@ -2,11 +2,9 @@
  * src/utils/attendanceReport.js
  * Logic untuk generate mock data presensi berdasarkan jadwal.
  */
-import { dataSiswa, mockJadwal } from '../data/mockData';
 import { getDaysInMonth, getDayName } from './reportHelpers';
 
-export const generatePresensiData = (bulan, tahun, kelas, mataPelajaran) => {
-  const siswaList = dataSiswa[kelas] || [];
+export const generatePresensiData = (bulan, tahun, siswaList = [], jadwalMap = {}, mataPelajaran) => {
   const daysInMonth = getDaysInMonth(bulan, tahun);
   
   // Helper functions
@@ -45,7 +43,7 @@ export const generatePresensiData = (bulan, tahun, kelas, mataPelajaran) => {
       }
 
       // Ambil jadwal hari ini (default array kosong jika jadwal tidak didefinisikan)
-      const scheduledSubjects = mockJadwal[dayName] || [];
+      const scheduledSubjects = jadwalMap[dayName] || [];
 
       if (mataPelajaran === 'Hasil Akhir') {
         if (scheduledSubjects.length === 0) {

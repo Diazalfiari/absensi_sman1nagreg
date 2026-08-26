@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { dataKelas, dataMapel, dataSiswa } from '../../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { kelasService } from '../../services/kelasService';
+import { jadwalService } from '../../services/jadwalService';
 import Button from '../common/Button';
 
 const STATUS_CONFIG = [
@@ -53,24 +54,46 @@ const AbsensiForm = ({ onSubmit }) => {
   const [selectedKelas, setSelectedKelas] = useState('');
   const [selectedMapel, setSelectedMapel] = useState('');
   const [presensiData, setAbsensiData] = useState([]);
+  const [dataKelas, setDataKelas] = useState([]);
+  const [dataMapel, setDataMapel] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
     () => new Date().toISOString().split('T')[0]
   );
 
-  const handleKelasChange = (e) => {
+  useEffect(() => {
+    // Memuat data kelas dan mata pelajaran saat komponen dimount
+    kelasService.getAllClasses()
+      .then(setDataKelas)
+      .catch(err => console.error('Gagal mengambil data kelas:', err));
+
+    jadwalService.getAllSubjects()
+      .then(setDataMapel)
+      .catch(err => console.error('Gagal mengambil data mata pelajaran:', err));
+  }, []);
+
+  const handleKelasChange = async (e) => {
     const kelas = e.target.value;
     setSelectedKelas(kelas);
     setSelectedMapel('');
+    setAbsensiData([]);
     
-    // Inisialisasi data presensi untuk kelas terpilih
-    if (kelas && dataSiswa[kelas]) {
-      const initialData = dataSiswa[kelas].map((siswa) => ({
-        ...siswa,
-        status: 'Hadir', // Status default
-      }));
-      setAbsensiData(initialData);
-    } else {
-      setAbsensiData([]);
+    // Ambil detail kelas untuk mendapatkan daftar siswa
+    if (kelas) {
+      try {
+        // Cari ID kelas berdasarkan nama yang dipilih
+        const selectedClassObj = dataKelas.find(k => k.nama === kelas || k.nama_kelas === kelas);
+        if (selectedClassObj) {
+          const detail = await kelasService.getClassDetail(selectedClassObj.id);
+          const students = detail.students || [];
+          const initialData = students.map((siswa) => ({
+            ...siswa,
+            status: 'Hadir', // Status default
+          }));
+          setAbsensiData(initialData);
+        }
+      } catch (err) {
+        console.error('Gagal mengambil daftar siswa:', err);
+      }
     }
   };
 
@@ -142,8 +165,8 @@ const AbsensiForm = ({ onSubmit }) => {
           >
             <option value="">Pilih Kelas</option>
             {dataKelas.map((kelas) => (
-              <option key={kelas.id} value={kelas.nama}>
-                {kelas.nama}
+              <option key={kelas.id || kelas.nama_kelas} value={kelas.nama_kelas || kelas.nama}>
+                {kelas.nama_kelas || kelas.nama}
               </option>
             ))}
           </select>
@@ -159,7 +182,7 @@ const AbsensiForm = ({ onSubmit }) => {
           >
             <option value="">Pilih Mata Pelajaran</option>
             {dataMapel.map((mapel) => (
-              <option key={mapel.id} value={mapel.nama}>
+              <option key={mapel.id || mapel.nama} value={mapel.nama}>
                 {mapel.nama}
               </option>
             ))}

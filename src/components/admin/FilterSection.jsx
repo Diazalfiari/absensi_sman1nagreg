@@ -1,10 +1,20 @@
-import React from 'react';
-import { dataKelas } from '../../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { kelasService } from '../../services/kelasService';
 
 const FilterSection = ({ filters, onFilterChange, onResetFilter, onReset, availableClasses }) => {
+  const [fetchedClasses, setFetchedClasses] = useState([]);
+
+  useEffect(() => {
+    if (!availableClasses || availableClasses.length === 0) {
+      kelasService.getAllClasses()
+        .then(data => setFetchedClasses(data))
+        .catch(err => console.error('Gagal mengambil data kelas:', err));
+    }
+  }, [availableClasses]);
+
   const classesToDisplay = availableClasses && availableClasses.length > 0
     ? availableClasses
-    : dataKelas;
+    : fetchedClasses;
 
   const handleReset = onResetFilter || onReset;
 
