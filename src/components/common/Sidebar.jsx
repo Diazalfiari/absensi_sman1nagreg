@@ -58,34 +58,34 @@ const Sidebar = ({ role }) => {
   };
 
   const renderMenu = (mobile = false) => (
-    <nav className={mobile ? 'flex gap-2 overflow-x-auto px-4 pb-3 no-scrollbar' : 'flex-1 p-3 overflow-y-auto no-scrollbar'}>
-      <ul className={mobile ? 'flex gap-2' : 'space-y-1.5'}>
+    <nav className={mobile ? 'flex overflow-x-auto px-2 py-2 no-scrollbar' : 'flex-1 p-3 overflow-y-auto no-scrollbar'}>
+      <ul className={mobile ? 'flex gap-1 w-full' : 'space-y-1.5'}>
         {items.map((item) => {
           const isActive = location.pathname === item.path;
 
           if (mobile) {
             return (
-              <li key={item.path}>
+              <li key={item.path} className="flex-1 min-w-[4.5rem]">
                 <Link
                   to={item.path}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`flex items-center gap-2 whitespace-nowrap rounded-xl border px-3 py-2 text-sm transition-colors ${
+                  className={`flex flex-col items-center justify-center gap-1.5 rounded-xl px-1 py-2 transition-colors ${
                     isActive
-                      ? 'border-[#c8d4f4] bg-[#eaf0ff] text-[#29438f] dark:border-[#30457f] dark:bg-[#152143] dark:text-[#aebcff]'
-                      : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-100'
+                      ? 'text-[#aebcff]'
+                      : 'text-zinc-500 hover:text-zinc-300'
                   }`}
                 >
                   <span
-                    className={`flex shrink-0 items-center justify-center font-bold h-5 w-5 rounded-md text-[0.65rem] ${
+                    className={`flex shrink-0 items-center justify-center font-bold h-8 w-8 rounded-full transition-colors ${
                       isActive
                         ? 'bg-[#29438f] text-white dark:bg-[#9eafff] dark:text-[#172654]'
-                        : 'bg-zinc-800 text-zinc-500'
+                        : 'bg-transparent text-inherit'
                     }`}
                     aria-hidden="true"
                   >
-                    <VisualIcon name={item.icon} className="h-3.5 w-3.5" />
+                    <VisualIcon name={item.icon} className="h-5 w-5" />
                   </span>
-                  <span className="font-medium">{item.label}</span>
+                  <span className={`font-medium text-[0.6rem] text-center leading-tight truncate w-full ${isActive ? 'text-[#c8d4f4] dark:text-[#aebcff]' : ''}`}>{item.label}</span>
                 </Link>
               </li>
             );
@@ -210,7 +210,7 @@ const Sidebar = ({ role }) => {
         </div>
       </aside>
 
-      {/* 2. MOBILE TOP STICKY BAR (< lg) */}
+      {/* 2. MOBILE TOP HEADER (< lg) */}
       <div className="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-xl lg:hidden">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
@@ -229,6 +229,10 @@ const Sidebar = ({ role }) => {
             Keluar
           </button>
         </div>
+      </div>
+
+      {/* 3. MOBILE BOTTOM NAVBAR (< lg) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-800 bg-zinc-950/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)] lg:hidden">
         {renderMenu(true)}
       </div>
 
