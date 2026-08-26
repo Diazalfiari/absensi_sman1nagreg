@@ -66,9 +66,12 @@ const KenaikanAngkatanModal = ({
           <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 max-h-56 overflow-y-auto custom-scrollbar">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {classes.map((cls) => {
-                const targetName = (cls.nama_kelas || '')
-                  .replace(/^X-/, 'XI-')
-                  .replace(/^XI-/, 'XII-');
+                let targetName = cls.nama_kelas || '';
+                if (tingkatAsal === 'X') {
+                  targetName = targetName.replace(/^X-/, 'XI-');
+                } else if (tingkatAsal === 'XI') {
+                  targetName = targetName.replace(/^XI-/, 'XII-');
+                }
                 const jml = parseInt(cls.total_siswa, 10) || 0;
 
                 return (

@@ -93,7 +93,7 @@ const DetailKelas = () => {
     if (!selectedStudents || selectedStudents.length === 0) return;
 
     try {
-      const studentIds = selectedStudents.map((s) => s.id || s.user_id);
+      const studentIds = selectedStudents.map((s) => s.student_id || s.id);
       const targetClassId = kelasInfo?.id || kelasId;
 
       const res = await kelasService.mutateStudent(studentIds, targetClassId);
@@ -116,7 +116,7 @@ const DetailKelas = () => {
   // ── Transfer Student to Another Class handler ──
   const handleTransferStudent = async (student, targetClass) => {
     try {
-      const studentId = student.id || student.user_id;
+      const studentId = student.student_id || student.id;
       const targetClassId = targetClass.id || targetClass.nama_kelas;
 
       await kelasService.mutateStudent(studentId, targetClassId);
