@@ -35,7 +35,7 @@ const LaporanBulanan = () => {
     bulan: new Date().getMonth() + 1,
     tahun: new Date().getFullYear(),
     kelas: '',
-    mataPelajaran: 'Hasil Akhir',
+    mataPelajaran: '',
   });
   const [kelasList, setKelasList] = useState([]);
   const [mapelList, setMapelList] = useState([]);
@@ -116,7 +116,8 @@ const LaporanBulanan = () => {
 
       return {
         id: student.student_id,
-        nipd: student.nipd,
+        nisn: student.nisn || student.nipd || '-',
+        nipd: student.nisn || student.nipd || '-',
         nama: student.nama_siswa,
         jenisKelamin: student.gender === 'P' ? 'Perempuan' : 'Laki-laki',
         presensiPerHari,
@@ -140,12 +141,12 @@ const LaporanBulanan = () => {
         setKelasList(classes || []);
         setMapelList(subjects || []);
 
-        if ((classes || []).length > 0) {
-          setFilters((prev) => ({
-            ...prev,
-            kelas: prev.kelas || classes[0].nama_kelas,
-          }));
-        }
+        setFilters((prev) => ({
+          ...prev,
+          kelas: prev.kelas || (classes && classes.length > 0 ? classes[0].nama_kelas : ''),
+          mataPelajaran:
+            prev.mataPelajaran || (subjects && subjects.length > 0 ? subjects[0].nama_mapel : ''),
+        }));
       } catch (error) {
         setErrorMessage(error.message || 'Gagal memuat data referensi kelas dan mata pelajaran.');
       }
@@ -156,14 +157,16 @@ const LaporanBulanan = () => {
 
   useEffect(() => {
     const loadMonthlyReport = async () => {
-      if (!filters.kelas) {
+      if (!filters.kelas || !filters.mataPelajaran) {
         setPresensiData([]);
         setLoadingData(false);
         return;
       }
 
       const kelasDipilih = classesByName[filters.kelas];
-      if (!kelasDipilih?.id) {
+      const selectedMapel = subjectsByName[filters.mataPelajaran];
+
+      if (!kelasDipilih?.id || !selectedMapel?.id) {
         setPresensiData([]);
         setLoadingData(false);
         return;
@@ -173,16 +176,12 @@ const LaporanBulanan = () => {
       setErrorMessage('');
 
       try {
-        const selectedMapel = subjectsByName[filters.mataPelajaran];
         const payload = {
           kelasId: kelasDipilih.id,
           bulan: filters.bulan,
           tahun: filters.tahun,
+          mapelId: selectedMapel.id,
         };
-
-        if (filters.mataPelajaran !== 'Hasil Akhir' && selectedMapel?.id) {
-          payload.mapelId = selectedMapel.id;
-        }
 
         const data = await presensiService.getBulanan(payload);
         const daysInCurrentMonth = getDaysInMonth(filters.bulan, filters.tahun);
@@ -261,7 +260,7 @@ const LaporanBulanan = () => {
               <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#9eafff]/10 blur-3xl" aria-hidden="true" />
               <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Presensi terpilih</p>
               <h2 className="relative mt-4 max-w-lg font-display text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">
-                Ringkasan kehadiran {filters.mataPelajaran}.
+                Ringkasan kehadiran {filters.mataPelajaran || 'mata pelajaran'}.
               </h2>
               <p className="relative mt-3 max-w-xl text-sm leading-6 text-[#c5cfe0]">
                 Data berubah langsung ketika periode, kelas, atau mata pelajaran diperbarui.

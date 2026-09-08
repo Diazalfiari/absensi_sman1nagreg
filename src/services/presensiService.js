@@ -27,7 +27,15 @@ export const presensiService = {
    */
   saveSession: async (jadwalId, payload) => {
     const response = await api.post(`/presensi/sesi/${jadwalId}/save`, payload);
-    return response.data;
+    return response.data || response;
+  },
+
+  /**
+   * Menyelesaikan sesi mengajar
+   */
+  finishSession: async (jadwalId, payload = {}) => {
+    const response = await api.post(`/presensi/sesi/${jadwalId}/finish`, payload);
+    return response.data || response;
   },
 
   /**

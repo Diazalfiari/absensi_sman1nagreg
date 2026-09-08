@@ -12,7 +12,7 @@ const MonthlyAttendanceTable = ({ presensiData, daysInMonth, bulan, tahun }) => 
               <thead className="sticky top-0 z-20">
                 <tr className="bg-[#172654] text-[#eef2ff] dark:bg-[#111b3c]">
                   <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">No</th>
-                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">NIPD</th>
+                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">NISN</th>
                   <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em]">Nama Siswa</th>
                   <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">Gender</th>
                   <th colSpan={daysInMonth} className="border border-[#30457f] px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em]">Tanggal</th>
@@ -38,7 +38,7 @@ const MonthlyAttendanceTable = ({ presensiData, daysInMonth, bulan, tahun }) => 
                 {presensiData.map((siswa, index) => (
                   <tr key={siswa.id} className="border-b border-zinc-800/80 transition-colors hover:bg-[#eaf0ff]/50 dark:hover:bg-[#152143]/50">
                     <td className="border-r border-zinc-800/80 px-3 py-2 text-center text-zinc-500">{index + 1}</td>
-                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center text-zinc-500">{siswa.nipd}</td>
+                    <td className="border-r border-zinc-800/80 px-3 py-2 text-center text-zinc-500 font-mono">{siswa.nisn || siswa.nipd || '-'}</td>
                     <td className="border-r border-zinc-800/80 px-3 py-2 font-semibold text-zinc-50">{siswa.nama}</td>
                     <td className="border-r border-zinc-800/80 px-3 py-2 text-center text-zinc-500">{siswa.jenisKelamin === 'Laki-laki' ? 'L' : 'P'}</td>
                     {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {

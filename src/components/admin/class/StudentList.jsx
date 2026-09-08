@@ -9,10 +9,8 @@ const StudentList = ({ students, onMutate }) => {
             <tr>
               <th className="px-6 py-4 font-medium">No</th>
               <th className="px-6 py-4 font-medium">Nama Siswa</th>
-              <th className="px-6 py-4 font-medium">NIPD / NISN</th>
-              <th className="px-6 py-4 font-medium">L/P</th>
-              <th className="px-6 py-4 font-medium">Kontak (Email / No. HP)</th>
-              <th className="px-6 py-4 font-medium">Alamat</th>
+              <th className="px-6 py-4 font-medium">NISN</th>
+              <th className="px-6 py-4 font-medium">Jenis Kelamin</th>
               <th className="px-6 py-4 font-medium text-right">Aksi</th>
             </tr>
           </thead>
@@ -22,40 +20,25 @@ const StudentList = ({ students, onMutate }) => {
                 <tr key={student.id || index} className="hover:bg-zinc-800/30 transition-colors">
                   <td className="px-6 py-4 text-zinc-500 font-mono text-xs">{index + 1}</td>
                   
-                  {/* Nama & Username */}
+                  {/* Nama Siswa */}
                   <td className="px-6 py-4">
                     <div className="font-medium text-zinc-100">{student.nama}</div>
-                    {student.username && (
-                      <div className="text-xs text-zinc-500 font-mono">@{student.username}</div>
-                    )}
                   </td>
 
-                  {/* NIPD & NISN */}
+                  {/* NISN */}
                   <td className="px-6 py-4">
-                    <div className="font-mono text-zinc-200 text-xs font-semibold">{student.nipd || '-'}</div>
-                    {student.nisn && (
-                      <div className="text-[11px] text-zinc-500 font-mono">NISN: {student.nisn}</div>
-                    )}
+                    <span className="font-mono text-zinc-200 text-xs font-semibold bg-zinc-800/60 px-2.5 py-1 rounded border border-zinc-700/60">
+                      {student.nisn || '-'}
+                    </span>
                   </td>
 
-                  {/* Gender */}
+                  {/* Jenis Kelamin */}
                   <td className="px-6 py-4 text-xs">
                     {student.gender === 'P' ? (
                       <span className="text-pink-400 font-medium">♀ Perempuan</span>
                     ) : (
                       <span className="text-sky-400 font-medium">♂ Laki-laki</span>
                     )}
-                  </td>
-
-                  {/* Kontak */}
-                  <td className="px-6 py-4 text-xs">
-                    <div className="text-zinc-300">{student.email || '-'}</div>
-                    {student.phone && <div className="text-zinc-500 font-mono mt-0.5">{student.phone}</div>}
-                  </td>
-
-                  {/* Alamat */}
-                  <td className="px-6 py-4 text-xs text-zinc-400 max-w-[200px] truncate" title={student.alamat || ''}>
-                    {student.alamat || '-'}
                   </td>
 
                   {/* Aksi */}
@@ -73,7 +56,7 @@ const StudentList = ({ students, onMutate }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="px-6 py-12 text-center text-zinc-500">
+                <td colSpan="5" className="px-6 py-12 text-center text-zinc-500">
                   Belum ada siswa yang terdaftar di kelas ini.
                 </td>
               </tr>

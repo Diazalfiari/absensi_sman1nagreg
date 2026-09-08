@@ -8,8 +8,11 @@ export const authService = {
   /**
    * Login pengguna
    */
-  login: async (username, password) => {
-    const response = await api.post('/auth/login', { username, password });
+  login: async (identifier, role) => {
+    const payload = typeof identifier === 'object'
+      ? identifier
+      : { identifier, role };
+    const response = await api.post('/auth/login', payload);
     if (response.data && response.data.token) {
       localStorage.setItem('authToken', response.data.token);
       localStorage.setItem('currentUser', JSON.stringify(response.data.user));

@@ -50,7 +50,7 @@ export const exportMonthlyReport = async ({
   worksheet.getCell('B3').dataValidation = {
     type: 'list',
     allowBlank: false,
-    formulae: ['"X-1,X-2,X-3,XI IPA 1,XI IPA 2,XI IPS 1,XII IPA 1,XII IPA 2,XII IPS 1"']
+    formulae: ['"X-1,X-2,X-3,XI-1,XI-2,XI-3,XII-1,XII-2,XII-3"']
   };
 
   worksheet.getCell('C3').value = 'Mata Pelajaran:';
@@ -83,7 +83,7 @@ export const exportMonthlyReport = async ({
   worksheet.addRow([]);
 
   // Table header
-  const tableHeaderRow1 = worksheet.addRow(['No', 'NIPD', 'Nama Siswa', 'Jenis Kelamin']);
+  const tableHeaderRow1 = worksheet.addRow(['No', 'NISN', 'Nama Siswa', 'Jenis Kelamin']);
   
   // Add days headers
   for (let day = 1; day <= daysInMonth; day++) {
@@ -127,7 +127,7 @@ export const exportMonthlyReport = async ({
   presensiData.forEach((siswa, index) => {
     const dataRow = worksheet.addRow([
       index + 1,
-      siswa.nipd,
+      siswa.nisn || siswa.nipd || '',
       siswa.nama,
       siswa.jenisKelamin
     ]);

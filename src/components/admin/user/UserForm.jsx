@@ -2,102 +2,39 @@ import React from 'react';
 import Button from '../../common/Button';
 
 const INPUT_CLASS =
-  'w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors';
+  'w-full px-4 py-2.5 bg-zinc-950 border border-zinc-800 rounded-lg text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors';
 const SELECT_CLASS =
-  'w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors appearance-none cursor-pointer';
-const LABEL_CLASS = 'block text-sm font-medium text-zinc-400 mb-1';
+  'w-full px-4 py-2.5 bg-zinc-950 border border-zinc-800 rounded-lg text-sm text-zinc-100 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors appearance-none cursor-pointer';
+const LABEL_CLASS = 'block text-sm font-medium text-zinc-400 mb-1.5';
 
-const UserForm = ({ role, user, classList = [], onChange, onSubmit, onCancel }) => (
+const UserForm = ({ role, user, classList = [], subjectList = [], onChange, onSubmit, onCancel }) => (
   <form onSubmit={onSubmit} className="space-y-4">
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div>
-        <label className={LABEL_CLASS}>Nama Lengkap *</label>
-        <input
-          type="text"
-          name="nama"
-          value={user.nama || ''}
-          onChange={onChange}
-          className={INPUT_CLASS}
-          placeholder="Nama lengkap pengguna"
-          required
-        />
-      </div>
-      <div>
-        <label className={LABEL_CLASS}>Username *</label>
-        <input
-          type="text"
-          name="username"
-          value={user.username || ''}
-          onChange={onChange}
-          className={INPUT_CLASS}
-          placeholder="Username untuk login"
-          required
-        />
-      </div>
-    </div>
-
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div>
-        <label className={LABEL_CLASS}>Password *</label>
-        <input
-          type="password"
-          name="password"
-          value={user.password || ''}
-          onChange={onChange}
-          className={INPUT_CLASS}
-          placeholder="Password akun"
-          required
-        />
-      </div>
-      <div>
-        <label className={LABEL_CLASS}>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={user.email || ''}
-          onChange={onChange}
-          className={INPUT_CLASS}
-          placeholder="email@contoh.sch.id"
-        />
-      </div>
-      <div>
-        <label className={LABEL_CLASS}>Nomor HP / WhatsApp</label>
-        <input
-          type="text"
-          name="phone"
-          value={user.phone || ''}
-          onChange={onChange}
-          className={INPUT_CLASS}
-          placeholder="081234567890"
-        />
-      </div>
-    </div>
-
-    {/* ── Siswa fields ── */}
+    {/* ── 1. FORM SISWA ── */}
     {role === 'siswa' && (
       <>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={LABEL_CLASS}>NIPD *</label>
+            <label className={LABEL_CLASS}>Nama Lengkap Siswa *</label>
             <input
               type="text"
-              name="nipd"
-              value={user.nipd || ''}
+              name="nama"
+              value={user.nama || ''}
               onChange={onChange}
               className={INPUT_CLASS}
-              placeholder="Nomor Induk Peserta Didik"
+              placeholder="Contoh: Budi Santoso"
               required
             />
           </div>
           <div>
-            <label className={LABEL_CLASS}>NISN</label>
+            <label className={LABEL_CLASS}>NISN (10 Digit) *</label>
             <input
               type="text"
               name="nisn"
               value={user.nisn || ''}
               onChange={onChange}
-              className={INPUT_CLASS}
-              placeholder="Nomor Induk Siswa Nasional (10 digit)"
+              className={`${INPUT_CLASS} font-mono`}
+              placeholder="Contoh: 0012345678"
+              required
             />
           </div>
         </div>
@@ -107,7 +44,7 @@ const UserForm = ({ role, user, classList = [], onChange, onSubmit, onCancel }) 
             <label className={LABEL_CLASS}>Kelas *</label>
             <select
               name="kelas"
-              value={user.kelas || ''}
+              value={user.kelas || user.kelasId || ''}
               onChange={onChange}
               className={SELECT_CLASS}
               required
@@ -130,66 +67,120 @@ const UserForm = ({ role, user, classList = [], onChange, onSubmit, onCancel }) 
             </select>
           </div>
           <div>
-            <label className={LABEL_CLASS}>Jenis Kelamin</label>
+            <label className={LABEL_CLASS}>Jenis Kelamin *</label>
             <select
               name="gender"
               value={user.gender || user.jenis_kelamin || 'L'}
               onChange={onChange}
               className={SELECT_CLASS}
+              required
             >
               <option value="L">♂ Laki-laki</option>
               <option value="P">♀ Perempuan</option>
             </select>
           </div>
         </div>
+      </>
+    )}
+
+    {/* ── 2. FORM GURU ── */}
+    {role === 'guru' && (
+      <>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className={LABEL_CLASS}>Nama Lengkap Guru *</label>
+            <input
+              type="text"
+              name="nama"
+              value={user.nama || ''}
+              onChange={onChange}
+              className={INPUT_CLASS}
+              placeholder="Contoh: Andi Setiawan, S.Pd"
+              required
+            />
+          </div>
+          <div>
+            <label className={LABEL_CLASS}>NIP (Nomor Induk Pegawai) *</label>
+            <input
+              type="text"
+              name="nip"
+              value={user.nip || ''}
+              onChange={onChange}
+              className={`${INPUT_CLASS} font-mono`}
+              placeholder="Contoh: 198001012010011001"
+              required
+            />
+          </div>
+        </div>
 
         <div>
-          <label className={LABEL_CLASS}>Alamat Tempat Tinggal</label>
-          <textarea
-            name="alamat"
-            value={user.alamat || ''}
+          <label className={LABEL_CLASS}>Mata Pelajaran Pengampu *</label>
+          <select
+            name="spesialisasi"
+            value={user.spesialisasi || user.mapel || ''}
             onChange={onChange}
-            rows={2}
-            className={INPUT_CLASS}
-            placeholder="Alamat lengkap siswa (contoh: Jl. Raya Nagreg No. 12)"
-          />
+            className={SELECT_CLASS}
+            required
+          >
+            <option value="">-- Pilih Mata Pelajaran --</option>
+            {subjectList && subjectList.length > 0 ? (
+              subjectList.map((s) => (
+                <option key={s.id || s.nama_mapel} value={s.nama_mapel}>
+                  {s.nama_mapel} ({s.kategori || 'Umum'})
+                </option>
+              ))
+            ) : (
+              <>
+                <option value="Matematika">Matematika</option>
+                <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                <option value="Bahasa Inggris">Bahasa Inggris</option>
+                <option value="Fisika">Fisika</option>
+                <option value="Kimia">Kimia</option>
+                <option value="Biologi">Biologi</option>
+                <option value="Sejarah">Sejarah</option>
+                <option value="Pendidikan Jasmani">Pendidikan Jasmani</option>
+              </>
+            )}
+          </select>
         </div>
       </>
     )}
 
-    {/* ── Guru fields ── */}
-    {role === 'guru' && (
+    {/* ── 3. FORM ADMIN ── */}
+    {role === 'admin' && (
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className={LABEL_CLASS}>NIP</label>
+          <label className={LABEL_CLASS}>Nama Lengkap Admin *</label>
+          <input
+            type="text"
+            name="nama"
+            value={user.nama || ''}
+            onChange={onChange}
+            className={INPUT_CLASS}
+            placeholder="Contoh: Administrator Sekolah"
+            required
+          />
+        </div>
+        <div>
+          <label className={LABEL_CLASS}>NIP Admin *</label>
           <input
             type="text"
             name="nip"
             value={user.nip || ''}
             onChange={onChange}
-            className={INPUT_CLASS}
-            placeholder="Nomor Induk Pegawai"
-          />
-        </div>
-        <div>
-          <label className={LABEL_CLASS}>Mata Pelajaran Pengampu</label>
-          <input
-            type="text"
-            name="spesialisasi"
-            value={user.spesialisasi || ''}
-            onChange={onChange}
-            className={INPUT_CLASS}
-            placeholder="Contoh: Matematika"
+            className={`${INPUT_CLASS} font-mono`}
+            placeholder="Contoh: 198001012010011001"
+            required
           />
         </div>
       </div>
     )}
 
-    <div className="pt-4 flex justify-end gap-3">
+    <div className="pt-4 flex justify-end gap-3 border-t border-zinc-800/80">
       <Button type="button" variant="outline" onClick={onCancel}>
         Batal
       </Button>
-      <Button type="submit" variant="primary">
+      <Button type="submit" variant="primary" className="!bg-[#29438f] hover:!bg-[#203674]">
         Simpan Data
       </Button>
     </div>

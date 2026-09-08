@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
 import Button from '../../components/common/Button';
@@ -69,9 +69,26 @@ const DetailSesi = () => {
     ? (typeof date === 'string' && date.length === 10 ? date : formatDateLocal(dateObj))
     : formatDateLocal(new Date());
 
+  const formattedDate = dateObj.toLocaleDateString('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
   const [loading, setLoading] = useState(true);
-  const [sessionStarted, setSessionStarted] = useState(false);
+  const [sessionStatus, setSessionStatus] = useState('Belum Dimulai'); // 'Belum Dimulai' | 'Sedang Berlangsung' | 'Selesai'
+  const [scheduleData, setScheduleData] = useState(schedule || null);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [attendance, setAttendance] = useState([]);
+
+  // Live timer untuk mengevaluasi status jadwal setiap 10 detik
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 10000);
+    return () => clearInterval(timer);
+  }, []);
 
   // State untuk materi pembelajaran & tugas kuis
   const [materi, setMateri] = useState({
@@ -86,7 +103,70 @@ const DetailSesi = () => {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const [showFinishConfirm, setShowFinishConfirm] = useState(false);
+  const [isStarting, setIsStarting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isFinishing, setIsFinishing] = useState(false);
   const [notification, setNotification] = useState({ isOpen: false, type: 'success', title: '', message: '' });
+
+  const sessionStarted = sessionStatus === 'Sedang Berlangsung' || sessionStatus === 'Selesai';
+
+  const activeSchedule = scheduleData || schedule || {};
+  const activeJamMulai = (activeSchedule.jamMulai || activeSchedule.jam_mulai || '07:30').substring(0, 5);
+  const activeJamSelesai = (activeSchedule.jamSelesai || activeSchedule.jam_selesai || '09:00').substring(0, 5);
+
+  // ── Evaluasi Tanggal & Waktu Sesi Pembelajaran ──
+  const scheduleTiming = useMemo(() => {
+    const now = currentTime;
+    const todayStr = formatDateLocal(now);
+    const nowTimeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    // 1. Validasi Tanggal
+    if (dateString < todayStr) {
+      return {
+        status: 'SUDAH_SELESAI',
+        label: 'Sesi Sudah Selesai',
+        message: 'Jadwal dan waktu telah terlewati. Sesi sudah selesai dan tidak dapat dimulai lagi.',
+        canStart: false,
+      };
+    }
+
+    if (dateString > todayStr) {
+      return {
+        status: 'BELUM_WAKTUNYA',
+        label: 'Sesi Belum Waktunya',
+        message: `Sesi belum waktunya dimulai. Jadwal pembelajaran: ${formattedDate} (${activeJamMulai} - ${activeJamSelesai} WIB).`,
+        canStart: false,
+      };
+    }
+
+    // 2. Tanggal adalah Hari Ini (dateString === todayStr), cek rentang jam
+    if (nowTimeStr < activeJamMulai) {
+      return {
+        status: 'BELUM_WAKTUNYA',
+        label: 'Sesi Belum Waktunya',
+        message: `Sesi belum waktunya. Pembelajaran dijadwalkan mulai pukul ${activeJamMulai} WIB (Waktu sekarang: ${nowTimeStr} WIB).`,
+        canStart: false,
+      };
+    }
+
+    if (nowTimeStr > activeJamSelesai) {
+      return {
+        status: 'SUDAH_SELESAI',
+        label: 'Sesi Sudah Selesai',
+        message: `Jadwal dan waktu sesi telah terlewati (berakhir pukul ${activeJamSelesai} WIB). Sesi sudah selesai dan tidak dapat dimulai lagi.`,
+        canStart: false,
+      };
+    }
+
+    // 3. Masih di dalam rentang waktu yang dijadwalkan
+    return {
+      status: 'BISA_DIMULAI',
+      label: 'Sesi Siap Dimulai',
+      message: `Jadwal sesi sedang aktif (${activeJamMulai} - ${activeJamSelesai} WIB). Silakan klik Mulai Sesi untuk membuka presensi.`,
+      canStart: true,
+    };
+  }, [dateString, formattedDate, activeJamMulai, activeJamSelesai, currentTime]);
 
   // ── Load Session & Students from Backend ──
   const loadSessionData = useCallback(async () => {
@@ -96,10 +176,20 @@ const DetailSesi = () => {
       setLoading(true);
       const data = await presensiService.getSession(schedule.id, dateString);
 
+      if (data?.schedule) {
+        setScheduleData((prev) => ({
+          ...prev,
+          ...data.schedule,
+          jamMulai: data.schedule.jam_mulai ? data.schedule.jam_mulai.substring(0, 5) : (prev?.jamMulai || '07:30'),
+          jamSelesai: data.schedule.jam_selesai ? data.schedule.jam_selesai.substring(0, 5) : (prev?.jamSelesai || '09:00'),
+          mataPelajaran: data.schedule.nama_mapel || prev?.mataPelajaran || '',
+          kelas: data.schedule.nama_kelas || prev?.kelas || '',
+          ruang: data.schedule.ruang || prev?.ruang || '',
+        }));
+      }
+
       if (data?.session) {
-        if (data.session.statusSesi === 'Sedang Berlangsung' || data.session.statusSesi === 'Selesai') {
-          setSessionStarted(true);
-        }
+        setSessionStatus(data.session.statusSesi || 'Belum Dimulai');
         setMateri({
           topik: data.session.topikMateri || (schedule.mataPelajaran ? `Materi ${schedule.mataPelajaran} - Kelas ${schedule.kelas}` : ''),
           deskripsi: data.session.deskripsiMateri || '',
@@ -133,13 +223,34 @@ const DetailSesi = () => {
   };
 
   const handleStartSession = () => {
+    if (!scheduleTiming.canStart) {
+      setNotification({
+        isOpen: true,
+        type: 'warning',
+        title: scheduleTiming.label,
+        message: scheduleTiming.message,
+      });
+      return;
+    }
     setShowConfirm(true);
   };
 
   const handleConfirmStart = async () => {
+    if (isStarting) return;
+    if (!scheduleTiming.canStart) {
+      setShowConfirm(false);
+      setNotification({
+        isOpen: true,
+        type: 'warning',
+        title: scheduleTiming.label,
+        message: scheduleTiming.message,
+      });
+      return;
+    }
     try {
+      setIsStarting(true);
       await presensiService.startSession(schedule.id, dateString);
-      setSessionStarted(true);
+      setSessionStatus('Sedang Berlangsung');
       setShowConfirm(false);
       setNotification({
         isOpen: true,
@@ -147,12 +258,73 @@ const DetailSesi = () => {
         title: 'Sesi Dimulai!',
         message: 'Sesi mengajar telah dimulai. Anda dapat mengisi presensi, materi, dan tugas.',
       });
+      await loadSessionData();
     } catch (err) {
       setNotification({
         isOpen: true,
         type: 'error',
         title: 'Gagal Memulai Sesi',
         message: err.message || 'Terjadi kesalahan saat memulai sesi mengajar.',
+      });
+    } finally {
+      setIsStarting(false);
+    }
+  };
+
+  const handleConfirmFinish = async () => {
+    if (isFinishing) return;
+    try {
+      setIsFinishing(true);
+      const payload = {
+        tanggal: dateString,
+        attendance: attendance.map((s) => ({
+          studentId: s.id,
+          status: s.status || 'Hadir',
+          catatan: s.catatan || '',
+        })),
+        materi,
+        tugasKuis,
+      };
+
+      await presensiService.finishSession(schedule.id, payload);
+      setSessionStatus('Selesai');
+      setShowFinishConfirm(false);
+      setNotification({
+        isOpen: true,
+        type: 'success',
+        title: 'Sesi Selesai!',
+        message: 'Sesi pembelajaran telah berhasil diselesaikan dan dicatat pada sistem.',
+      });
+      await loadSessionData();
+    } catch (err) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Gagal Menyelesaikan Sesi',
+        message: err.message || 'Terjadi kesalahan saat menyelesaikan sesi.',
+      });
+    } finally {
+      setIsFinishing(false);
+    }
+  };
+
+  const handleReopenSession = async () => {
+    try {
+      await presensiService.startSession(schedule.id, dateString);
+      setSessionStatus('Sedang Berlangsung');
+      setNotification({
+        isOpen: true,
+        type: 'info',
+        title: 'Sesi Dibuka Kembali',
+        message: 'Status sesi telah diubah kembali menjadi Sedang Berlangsung.',
+      });
+      await loadSessionData();
+    } catch (err) {
+      setNotification({
+        isOpen: true,
+        type: 'error',
+        title: 'Gagal Mengubah Status Sesi',
+        message: err.message || 'Terjadi kesalahan saat membuka kembali sesi.',
       });
     }
   };
@@ -193,7 +365,9 @@ const DetailSesi = () => {
   };
 
   const handleConfirmSave = async () => {
+    if (isSaving) return;
     try {
+      setIsSaving(true);
       const payload = {
         tanggal: dateString,
         attendance: attendance.map((s) => ({
@@ -203,6 +377,7 @@ const DetailSesi = () => {
         })),
         materi,
         tugasKuis,
+        statusSesi: sessionStatus,
       };
 
       await presensiService.saveSession(schedule.id, payload);
@@ -213,6 +388,7 @@ const DetailSesi = () => {
         title: 'Data Tersimpan!',
         message: `Data kehadiran ${attendance.length} siswa, materi, dan tugas/kuis berhasil disimpan ke database.`,
       });
+      await loadSessionData();
     } catch (err) {
       setNotification({
         isOpen: true,
@@ -220,6 +396,8 @@ const DetailSesi = () => {
         title: 'Gagal Menyimpan Data',
         message: err.message || 'Terjadi kesalahan saat menyimpan data presensi ke server.',
       });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -257,13 +435,6 @@ const DetailSesi = () => {
     );
   }
 
-  const formattedDate = dateObj.toLocaleDateString('id-ID', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-
   return (
     <div className="flex min-h-[100dvh] flex-col bg-zinc-950 text-zinc-50 selection:bg-[#29438f]/30">
       <Sidebar role="guru" />
@@ -286,7 +457,7 @@ const DetailSesi = () => {
               <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-[#9eafff]/10 blur-3xl" aria-hidden="true" />
               <p className="relative text-xs font-semibold uppercase tracking-[0.2em] text-[#aebcff]">Sesi mengajar</p>
               <h1 className="relative mt-5 font-display text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">{schedule.mataPelajaran}</h1>
-              <p className="relative mt-3 text-lg font-medium text-[#d8deff]">Kelas {schedule.kelas}</p>
+              <p className="relative mt-3 text-lg font-medium text-[#d8deff]">Kelas {activeSchedule.kelas || schedule?.kelas}</p>
               <div className="relative mt-8 grid gap-5 border-t border-white/10 pt-5 sm:grid-cols-2">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Tanggal</p>
@@ -294,36 +465,177 @@ const DetailSesi = () => {
                 </div>
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Waktu &amp; Ruang</p>
-                  <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{schedule.jamMulai} - {schedule.jamSelesai} • {schedule.ruang || `Kelas ${schedule.kelas}`}</p>
+                  <p className="mt-2 text-sm leading-6 text-[#edf1ff]">{activeJamMulai} - {activeJamSelesai} WIB • {activeSchedule.ruang || `Kelas ${activeSchedule.kelas || schedule?.kelas}`}</p>
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-white/10 p-6 sm:p-8 lg:border-l lg:border-t-0">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Status sesi</p>
-                  <p className="mt-3 font-display text-2xl font-semibold tracking-[-0.05em] text-white">
-                    {sessionStarted ? 'Sedang berlangsung / Aktif' : 'Belum dimulai'}
-                  </p>
+            <div className="border-t border-white/10 p-6 sm:p-8 lg:border-l lg:border-t-0 flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Status sesi</p>
+                    <p className="mt-3 font-display text-2xl font-semibold tracking-[-0.05em] text-white">
+                      {sessionStatus === 'Selesai'
+                        ? 'Selesai'
+                        : sessionStatus === 'Sedang Berlangsung'
+                        ? 'Sedang Berlangsung'
+                        : scheduleTiming.status === 'SUDAH_SELESAI'
+                        ? 'Sesi Sudah Selesai'
+                        : scheduleTiming.status === 'BELUM_WAKTUNYA'
+                        ? 'Sesi Belum Waktunya'
+                        : 'Belum Dimulai'}
+                    </p>
+                  </div>
+                  <span
+                    className={`flex h-11 w-11 items-center justify-center rounded-xl shadow-sm ${
+                      sessionStatus === 'Selesai'
+                        ? 'bg-blue-500 text-white'
+                        : sessionStatus === 'Sedang Berlangsung'
+                        ? 'bg-emerald-400 text-[#172654]'
+                        : scheduleTiming.status === 'SUDAH_SELESAI'
+                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                        : scheduleTiming.status === 'BELUM_WAKTUNYA'
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                        : 'bg-[#e5ba4b] text-[#172654]'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    <VisualIcon
+                      name={
+                        sessionStatus === 'Selesai'
+                          ? 'check'
+                          : sessionStatus === 'Sedang Berlangsung'
+                          ? 'play'
+                          : scheduleTiming.status === 'SUDAH_SELESAI'
+                          ? 'x'
+                          : scheduleTiming.status === 'BELUM_WAKTUNYA'
+                          ? 'clock'
+                          : 'calendar'
+                      }
+                      className="h-4 w-4"
+                    />
+                  </span>
                 </div>
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${sessionStarted ? 'bg-emerald-400 text-[#172654]' : 'bg-[#e5ba4b] text-[#172654]'}`} aria-hidden="true">
-                  <VisualIcon name={sessionStarted ? 'play' : 'calendar'} className="h-4 w-4" />
-                </span>
+
+                {sessionStatus === 'Sedang Berlangsung' && (
+                  <div className="mt-4 flex items-center gap-2 text-xs text-[#d8deff]">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+                    <span>Presensi aktif &amp; pembelajaran berlangsung</span>
+                  </div>
+                )}
+                {sessionStatus === 'Selesai' && (
+                  <div className="mt-4 flex items-center gap-2 text-xs text-blue-300">
+                    <span className="h-2 w-2 rounded-full bg-blue-400" aria-hidden="true" />
+                    <span>Sesi telah diselesaikan &amp; tersimpan</span>
+                  </div>
+                )}
+                {sessionStatus === 'Belum Dimulai' && (
+                  <div className="mt-4">
+                    {scheduleTiming.status === 'SUDAH_SELESAI' && (
+                      <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-3 text-xs text-rose-200">
+                        <p className="font-semibold flex items-center gap-1.5 text-rose-300">
+                          <VisualIcon name="x" className="h-3.5 w-3.5 text-rose-400" />
+                          Sesi Sudah Selesai
+                        </p>
+                        <p className="mt-1 text-[11px] leading-relaxed text-rose-300/80">
+                          {scheduleTiming.message}
+                        </p>
+                      </div>
+                    )}
+                    {scheduleTiming.status === 'BELUM_WAKTUNYA' && (
+                      <div className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 text-xs text-amber-200">
+                        <p className="font-semibold flex items-center gap-1.5 text-amber-300">
+                          <VisualIcon name="clock" className="h-3.5 w-3.5 text-amber-400" />
+                          Sesi Belum Waktunya
+                        </p>
+                        <p className="mt-1 text-[11px] leading-relaxed text-amber-300/80">
+                          {scheduleTiming.message}
+                        </p>
+                      </div>
+                    )}
+                    {scheduleTiming.status === 'BISA_DIMULAI' && (
+                      <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-xs text-emerald-200">
+                        <p className="font-semibold flex items-center gap-1.5 text-emerald-300">
+                          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                          Jadwal Sesi Aktif ({activeJamMulai} - {activeJamSelesai} WIB)
+                        </p>
+                        <p className="mt-1 text-[11px] leading-relaxed text-emerald-300/80">
+                          Saat ini masih di dalam jam pembelajaran. Silakan klik Mulai Sesi untuk membuka presensi.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              {sessionStarted ? (
-                <div className="mt-10 flex items-center gap-3 border-t border-white/10 pt-5 text-sm text-[#d8deff]">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
-                  Presensi aktif dan siap disimpan ke database
-                </div>
-              ) : (
-                <div className="mt-8 border-t border-white/10 pt-5">
-                  <p className="text-sm leading-6 text-[#c5cfe0]">Mulai sesi untuk mengaktifkan pengisian presensi siswa kelas ini.</p>
-                  <Button size="md" onClick={handleStartSession} className="mt-5 w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69]">
-                    Mulai Sesi <span aria-hidden="true">&#8594;</span>
+
+              <div className="mt-6 border-t border-white/10 pt-4">
+                {sessionStatus === 'Belum Dimulai' && (
+                  <div>
+                    {scheduleTiming.canStart ? (
+                      <Button
+                        size="md"
+                        onClick={handleStartSession}
+                        disabled={isStarting}
+                        className="w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69] font-medium shadow-md shadow-amber-900/20 flex items-center justify-center gap-2"
+                      >
+                        <span>Mulai Sesi</span> <span aria-hidden="true">&#8594;</span>
+                      </Button>
+                    ) : scheduleTiming.status === 'SUDAH_SELESAI' ? (
+                      <div className="space-y-1">
+                        <button
+                          type="button"
+                          disabled
+                          className="w-full py-2.5 px-4 rounded-xl bg-zinc-800/80 border border-zinc-700/60 text-zinc-400 font-medium text-xs sm:text-sm flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
+                        >
+                          <VisualIcon name="x" className="h-4 w-4 text-rose-400" />
+                          <span>Sesi Sudah Selesai</span>
+                        </button>
+                        <p className="text-center text-[11px] text-zinc-400">
+                          Waktu jadwal telah terlewati. Tidak dapat memulai sesi.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        <button
+                          type="button"
+                          disabled
+                          className="w-full py-2.5 px-4 rounded-xl bg-zinc-800/80 border border-zinc-700/60 text-zinc-400 font-medium text-xs sm:text-sm flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
+                        >
+                          <VisualIcon name="clock" className="h-4 w-4 text-amber-400" />
+                          <span>Sesi Belum Waktunya</span>
+                        </button>
+                        <p className="text-center text-[11px] text-zinc-400">
+                          Dapat dimulai pada pukul {activeJamMulai} WIB
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {sessionStatus === 'Sedang Berlangsung' && (
+                  <Button
+                    size="md"
+                    onClick={() => setShowFinishConfirm(true)}
+                    disabled={isFinishing}
+                    className="w-full !bg-rose-600 hover:!bg-rose-700 !text-white font-medium flex items-center justify-center gap-2 shadow-lg shadow-rose-950/40"
+                  >
+                    <VisualIcon name="check" className="h-4 w-4" />
+                    <span>{isFinishing ? 'Menyelesaikan...' : 'Selesaikan Sesi'}</span>
                   </Button>
-                </div>
-              )}
+                )}
+
+                {sessionStatus === 'Selesai' && (
+                  <button
+                    type="button"
+                    onClick={handleReopenSession}
+                    className="w-full py-2.5 px-3 text-xs font-semibold text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all text-center flex items-center justify-center gap-1.5"
+                  >
+                    <span>↺</span>
+                    <span>Buka Kembali Sesi</span>
+                  </button>
+                )}
+              </div>
             </div>
           </section>
 
@@ -372,11 +684,49 @@ const DetailSesi = () => {
               </div>
 
               {!sessionStarted && (
-                <div className="mx-5 mt-5 flex items-start gap-3 rounded-2xl border border-[#5269b5]/40 bg-[#1b2a54] p-4 text-sm text-[#d8deff] sm:mx-7">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#9eafff]/15 text-[#aebcff]" aria-hidden="true">
-                    <VisualIcon name="info" className="h-3.5 w-3.5" />
+                <div className={`mx-5 mt-5 flex items-start gap-3 rounded-2xl border p-4 text-sm sm:mx-7 ${
+                  scheduleTiming.status === 'SUDAH_SELESAI'
+                    ? 'border-rose-500/30 bg-rose-950/20 text-rose-200'
+                    : scheduleTiming.status === 'BELUM_WAKTUNYA'
+                    ? 'border-amber-500/30 bg-amber-950/20 text-amber-200'
+                    : 'border-[#5269b5]/40 bg-[#1b2a54] text-[#d8deff]'
+                }`}>
+                  <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${
+                    scheduleTiming.status === 'SUDAH_SELESAI'
+                      ? 'bg-rose-500/20 text-rose-300'
+                      : scheduleTiming.status === 'BELUM_WAKTUNYA'
+                      ? 'bg-amber-500/20 text-amber-300'
+                      : 'bg-[#9eafff]/15 text-[#aebcff]'
+                  }`} aria-hidden="true">
+                    <VisualIcon
+                      name={
+                        scheduleTiming.status === 'SUDAH_SELESAI'
+                          ? 'x'
+                          : scheduleTiming.status === 'BELUM_WAKTUNYA'
+                          ? 'clock'
+                          : 'info'
+                      }
+                      className="h-3.5 w-3.5"
+                    />
                   </span>
-                  <p>Mulai sesi terlebih dahulu untuk mengaktifkan perubahan status presensi siswa.</p>
+                  <div>
+                    {scheduleTiming.status === 'SUDAH_SELESAI' ? (
+                      <div>
+                        <p className="font-semibold text-rose-300">Sesi Sudah Selesai</p>
+                        <p className="mt-0.5 text-xs text-rose-200/80">Jadwal dan waktu pembelajaran telah terlewati. Sesi ini sudah selesai dan tidak dapat dimulai lagi.</p>
+                      </div>
+                    ) : scheduleTiming.status === 'BELUM_WAKTUNYA' ? (
+                      <div>
+                        <p className="font-semibold text-amber-300">Sesi Belum Waktunya</p>
+                        <p className="mt-0.5 text-xs text-amber-200/80">Sesi hanya dapat dimulai saat tanggal dan jam pembelajaran yang dijadwalkan ({activeJamMulai} - {activeJamSelesai} WIB).</p>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="font-semibold text-[#edf1ff]">Sesi Siap Dimulai</p>
+                        <p className="mt-0.5 text-xs text-[#d8deff]/80">Waktu sesi telah tiba. Klik <strong className="text-white">Mulai Sesi</strong> di atas untuk mengaktifkan perubahan status presensi siswa.</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -489,10 +839,33 @@ const DetailSesi = () => {
 
               {sessionStarted && (
                 <div className="flex flex-col gap-3 border-t border-zinc-800/80 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
-                  <p className="text-xs leading-5 text-zinc-500">Pastikan setiap siswa memiliki status sebelum menyimpan ke database.</p>
-                  <Button size="md" onClick={handleSaveAttendance} className="w-full !bg-[#e5ba4b] !text-[#172654] hover:!bg-[#f0cb69] sm:w-auto">
-                    Simpan Kehadiran <span aria-hidden="true">&#8594;</span>
-                  </Button>
+                  <p className="text-xs leading-5 text-zinc-500">
+                    {sessionStatus === 'Selesai'
+                      ? 'Sesi ini telah selesai. Anda tetap dapat memperbarui presensi jika ada koreksi.'
+                      : 'Pastikan seluruh siswa memiliki status kehadiran sebelum menyelesaikan sesi.'}
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <Button
+                      size="md"
+                      variant="outline"
+                      onClick={handleSaveAttendance}
+                      disabled={isSaving}
+                      className="w-full sm:w-auto !border-zinc-700 hover:!border-zinc-600 !text-zinc-300"
+                    >
+                      {sessionStatus === 'Selesai' ? 'Perbarui Presensi' : 'Simpan Sementara'}
+                    </Button>
+                    {sessionStatus === 'Sedang Berlangsung' && (
+                      <Button
+                        size="md"
+                        onClick={() => setShowFinishConfirm(true)}
+                        disabled={isFinishing}
+                        className="w-full sm:w-auto !bg-rose-600 hover:!bg-rose-700 !text-white font-medium flex items-center justify-center gap-2 shadow-md shadow-rose-950/30"
+                      >
+                        <VisualIcon name="check" className="h-4 w-4" />
+                        <span>Selesaikan Sesi</span>
+                      </Button>
+                    )}
+                  </div>
                 </div>
               )}
             </section>
@@ -607,24 +980,38 @@ const DetailSesi = () => {
 
       <ConfirmDialog
         isOpen={showConfirm}
-        onClose={() => setShowConfirm(false)}
+        onClose={() => !isStarting && setShowConfirm(false)}
         onConfirm={handleConfirmStart}
+        disabled={isStarting}
         title="Mulai Sesi Mengajar"
         message={`Apakah Anda yakin ingin memulai sesi ${schedule?.mataPelajaran} untuk kelas ${schedule?.kelas}?`}
-        confirmText="Ya, Mulai Sesi"
+        confirmText={isStarting ? 'Memulai...' : 'Ya, Mulai Sesi'}
         cancelText="Batal"
         type="info"
       />
 
       <ConfirmDialog
         isOpen={showSaveConfirm}
-        onClose={() => setShowSaveConfirm(false)}
+        onClose={() => !isSaving && setShowSaveConfirm(false)}
         onConfirm={handleConfirmSave}
+        disabled={isSaving}
         title="Simpan Data Kehadiran"
         message={`Apakah Anda yakin ingin menyimpan data kehadiran untuk kelas ${schedule?.kelas}?`}
-        confirmText="Ya, Simpan"
+        confirmText={isSaving ? 'Menyimpan...' : 'Ya, Simpan'}
         cancelText="Batal"
         type="success"
+      />
+
+      <ConfirmDialog
+        isOpen={showFinishConfirm}
+        onClose={() => !isFinishing && setShowFinishConfirm(false)}
+        onConfirm={handleConfirmFinish}
+        disabled={isFinishing}
+        title="Selesaikan Sesi Mengajar"
+        message={`Apakah Anda yakin ingin menyelesaikan sesi pembelajaran ${schedule?.mataPelajaran} untuk kelas ${schedule?.kelas}? Catatan kehadiran siswa dan materi pembelajaran akan disimpan sebagai sesi selesai.`}
+        confirmText={isFinishing ? 'Menyelesaikan...' : 'Ya, Selesaikan Sesi'}
+        cancelText="Batal"
+        type="danger"
       />
     </div>
   );

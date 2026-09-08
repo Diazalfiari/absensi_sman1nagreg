@@ -4,6 +4,7 @@ import { getCurrentUser } from './utils/helpers';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { SidebarProvider } from './contexts/SidebarContext';
 import ThemeToggle from './components/common/ThemeToggle';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // Pages
 import Home from './pages/Home';
@@ -15,6 +16,7 @@ import TambahJadwal from './pages/Admin/TambahJadwal';
 import ManajemenPengguna from './pages/Admin/ManajemenPengguna';
 import ManajemenKelas from './pages/Admin/ManajemenKelas';
 import DetailKelas from './pages/Admin/DetailKelas';
+import ManajemenMapel from './pages/Admin/ManajemenMapel';
 import LogAktivitas from './pages/Admin/LogAktivitas';
 import GuruDashboard from './pages/Guru/GuruDashboard';
 import JadwalMengajar from './pages/Guru/JadwalMengajar';
@@ -46,6 +48,7 @@ function App() {
       <SidebarProvider>
         <Router>
           <ThemeToggle />
+          <ScrollToTop />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
@@ -113,6 +116,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRole="admin">
                   <DetailKelas />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/manajemen-mapel"
+              element={
+                <ProtectedRoute allowedRole="admin">
+                  <ManajemenMapel />
                 </ProtectedRoute>
               }
             />

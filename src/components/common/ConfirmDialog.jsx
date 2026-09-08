@@ -9,7 +9,8 @@ const ConfirmDialog = ({
   message = 'Apakah Anda yakin?',
   confirmText = 'Ya, Lanjutkan',
   cancelText = 'Batal',
-  type = 'info' // info, warning, danger, success
+  type = 'info', // info, warning, danger, success
+  disabled = false,
 }) => {
   if (!isOpen) return null;
 
@@ -59,12 +60,14 @@ const ConfirmDialog = ({
             variant="secondary" 
             onClick={onClose}
             className="flex-1"
+            disabled={disabled}
           >
             {cancelText}
           </Button>
           <Button 
             onClick={onConfirm}
             className="flex-1"
+            disabled={disabled}
           >
             {confirmText}
           </Button>

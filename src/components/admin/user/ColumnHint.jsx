@@ -8,14 +8,16 @@ import React from 'react';
  *   role - 'siswa' | 'guru'
  */
 const ColumnHint = ({ role }) => (
-  <div className="p-3 bg-zinc-950/50 border border-zinc-800 rounded-lg text-xs text-zinc-500 space-y-1">
-    <p className="font-medium text-zinc-300">Urutan kolom spreadsheet yang diharapkan:</p>
-    <p className="text-primary-400 font-mono text-[11px] leading-relaxed">
+  <div className="p-3 bg-zinc-950/50 border border-zinc-800 rounded-lg text-xs text-zinc-400 space-y-1.5">
+    <p className="font-semibold text-zinc-200">Urutan kolom spreadsheet yang diharapkan:</p>
+    <div className="p-2 bg-zinc-900 border border-zinc-800 rounded font-mono text-[11px] text-[#9eafff]">
       {role === 'siswa'
-        ? 'Nama Lengkap | Username | Password | Email | Nomor HP | NIPD | NISN | Kelas (cth: X-1) | Jenis Kelamin (L/P) | Alamat'
-        : 'Nama Lengkap | Username | Password | Email | Nomor HP | NIP | Mata Pelajaran'}
+        ? 'Nama Lengkap | NISN | Kelas (cth: X-1) | Jenis Kelamin (L/P)'
+        : 'Nama Lengkap | NIP | Mata Pelajaran Pengampu'}
+    </div>
+    <p className="text-[11px] text-zinc-500">
+      Baris judul/header di baris pertama (misal: "Nama Lengkap", "NISN", dst.) akan dilewati otomatis.
     </p>
-    <p className="text-zinc-500">Baris judul/header (opsional) akan dilewati secara otomatis.</p>
   </div>
 );
 

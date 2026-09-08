@@ -77,10 +77,13 @@ const ReportFilter = ({
             onChange={onFilterChange}
             className={`${inputClasses} dark-select`}
           >
-            <option value="Hasil Akhir">Hasil Akhir</option>
-            {dataMapel.map((mapel) => (
-              <option key={mapel.id} value={mapel.nama}>{mapel.nama}</option>
-            ))}
+            {dataMapel.length === 0 ? (
+              <option value="">Memuat mata pelajaran...</option>
+            ) : (
+              dataMapel.map((mapel) => (
+                <option key={mapel.id} value={mapel.nama}>{mapel.nama}</option>
+              ))
+            )}
           </select>
         </div>
 

@@ -16,6 +16,7 @@ const menuItems = {
     { path: '/admin/tambah-jadwal', label: 'Tambah Jadwal', icon: 'calendar' },
     { path: '/admin/manajemen-pengguna', label: 'Manajemen Pengguna', icon: 'users' },
     { path: '/admin/manajemen-kelas', label: 'Manajemen Kelas', icon: 'class' },
+    { path: '/admin/manajemen-mapel', label: 'Manajemen Mapel', icon: 'book' },
     { path: '/admin/log-aktivitas', label: 'Log Aktivitas', icon: 'history' },
   ],
   guru: [

@@ -1,13 +1,27 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 
 const ThemeToggle = () => {
   const { isDark, toggleTheme } = useTheme();
+  const location = useLocation();
+
+  // Cek apakah berada di halaman Home atau Login
+  const isHomeOrLogin =
+    location.pathname === '/' ||
+    location.pathname === '/login' ||
+    location.pathname === '/home';
+
+  // Halaman home & login: pojok kanan bawah untuk mode hp dan tablet
+  // Halaman setelah login: tetap bottom-24 agar tidak bertumpukan dengan bottom navbar mobile
+  const positionClasses = isHomeOrLogin
+    ? 'bottom-5 right-5 sm:bottom-6 sm:right-6 lg:bottom-6 lg:right-6'
+    : 'bottom-24 right-4 sm:bottom-24 sm:right-6 lg:bottom-6 lg:right-6';
 
   return (
     <button
       onClick={toggleTheme}
-      className="fixed bottom-24 right-4 lg:bottom-6 lg:right-6 z-50 p-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-50 shadow-soft transition-all duration-300 hover:scale-105 active:scale-95 group"
+      className={`fixed ${positionClasses} z-50 p-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-50 shadow-soft transition-all duration-300 hover:scale-105 active:scale-95 group`}
       aria-label="Toggle Theme"
       title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
     >

@@ -5,14 +5,11 @@ import ColumnHint from './ColumnHint';
 import PreviewTable from './PreviewTable';
 import { parseCsvText, parsePastedText } from '../../../utils/userImport';
 
-const INPUT_CLASS =
-  'w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors';
-const LABEL_CLASS = 'block text-sm font-medium text-zinc-400 mb-1';
-
 /**
  * UserImport
- * Menangani import file Excel/CSV (.xlsx, .xls, .csv) dan copy-paste dari Excel,
- * menampilkan preview tabel, dan memanggil onSave dengan array user.
+ * Menangani import file Excel (.xlsx, .xls, .csv) dan copy-paste dari Excel.
+ * Format Siswa: Nama Lengkap | NISN | Kelas | Jenis Kelamin
+ * Format Guru : Nama Lengkap | NIP | Mata Pelajaran Pengampu
  */
 const UserImport = ({ role, method, onSave, onCancel }) => {
   const fileInputRef = useRef(null);
@@ -20,6 +17,7 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
   const [pasteText, setPasteText] = useState('');
   const [importError, setImportError] = useState('');
   const [isReadingFile, setIsReadingFile] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const removePreviewRow = (idx) =>
     setPreviewData((prev) => prev.filter((_, i) => i !== idx));
@@ -27,11 +25,15 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
   const handleSaveBulk = async () => {
     if (!previewData.length) return;
     try {
+      setIsSubmitting(true);
+      setImportError('');
       await onSave(previewData);
       setPreviewData([]);
       setPasteText('');
     } catch (err) {
-      // Biarkan previewData tetap ada jika terjadi error dari server
+      setImportError(err.message || 'Terjadi kesalahan saat menyimpan data.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -45,7 +47,6 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
       const fileName = file.name.toLowerCase();
 
       if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-        // Parse spreadsheet Excel menggunakan ExcelJS
         const arrayBuffer = await file.arrayBuffer();
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(arrayBuffer);
@@ -57,77 +58,48 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
 
         const rows = [];
         worksheet.eachRow((row, rowNumber) => {
-          const col1 = row.getCell(1).text?.trim();
+          const col1 = row.getCell(1).text?.trim() || '';
 
-          // Lewati header jika baris 1 berisi kata 'nama' atau 'nama lengkap'
-          if (rowNumber === 1 && (col1.toLowerCase() === 'nama' || col1.toLowerCase() === 'nama lengkap' || col1.toLowerCase() === 'no')) {
+          // Lewati header jika baris 1 berisi judul kolom
+          if (
+            rowNumber === 1 &&
+            (col1.toLowerCase() === 'nama' ||
+              col1.toLowerCase() === 'nama lengkap' ||
+              col1.toLowerCase() === 'no' ||
+              col1.toLowerCase() === 'name')
+          ) {
             return;
           }
 
           if (role === 'siswa') {
-            const colCount = row.cellCount;
-            let nama, username, password, email, phone, nipd, nisn, kelas, gender, alamat;
+            // Kolom: [1] Nama Lengkap, [2] NISN, [3] Kelas, [4] Jenis Kelamin
+            const nama = row.getCell(1).text?.trim() || '';
+            const nisn = row.getCell(2).text?.trim() || '';
+            const kelas = row.getCell(3).text?.trim() || '';
+            const rawGender = (row.getCell(4).text?.trim() || 'L').toUpperCase();
+            const gender = rawGender === 'P' || rawGender === 'PEREMPUAN' ? 'P' : 'L';
 
-            if (colCount >= 9) {
-              nama = row.getCell(1).text?.trim();
-              username = row.getCell(2).text?.trim();
-              password = row.getCell(3).text?.trim() || `${username}123`;
-              email = row.getCell(4).text?.trim() || '';
-              phone = row.getCell(5).text?.trim() || '';
-              nipd = row.getCell(6).text?.trim() || username;
-              nisn = row.getCell(7).text?.trim() || '';
-              kelas = row.getCell(8).text?.trim();
-              const rawGender = (row.getCell(9).text?.trim() || 'L').toUpperCase();
-              gender = rawGender === 'P' || rawGender === 'PEREMPUAN' ? 'P' : 'L';
-              alamat = row.getCell(10).text?.trim() || '';
-            } else {
-              nama = row.getCell(1).text?.trim();
-              username = row.getCell(2).text?.trim();
-              password = row.getCell(3).text?.trim() || `${username}123`;
-              nipd = row.getCell(4).text?.trim() || username;
-              nisn = '';
-              email = '';
-              kelas = row.getCell(5).text?.trim();
-              const rawGender = (row.getCell(6).text?.trim() || 'L').toUpperCase();
-              gender = rawGender === 'P' || rawGender === 'PEREMPUAN' ? 'P' : 'L';
-              alamat = row.getCell(7).text?.trim() || '';
-              phone = row.getCell(8).text?.trim() || '';
-            }
-
-            if (nama && username) {
+            if (nama || nisn) {
               rows.push({
                 id: Date.now() + rowNumber,
                 role: 'siswa',
                 nama,
-                username,
-                password,
-                email,
-                phone,
-                nipd,
                 nisn,
                 kelas,
                 gender,
-                alamat,
               });
             }
           } else {
-            const nama = row.getCell(1).text?.trim();
-            const username = row.getCell(2).text?.trim();
-            const password = row.getCell(3).text?.trim() || `${username}123`;
-            const email = row.getCell(4).text?.trim() || '';
-            const phone = row.getCell(5).text?.trim() || '';
-            const nip = row.getCell(6).text?.trim() || '';
-            const spesialisasi = row.getCell(7).text?.trim() || '';
+            // Guru Kolom: [1] Nama Lengkap, [2] NIP, [3] Mata Pelajaran Pengampu
+            const nama = row.getCell(1).text?.trim() || '';
+            const nip = row.getCell(2).text?.trim() || '';
+            const spesialisasi = row.getCell(3).text?.trim() || '';
 
-            if (nama && username) {
+            if (nama || nip) {
               rows.push({
                 id: Date.now() + rowNumber,
                 role: 'guru',
                 nama,
-                username,
-                password,
-                email,
-                phone,
                 nip,
                 spesialisasi,
               });
@@ -136,12 +108,12 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
         });
 
         if (rows.length === 0) {
-          throw new Error('Tidak ada data yang valid ditemukan di dalam file Excel.');
+          throw new Error('Tidak ada baris data yang ditemukan di dalam file Excel.');
         }
 
         setPreviewData(rows);
       } else {
-        // Parse file CSV / Text
+        // Parse CSV
         const text = await file.text();
         const parsed = parseCsvText(text, role);
         if (!parsed.length) throw new Error('Tidak ada data yang ditemukan.');
@@ -178,7 +150,7 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
     try {
       const parsed = parsePastedText(val, role);
       if (!parsed.length) {
-        setImportError('Format data tidak sesuai. Pastikan kolom terpisah dengan Tab/koma.');
+        setImportError('Format data tidak sesuai. Pastikan kolom terpisah dengan Tab dari Excel.');
         setPreviewData([]);
       } else {
         setPreviewData(parsed);
@@ -188,6 +160,13 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
       setPreviewData([]);
     }
   };
+
+  const validCount = previewData.filter((r) =>
+    role === 'siswa'
+      ? r.nama && r.nisn && r.kelas && r.gender
+      : r.nama && r.nip && r.spesialisasi
+  ).length;
+  const invalidCount = previewData.length - validCount;
 
   return (
     <div className="space-y-4">
@@ -199,72 +178,103 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
           onClick={() => fileInputRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          className="border-2 border-dashed border-zinc-700 hover:border-primary-500 rounded-xl p-8 text-center cursor-pointer transition-colors group"
+          className={`cursor-pointer border-2 border-dashed border-zinc-800 hover:border-primary-500/60 rounded-xl ${previewData.length > 0 ? 'p-3' : 'p-5'} text-center bg-zinc-950 transition-all`}
         >
-          <div className="text-3xl mb-2">📂</div>
-          <p className="text-sm font-medium text-zinc-300 group-hover:text-primary-400 transition-colors">
-            {isReadingFile ? 'Sedang membaca file...' : 'Klik untuk pilih file, atau drag & drop di sini'}
-          </p>
-          <p className="text-xs text-zinc-500 mt-1">Format didukung: .xlsx, .xls, .csv</p>
           <input
             ref={fileInputRef}
             type="file"
-            accept=".xlsx,.xls,.csv,.txt"
-            className="hidden"
+            accept=".xlsx,.xls,.csv"
             onChange={handleFileChange}
+            className="hidden"
           />
+          <div className={`${previewData.length > 0 ? 'text-xl mb-1' : 'text-3xl mb-2'}`}>📂</div>
+          <p className="text-sm font-medium text-zinc-300">
+            {isReadingFile ? 'Sedang membaca file...' : 'Klik untuk pilih file spreadsheet (.xlsx, .xls, .csv)'}
+          </p>
+          <p className="text-xs text-zinc-500 mt-0.5">atau drag & drop file ke area ini</p>
         </div>
       ) : (
-        /* ── Copy-Paste Excel ── */
+        /* ── Copy-Paste dari Excel ── */
         <div>
-          <label className={LABEL_CLASS}>
-            Tempel data dari baris Excel / Spreadsheet{' '}
-            <span className="text-zinc-600 font-normal">(Ctrl+V / ⌘V)</span>
+          <label className="block text-sm font-medium text-zinc-400 mb-1">
+            Tempel (Paste) data dari tabel Excel di sini:
           </label>
           <textarea
-            rows={6}
             value={pasteText}
             onChange={handlePasteTextChange}
+            rows={previewData.length > 0 ? 3 : 4}
+            className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-xs font-mono text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors resize-y"
             placeholder={
               role === 'siswa'
-                ? 'Ahmad Fauzi\tahmad.fauzi\tpass123\tahmad@gmail.com\t081234567890\t2021001\t0051234567\tX-1\tL\tJl. Raya Nagreg No. 10\nSiti Nurhaliza\tsiti.n\tpass123\tsiti@gmail.com\t081298765432\t2021002\t0051234568\tX-1\tP\tJl. Raya Nagreg No. 15'
-                : 'Budi Santoso\tbudi.sp\tpass123\tbudi@sekolah.sch.id\t081298765432\t198505152010011003\tMatematika\nDewi Lestari\tdewi.l\tpass123\tdewi@sekolah.sch.id\t081345678901\t198906202015022001\tBahasa Indonesia'
+                ? `Contoh (Salin 4 kolom dari Excel):\nBudi Santoso\t0012345678\tX-1\tL\nSiti Aminah\t0012345679\tX-1\tP`
+                : `Contoh (Salin 3 kolom dari Excel):\nAndi Setiawan\t198001012010011001\tMatematika\nSiti Rahma\t198202022011022002\tBahasa Indonesia`
             }
-            className={`${INPUT_CLASS} resize-none font-mono text-xs`}
           />
         </div>
       )}
 
       {importError && (
-        <p className="text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2">
+        <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-400">
           ⚠️ {importError}
-        </p>
+        </div>
       )}
 
+      {/* ── Preview Section ── */}
       {previewData.length > 0 && (
-        <>
-          <p className="text-xs text-zinc-400">
-            Preview:{' '}
-            <span className="text-primary-400 font-semibold">{previewData.length} baris data</span>{' '}
-            siap {method === 'excel' ? 'diimpor ke database' : 'ditambahkan'}
-          </p>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs text-zinc-400">
+            <span>
+              Total terdeteksi: <strong className="text-zinc-200">{previewData.length} baris</strong>
+              {' | '}
+              <span className="text-emerald-400 font-medium">Valid: {validCount}</span>
+              {invalidCount > 0 && (
+                <span className="text-rose-400 font-medium ml-2">Perlu perbaikan: {invalidCount}</span>
+              )}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setPreviewData([]);
+                setPasteText('');
+              }}
+              className="text-zinc-500 hover:text-rose-400 transition-colors"
+            >
+              Hapus Semua
+            </button>
+          </div>
+
           <PreviewTable data={previewData} role={role} onRemove={removePreviewRow} />
-        </>
+        </div>
       )}
 
-      <div className="pt-4 flex justify-end gap-3">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Batal
-        </Button>
-        <Button
-          type="button"
-          variant="primary"
-          onClick={handleSaveBulk}
-          disabled={!previewData.length || isReadingFile}
-        >
-          {method === 'excel' ? 'Import ke Database' : 'Simpan Semua'}{' '}
-          {previewData.length > 0 ? `(${previewData.length})` : ''}
-        </Button>
+      {/* ── Action Buttons Footer (Always visible & sticky at modal bottom) ── */}
+      <div className="sticky bottom-0 bg-zinc-900/95 backdrop-blur-md pt-3.5 pb-2 -mx-6 px-6 -mb-6 border-t border-zinc-800 flex items-center justify-between gap-3 z-10">
+        <div className="text-xs text-zinc-400">
+          {previewData.length > 0 ? (
+            <span>
+              Siap simpan <strong className="text-zinc-200">{previewData.length}</strong> data ({validCount} valid)
+            </span>
+          ) : (
+            <span className="text-zinc-500">Belum ada data untuk disimpan</span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
+            Batal
+          </Button>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={handleSaveBulk}
+            disabled={!previewData.length || isSubmitting}
+            className="!bg-[#29438f] hover:!bg-[#203674] shadow-md shadow-blue-950/40"
+          >
+            {isSubmitting
+              ? 'Menyimpan...'
+              : `Simpan ${previewData.length} Data ${role === 'siswa' ? 'Siswa' : 'Guru'}`}
+          </Button>
+        </div>
       </div>
     </div>
   );
