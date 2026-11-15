@@ -664,7 +664,6 @@ const DetailSesi = () => {
             <section className={`rounded-3xl border border-zinc-800/80 bg-zinc-900/60 shadow-[0_16px_45px_rgba(15,23,42,0.06)] ${!sessionStarted ? 'opacity-60' : ''}`}>
               <div className="flex flex-col gap-4 border-b border-zinc-800/80 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-7">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9eafff]">Ruang kerja utama</p>
                   <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-zinc-50">Daftar Kehadiran Siswa</h2>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
@@ -675,7 +674,7 @@ const DetailSesi = () => {
                     <button
                       type="button"
                       onClick={() => handleSetAllStatus('Hadir')}
-                      className="rounded-xl border border-emerald-400/30 bg-emerald-500/20 px-3 py-1.5 text-xs font-semibold text-emerald-300 transition-colors hover:bg-emerald-500/30"
+                      className="rounded-xl border border-emerald-400/30 bg-emerald-500/20 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-500/30"
                     >
                       ✓ Semua Hadir
                     </button>

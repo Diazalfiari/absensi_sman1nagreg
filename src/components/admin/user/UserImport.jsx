@@ -139,27 +139,44 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
   };
 
   // ── Paste textarea handler ──
-  const handlePasteTextChange = (e) => {
-    const val = e.target.value;
-    setPasteText(val);
-    setImportError('');
-    if (!val.trim()) {
+const processPasteText = (val) => {
+  setPasteText(val);
+  setImportError('');
+  if (!val.trim()) {
+    setPreviewData([]);
+    return;
+  }
+  try {
+    const parsed = parsePastedText(val, role);
+    if (!parsed.length) {
+      setImportError('Format data tidak sesuai. Pastikan kolom terpisah dengan Tab dari Excel.');
       setPreviewData([]);
-      return;
+    } else {
+      setPreviewData(parsed);
     }
-    try {
-      const parsed = parsePastedText(val, role);
-      if (!parsed.length) {
-        setImportError('Format data tidak sesuai. Pastikan kolom terpisah dengan Tab dari Excel.');
-        setPreviewData([]);
-      } else {
-        setPreviewData(parsed);
-      }
-    } catch (err) {
-      setImportError(err.message || 'Gagal memproses teks.');
-      setPreviewData([]);
-    }
-  };
+  } catch (err) {
+    setImportError(err.message || 'Gagal memproses teks.');
+    setPreviewData([]);
+  }
+};
+
+const handlePasteTextChange = (e) => processPasteText(e.target.value);
+
+// Tab menyisipkan karakter tab (pemisah kolom), bukan pindah fokus
+const handlePasteKeyDown = (e) => {
+  if (e.key !== 'Tab' || e.shiftKey) return; // Shift+Tab tetap untuk keluar dari textarea
+
+  e.preventDefault();
+  const el = e.target;
+  const { selectionStart, selectionEnd, value } = el;
+
+  processPasteText(value.slice(0, selectionStart) + '\t' + value.slice(selectionEnd));
+
+  // Kembalikan posisi kursor setelah React selesai render ulang
+  requestAnimationFrame(() => {
+    el.selectionStart = el.selectionEnd = selectionStart + 1;
+  });
+};
 
   const validCount = previewData.filter((r) =>
     role === 'siswa'
@@ -202,14 +219,18 @@ const UserImport = ({ role, method, onSave, onCancel }) => {
           <textarea
             value={pasteText}
             onChange={handlePasteTextChange}
+            onKeyDown={handlePasteKeyDown}
             rows={previewData.length > 0 ? 3 : 4}
-            className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-xs font-mono text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors resize-y"
+            className="w-full px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-xs font-mono text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-colors resize-y [tab-size:8]"
             placeholder={
               role === 'siswa'
                 ? `Contoh (Salin 4 kolom dari Excel):\nBudi Santoso\t0012345678\tX-1\tL\nSiti Aminah\t0012345679\tX-1\tP`
                 : `Contoh (Salin 3 kolom dari Excel):\nAndi Setiawan\t198001012010011001\tMatematika\nSiti Rahma\t198202022011022002\tBahasa Indonesia`
             }
           />
+          <p className="mt-1 text-[11px] text-zinc-500">
+  Untuk ketik manual,bukan dari Copy paste Excel, maka Tekan <kbd>Tab</kbd> untuk pindah kolom.
+</p>
         </div>
       )}
 

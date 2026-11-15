@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/common/Sidebar';
-import VisualIcon from '../../components/common/VisualIcon';
 import { getCurrentUser } from '../../utils/helpers';
 import Footer from '../../components/common/Footer';
 
@@ -209,17 +208,6 @@ const LaporanBulanan = () => {
 
   const daysInMonth = getDaysInMonth(filters.bulan, filters.tahun);
   const bulanName = bulanOptions.find((b) => b.value === filters.bulan)?.label;
-
-  const reportSummary = presensiData.reduce((summary, siswa) => ({
-    hadir: summary.hadir + siswa.hadir,
-    sakit: summary.sakit + siswa.sakit,
-    izin: summary.izin + siswa.izin,
-    alpa: summary.alpa + siswa.alpa,
-  }), { hadir: 0, sakit: 0, izin: 0, alpa: 0 });
-
-  const averageAttendance = presensiData.length > 0
-    ? Math.round(presensiData.reduce((total, siswa) => total + siswa.persentase, 0) / presensiData.length)
-    : 0;
 
   const handleExportExcel = async () => {
     await exportMonthlyReport({

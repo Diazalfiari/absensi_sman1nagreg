@@ -106,7 +106,6 @@ const AdminDashboard = () => {
 
   const totalStats = dashboardData?.stats || { total: 0, hadir: 0, izin: 0, sakit: 0, alpa: 0 };
   const persentaseKehadiran = dashboardData?.persentaseKehadiran ?? 100;
-  const totalKelas = dashboardData?.totalKelas ?? 36;
   const leadingClasses = dashboardData?.leadingClasses || [];
   const attentionClasses = dashboardData?.attentionClasses || [];
 
@@ -142,31 +141,6 @@ const AdminDashboard = () => {
               <p className="mt-1 text-xs text-zinc-500">Ringkasan data presensi</p>
             </div>
           </header>
-
-          {/* <section className="relative mb-8 overflow-hidden rounded-3xl border border-[#b9c8f2] bg-[#eaf0ff] p-6 text-[#172654] dark:border-[#26386e] dark:bg-[#152143] dark:text-[#eef2ff] sm:p-8">
-            <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-32 h-72 w-72 rounded-full bg-[#29438f]/10 blur-3xl dark:bg-[#9eafff]/10" />
-            <div className="relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#29438f] dark:text-[#aebcff]">Ikhtisar kehadiran</p>
-                <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold leading-tight tracking-[-0.035em] sm:text-4xl">
-                  Semua data sekolah, satu tampilan yang mudah dibaca.
-                </h2>
-                <p className="mt-4 max-w-xl text-sm leading-7 text-[#52628e] dark:text-[#b4bfdf]">
-                  Pantau rekap kelas, lihat performa kehadiran, dan lanjutkan pekerjaan administratif dari satu panel.
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-[#c8d4f4] bg-white/60 p-4 dark:border-[#30457f] dark:bg-[#101a35]/60">
-                  <p className="text-2xl font-semibold tracking-tight">{totalKelas}</p>
-                  <p className="mt-1 text-xs leading-5 text-[#52628e] dark:text-[#b4bfdf]">Kelas terpantau</p>
-                </div>
-                <div className="rounded-2xl border border-[#c8d4f4] bg-white/60 p-4 dark:border-[#30457f] dark:bg-[#101a35]/60">
-                  <p className="text-2xl font-semibold tracking-tight">{persentaseKehadiran}%</p>
-                  <p className="mt-1 text-xs leading-5 text-[#52628e] dark:text-[#b4bfdf]">Kehadiran keseluruhan</p>
-                </div>
-              </div>
-            </div>
-          </section> */}
 
           <section className="mb-8">
             <div className="mb-4 flex items-end justify-between gap-4">

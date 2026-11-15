@@ -20,7 +20,7 @@ const JadwalMengajar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [schedulesList, setSchedulesList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     if (!currentUser || currentUser.role !== 'guru') {
@@ -154,9 +154,6 @@ const JadwalMengajar = () => {
 
   const days = getDaysInMonth(currentMonth);
   const selectedSchedules = selectedDate ? getScheduleForDate(selectedDate) : [];
-
-  // Hitung jumlah hari aktif dalam sebulan
-  const daysWithSchedulesCount = days.filter((d) => d && hasSchedule(d)).length;
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-zinc-950 text-zinc-50 selection:bg-[#29438f]/30">

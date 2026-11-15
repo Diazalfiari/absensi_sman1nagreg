@@ -307,18 +307,18 @@ const AdminRekap = () => {
                   icon="✓"
                 />
                 <StatCard
-                  title="Sakit"
-                  value={summary.sakit}
-                  subValue="Siswa Sakit"
-                  status="warning"
-                  icon="🏥"
-                />
-                <StatCard
                   title="Izin"
                   value={summary.izin}
                   subValue="Siswa Izin"
                   status="info"
                   icon="📝"
+                />
+                <StatCard
+                  title="Sakit"
+                  value={summary.sakit}
+                  subValue="Siswa Sakit"
+                  status="warning"
+                  icon="🏥"
                 />
                 <StatCard
                   title="Alpa"
