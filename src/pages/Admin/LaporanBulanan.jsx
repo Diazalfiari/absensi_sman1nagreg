@@ -255,7 +255,7 @@ const LaporanBulanan = () => {
             </div>
           </header>
 
-          <section className="grid overflow-hidden rounded-3xl border border-[#30457f] bg-[#172654] text-white shadow-[0_24px_70px_rgba(23,38,84,0.2)] dark:bg-[#111b3c] lg:grid-cols-[1.25fr_1fr]">
+          {/* <section className="grid overflow-hidden rounded-3xl border border-[#30457f] bg-[#172654] text-white shadow-[0_24px_70px_rgba(23,38,84,0.2)] dark:bg-[#111b3c] lg:grid-cols-[1.25fr_1fr]">
             <div className="relative overflow-hidden p-6 sm:p-8">
               <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#9eafff]/10 blur-3xl" aria-hidden="true" />
               <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Presensi terpilih</p>
@@ -284,9 +284,9 @@ const LaporanBulanan = () => {
                 <p className="mt-2 text-xs leading-5 text-[#c5cfe0]">Hari kalender</p>
               </div>
             </div>
-          </section>
+          </section> */}
 
-          <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {/* <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-700 dark:text-emerald-300">Hadir</p>
               <p className="mt-3 text-2xl font-semibold text-zinc-50">{loadingData ? '-' : reportSummary.hadir}</p>
@@ -303,7 +303,7 @@ const LaporanBulanan = () => {
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-700 dark:text-rose-300">Alpa</p>
               <p className="mt-3 text-2xl font-semibold text-zinc-50">{loadingData ? '-' : reportSummary.alpa}</p>
             </div>
-          </section>
+          </section> */}
 
           <ReportFilter
             filters={filters}
@@ -334,7 +334,7 @@ const LaporanBulanan = () => {
               </div>
             </div>
             {loadingData ? (
-              <div className="px-6 py-10 text-sm text-zinc-400">Memuat laporan bulanan dari database...</div>
+              <div className="px-6 py-10 text-sm text-zinc-400">Memuat laporan bulanan...</div>
             ) : (
               <MonthlyAttendanceTable
                 presensiData={presensiData}
@@ -352,10 +352,10 @@ const LaporanBulanan = () => {
                 <p className="mt-1 text-xs leading-5 text-zinc-500">Gunakan kode berikut saat membaca tabel laporan.</p>
               </div>
                 <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs text-zinc-500 sm:grid-cols-4">
-                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"><VisualIcon name="task" className="h-4 w-4" /></span><span>Hadir</span></div>
-                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300"><VisualIcon name="info" className="h-4 w-4" /></span><span>Sakit</span></div>
-                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300"><VisualIcon name="message" className="h-4 w-4" /></span><span>Izin</span></div>
-                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300"><VisualIcon name="question" className="h-4 w-4" /></span><span>Alpa</span></div>
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">H</span><span>Hadir</span></div>
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-300">S</span><span>Sakit</span></div>
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-300">I</span><span>Izin</span></div>
+                 <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/20 bg-rose-500/10 text-rose-700 dark:text-rose-300">A</span><span>Alpa</span></div>
               </div>
             </div>
           </section>

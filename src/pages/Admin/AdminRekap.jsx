@@ -274,7 +274,7 @@ const AdminRekap = () => {
             <div>
               <h2 className="text-2xl font-bold text-zinc-100">Rekapitulasi Presensi Siswa</h2>
               <p className="text-sm text-zinc-400 mt-1">
-                Laporan data kehadiran seluruh rombel kelas terintegrasi database MySQL
+                Laporan data kehadiran seluruh rombel kelas
               </p>
             </div>
             <div className="flex items-center gap-3 w-full sm:w-auto">

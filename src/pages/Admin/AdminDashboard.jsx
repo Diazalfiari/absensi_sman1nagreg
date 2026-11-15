@@ -143,7 +143,7 @@ const AdminDashboard = () => {
             </div>
           </header>
 
-          <section className="relative mb-8 overflow-hidden rounded-3xl border border-[#b9c8f2] bg-[#eaf0ff] p-6 text-[#172654] dark:border-[#26386e] dark:bg-[#152143] dark:text-[#eef2ff] sm:p-8">
+          {/* <section className="relative mb-8 overflow-hidden rounded-3xl border border-[#b9c8f2] bg-[#eaf0ff] p-6 text-[#172654] dark:border-[#26386e] dark:bg-[#152143] dark:text-[#eef2ff] sm:p-8">
             <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-32 h-72 w-72 rounded-full bg-[#29438f]/10 blur-3xl dark:bg-[#9eafff]/10" />
             <div className="relative grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
               <div>
@@ -166,7 +166,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </section>
+          </section> */}
 
           <section className="mb-8">
             <div className="mb-4 flex items-end justify-between gap-4">

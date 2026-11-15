@@ -304,7 +304,7 @@ const LogAktivitas = () => {
                 Log Aktivitas Sistem
               </h1>
               <p className="relative mt-3 max-w-2xl text-sm leading-6 text-[#d8deff] sm:text-base">
-                Audit riwayat seluruh aktivitas operasional presensi siswa, pembaruan jadwal kelas, mutasi rombel, kenaikan kelas, kelulusan, serta log autentikasi secara *real-time* ke database MySQL.
+                Audit riwayat seluruh aktivitas operasional presensi siswa, pembaruan jadwal kelas, mutasi rombel, kenaikan kelas, kelulusan, serta log autentikasi secara *real-time*.
               </p>
             </div>
 

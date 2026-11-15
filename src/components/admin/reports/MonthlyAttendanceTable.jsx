@@ -14,7 +14,7 @@ const MonthlyAttendanceTable = ({ presensiData, daysInMonth, bulan, tahun }) => 
                   <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">No</th>
                   <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">NISN</th>
                   <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em]">Nama Siswa</th>
-                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">Gender</th>
+                  <th rowSpan="2" className="border border-[#30457f] px-3 py-3 text-center text-xs font-semibold uppercase tracking-[0.12em]">Jenis Kelamin</th>
                   <th colSpan={daysInMonth} className="border border-[#30457f] px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em]">Tanggal</th>
                   <th colSpan="5" className="border border-[#30457f] px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em]">Rekap</th>
                 </tr>

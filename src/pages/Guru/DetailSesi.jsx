@@ -352,7 +352,7 @@ const DetailSesi = () => {
         isOpen: true,
         type: 'success',
         title: 'Materi & Tugas Tersimpan!',
-        message: 'Materi pembelajaran, tugas, dan kuis berhasil disimpan ke database.',
+        message: 'Materi pembelajaran, tugas, dan kuis berhasil disimpan.',
       });
     } catch (err) {
       setNotification({
@@ -385,8 +385,8 @@ const DetailSesi = () => {
       setNotification({
         isOpen: true,
         type: 'success',
-        title: 'Data Tersimpan!',
-        message: `Data kehadiran ${attendance.length} siswa, materi, dan tugas/kuis berhasil disimpan ke database.`,
+        title: 'Presensi berhasil disimpan!',
+        message: `Data kehadiran ${attendance.length} siswa, materi, dan tugas/kuis berhasil disimpan.`,
       });
       await loadSessionData();
     } catch (err) {
@@ -712,13 +712,13 @@ const DetailSesi = () => {
                   <div>
                     {scheduleTiming.status === 'SUDAH_SELESAI' ? (
                       <div>
-                        <p className="font-semibold text-rose-300">Sesi Sudah Selesai</p>
-                        <p className="mt-0.5 text-xs text-rose-200/80">Jadwal dan waktu pembelajaran telah terlewati. Sesi ini sudah selesai dan tidak dapat dimulai lagi.</p>
+                        <p className="font-semibold text-rose-800">Sesi Sudah Selesai</p>
+                        <p className="mt-0.5 text-xs text-rose-700">Jadwal dan waktu pembelajaran telah terlewati. Sesi ini sudah selesai dan tidak dapat dimulai lagi.</p>
                       </div>
                     ) : scheduleTiming.status === 'BELUM_WAKTUNYA' ? (
                       <div>
-                        <p className="font-semibold text-amber-300">Sesi Belum Waktunya</p>
-                        <p className="mt-0.5 text-xs text-amber-200/80">Sesi hanya dapat dimulai saat tanggal dan jam pembelajaran yang dijadwalkan ({activeJamMulai} - {activeJamSelesai} WIB).</p>
+                        <p className="font-semibold text-amber-800">Sesi Belum Waktunya</p>
+                        <p className="mt-0.5 text-xs text-amber-700">Sesi hanya dapat dimulai saat tanggal dan jam pembelajaran yang dijadwalkan ({activeJamMulai} - {activeJamSelesai} WIB).</p>
                       </div>
                     ) : (
                       <div>
@@ -852,19 +852,8 @@ const DetailSesi = () => {
                       disabled={isSaving}
                       className="w-full sm:w-auto !border-zinc-700 hover:!border-zinc-600 !text-zinc-300"
                     >
-                      {sessionStatus === 'Selesai' ? 'Perbarui Presensi' : 'Simpan Sementara'}
+                      {sessionStatus === 'Selesai' ? 'Perbarui Presensi' : 'Simpan'}
                     </Button>
-                    {sessionStatus === 'Sedang Berlangsung' && (
-                      <Button
-                        size="md"
-                        onClick={() => setShowFinishConfirm(true)}
-                        disabled={isFinishing}
-                        className="w-full sm:w-auto !bg-rose-600 hover:!bg-rose-700 !text-white font-medium flex items-center justify-center gap-2 shadow-md shadow-rose-950/30"
-                      >
-                        <VisualIcon name="check" className="h-4 w-4" />
-                        <span>Selesaikan Sesi</span>
-                      </Button>
-                    )}
                   </div>
                 </div>
               )}

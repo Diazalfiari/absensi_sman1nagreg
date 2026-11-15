@@ -25,7 +25,6 @@ const Navbar = ({ transparent = false }) => {
           className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-zinc-700/80 bg-zinc-900/70 px-4 text-sm font-semibold text-zinc-50 transition duration-200 hover:border-[#e5ba4b]/70 hover:bg-zinc-800 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e5ba4b] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
         >
           Masuk
-          <span aria-hidden="true" className="text-base leading-none text-[#e5ba4b]">&#8594;</span>
         </Link>
       </div>
     </nav>

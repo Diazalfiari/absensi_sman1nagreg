@@ -200,7 +200,7 @@ const TambahJadwal = () => {
         isOpen: true,
         type: 'success',
         title: 'Jadwal Berhasil Disimpan!',
-        message: `Jadwal pelajaran telah berhasil disimpan ke database untuk ${selectedDates.length} tanggal pertemuan.`,
+        message: `Jadwal pelajaran telah berhasil disimpan untuk ${selectedDates.length} tanggal pertemuan.`,
       });
     } catch (err) {
       setNotification({
@@ -244,7 +244,7 @@ const TambahJadwal = () => {
         <div className="max-w-7xl mx-auto space-y-6">
           <div>
             <h1 className="text-3xl md:text-4xl font-display tracking-tight">Tambah Jadwal Pelajaran</h1>
-            <p className="text-zinc-400 mt-1">Buat jadwal baru dengan seleksi tanggal dan hari yang fleksibel langsung ke database MySQL</p>
+            <p className="text-zinc-400 mt-1">Buat jadwal baru dengan seleksi tanggal dan hari yang fleksibel</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -486,7 +486,7 @@ const TambahJadwal = () => {
         onClose={() => setShowConfirm(false)}
         onConfirm={handleConfirmSave}
         title="Konfirmasi Tambah Jadwal"
-        message={`Apakah Anda yakin ingin menyimpan jadwal pelajaran ini ke database?`}
+        message={`Apakah Anda yakin ingin menyimpan jadwal pelajaran ini?`}
         confirmText="Ya, Simpan Jadwal"
         cancelText="Batal"
         type="info"

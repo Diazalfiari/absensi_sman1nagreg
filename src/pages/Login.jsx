@@ -39,7 +39,7 @@ const Login = () => {
           navigate('/admin');
           break;
         case 'guru':
-          navigate('/guru');
+          navigate('/guru/Jadwal-mengajar');
           break;
         case 'siswa':
           navigate('/siswa');
@@ -48,7 +48,7 @@ const Login = () => {
           navigate('/');
       }
     } catch (err) {
-      setError(err.message || 'Gagal masuk. Periksa kembali NISN atau NIP Anda.');
+      setError(err.message || 'Gagal masuk. Periksa kembali NIP Anda.');
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,7 @@ const Login = () => {
                 Kehadiran dimulai dari akses yang sederhana.
               </h2>
               <p className="mt-4 max-w-md text-sm leading-7 text-zinc-500 dark:text-zinc-400">
-                Satu gerbang masuk aman untuk seluruh civitas akademika SMAN 1 Nagreg.
+               Satu akses untuk mendukung pencatatan kehadiran siswa yang tertib dan terarah.
               </p>
             </div>
           </aside>
@@ -98,10 +98,10 @@ const Login = () => {
               <div className="mb-8">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#29438f] dark:text-[#9eafff]">Portal Kehadiran Sekolah</p>
                 <h1 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-[-0.04em] text-zinc-50 sm:text-4xl">
-                  Masuk ke Akun
+                  Sistem Presensi Siswa
                 </h1>
                 <p className="mt-3 max-w-sm text-sm leading-relaxed text-zinc-400">
-                  Masukkan NISN atau NIP Anda untuk mengakses sistem presensi.
+                  Masukkan NIP Anda untuk mengakses sistem presensi.
                 </p>
               </div>
 
@@ -118,7 +118,7 @@ const Login = () => {
                 <form onSubmit={handleSubmit} className="space-y-5" autoComplete="off">
                   <div>
                     <label htmlFor="identifier" className="mb-2 block text-sm font-medium text-zinc-300">
-                      NISN / NIP
+                      Masuk menggunakan NIP Anda:
                     </label>
                     <input
                       id="identifier"
@@ -128,10 +128,10 @@ const Login = () => {
                       onChange={handleInputChange}
                       autoFocus
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-50 placeholder-zinc-500 transition-colors focus:border-[#29438f] focus:outline-none focus:ring-2 focus:ring-[#29438f]/40 font-mono text-base"
-                      placeholder="Masukkan NISN atau NIP..."
+                      placeholder="Masukkan NIP..."
                     />
                     <p className="mt-2 text-xs text-zinc-500 leading-relaxed">
-                      Siswa masuk menggunakan NISN, Guru &amp; Tenaga Kependidikan masuk menggunakan NIP.
+                      Guru &amp; Staf TPMPS(Tim Penjaminan Mutu Pendidikan Sekolah) masuk menggunakan NIP.
                     </p>
                   </div>
 
@@ -143,7 +143,7 @@ const Login = () => {
                       disabled={loading}
                       className="!rounded-xl !bg-[#29438f] !text-white shadow-[0_12px_28px_rgba(41,67,143,0.24)] hover:!bg-[#203674] py-3 text-sm font-semibold"
                     >
-                      {loading ? 'Memverifikasi...' : 'Masuk ke Sistem'}
+                      {loading ? 'Memverifikasi...' : 'Masuk'}
                     </Button>
                   </div>
                 </form>

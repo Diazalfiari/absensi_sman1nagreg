@@ -164,47 +164,6 @@ const JadwalMengajar = () => {
 
       <main className="mt-16 flex-1 p-5 sm:p-7 lg:ml-72 lg:mt-0 lg:p-10">
         <div className="mx-auto max-w-7xl space-y-8">
-          {/* ── Banner ── */}
-          <section className="grid overflow-hidden rounded-[28px] border border-[#30457f] bg-[#172654] text-white shadow-[0_24px_70px_rgba(23,38,84,0.2)] dark:bg-[#111b3c] lg:grid-cols-[1.3fr_0.7fr]">
-            <div className="relative overflow-hidden p-6 sm:p-8 lg:p-10">
-              <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-[#9eafff]/10 blur-3xl" aria-hidden="true" />
-              <p className="relative text-xs font-semibold uppercase tracking-[0.2em] text-[#aebcff]">Aktivitas mengajar</p>
-              <h1 className="relative mt-5 max-w-xl font-display text-4xl font-semibold tracking-[-0.06em] sm:text-5xl">Jadwal Mengajar</h1>
-              <p className="relative mt-4 max-w-lg text-sm leading-7 text-[#c5cfe0] sm:text-base">
-                Kelola ritme kelas Anda dari satu kalender terintegrasi database. Pilih tanggal pada kalender untuk membuka sesi presensi, materi, dan tugas.
-              </p>
-              <div className="relative mt-7 flex flex-wrap items-center gap-3">
-                <span className="rounded-full border border-[#9eafff]/30 bg-[#9eafff]/10 px-3 py-1.5 text-xs font-semibold text-[#d8deff]">Guru aktif</span>
-                <span className="text-xs text-[#c5cfe0]">NIP {currentUser?.nip || '-'}</span>
-              </div>
-            </div>
-
-            <div className="border-t border-white/10 p-6 sm:p-8 lg:border-l lg:border-t-0">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#aebcff]">Periode aktif</p>
-                  <p className="mt-3 font-display text-2xl font-semibold tracking-[-0.05em] text-white">
-                    {monthNames[currentMonth.getMonth()]}
-                  </p>
-                  <p className="mt-1 text-sm text-[#c5cfe0]">Tahun {currentMonth.getFullYear()}</p>
-                </div>
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5ba4b] text-[#172654]" aria-hidden="true">
-                  <VisualIcon name="calendar" className="h-4 w-4" />
-                </span>
-              </div>
-              <div className="mt-10 grid grid-cols-2 gap-3 border-t border-white/10 pt-5">
-                <div>
-                  <p className="text-2xl font-semibold text-white">{loading ? '...' : daysWithSchedulesCount}</p>
-                  <p className="mt-1 text-xs text-[#aeb9d0]">Hari terjadwal (Bulan ini)</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-white">{loading ? '...' : schedulesList.length}</p>
-                  <p className="mt-1 text-xs text-[#aeb9d0]">Total rombel diampu</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
           {/* ── Calendar & Panel ── */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.28fr)_minmax(320px,0.72fr)]">
             <section className="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-[0_16px_45px_rgba(15,23,42,0.06)] sm:p-7">

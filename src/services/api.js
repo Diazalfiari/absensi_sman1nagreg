@@ -18,7 +18,7 @@ export async function apiRequest(endpoint, options = {}) {
     ...options.headers,
   };
 
-  // Jangan pasang Content-Type jika body adalah FormData (biarkan browser set multipart boundary)
+
   if (!(options.body instanceof FormData) && !headers['Content-Type']) {
     headers['Content-Type'] = 'application/json';
   }

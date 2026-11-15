@@ -136,7 +136,7 @@ const ManajemenKelas = () => {
           <section className="grid overflow-hidden rounded-3xl border border-[#30457f] bg-[#172654] text-white shadow-[0_24px_70px_rgba(23,38,84,0.2)] dark:bg-[#111b3c] sm:grid-cols-[1.25fr_1fr]">
             <div className="relative overflow-hidden p-6 sm:p-8">
               <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#9eafff]/10 blur-3xl" aria-hidden="true" />
-              <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Ringkasan Data Database</p>
+              <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#aebcff]">Ringkasan Data</p>
               <h3 className="relative mt-4 max-w-md font-display text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">
                 36 Rombel dalam Satu Tampilan
               </h3>

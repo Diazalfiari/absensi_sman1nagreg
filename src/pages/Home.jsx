@@ -46,7 +46,7 @@ const Home = () => {
               </h1>
 
               <p className="mt-7 max-w-lg text-base leading-8 text-zinc-500 dark:text-zinc-400 sm:text-lg">
-                Satu pintu untuk mencatat, memantau, dan meninjau kehadiran warga SMAN 1 Nagreg.
+                Satu pintu untuk mencatat, memantau, dan meninjau kehadiran Siswa 1 Nagreg.
               </p>
 
               <div className="mt-9 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
@@ -55,7 +55,6 @@ const Home = () => {
                   className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-[#29438f] px-6 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(41,67,143,0.24)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#203674] active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e5ba4b] focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                 >
                   Masuk ke sistem
-                  <span aria-hidden="true" className="text-lg leading-none">&#8594;</span>
                 </Link>
                 <span className="text-sm text-zinc-500 dark:text-zinc-400">Akses sesuai peran Anda</span>
               </div>
@@ -87,8 +86,8 @@ const Home = () => {
 
                 <div className="flex items-center justify-between rounded-2xl border border-zinc-800/70 bg-zinc-900 px-6 py-5 dark:bg-zinc-900">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Untuk seluruh warga sekolah</p>
-                    <p className="mt-2 text-sm font-medium text-zinc-50">Siswa, guru, dan admin</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Untuk</p>
+                    <p className="mt-2 text-sm font-medium text-zinc-50">guru, dan admin</p>
                   </div>
                   <div aria-hidden="true" className="h-10 w-10 rounded-xl border border-[#e5ba4b]/70 bg-[#e5ba4b]/10" />
                 </div>

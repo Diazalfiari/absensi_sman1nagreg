@@ -181,7 +181,7 @@ const ManajemenPengguna = () => {
     try {
       setLoading(true);
       await userService.updateUser(editingUser.id, editingUser);
-      showNotification('success', 'Data Diperbarui', 'Perubahan data pengguna berhasil disimpan ke database.');
+      showNotification('success', 'Data Diperbarui', 'Perubahan data pengguna berhasil disimpan.');
       setIsEditModalOpen(false);
       setEditingUser(null);
       fetchUsers();
@@ -201,7 +201,7 @@ const ManajemenPengguna = () => {
     try {
       setLoading(true);
       await userService.createUser(newUser);
-      showNotification('success', 'Pengguna Baru Ditambahkan', `Akun '${newUser.nama}' berhasil disimpan ke database.`);
+      showNotification('success', 'Pengguna Baru Ditambahkan', `Akun '${newUser.nama}' berhasil disimpan.`);
       setIsAddModalOpen(false);
       fetchUsers();
       fetchCounts();
@@ -228,7 +228,7 @@ const ManajemenPengguna = () => {
           `Berhasil: ${result.totalBerhasil} data\nGagal: ${result.totalGagal} data\n${errorDetails}${result.errors && result.errors.length > 5 ? '\n...dan lainnya' : ''}`
         );
       } else {
-        showNotification('success', 'Import Pengguna Berhasil', `${result.totalBerhasil} data pengguna berhasil disimpan ke database.`);
+        showNotification('success', 'Import Pengguna Berhasil', `${result.totalBerhasil} data pengguna berhasil disimpan.`);
       }
       setIsAddModalOpen(false);
       fetchUsers();
